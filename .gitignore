@@ -1,5 +1,7 @@
 # Custom Ignores
 .idea
+gradlew
+gradlew.bat
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Merged gitignore files from GitHub gitignore repository below.
