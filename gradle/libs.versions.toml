@@ -1,0 +1,33 @@
+# Use this file as a central defnition for all dependencies used in the project.
+# Keep one empty line between each entry to simplify merging dependency update branches.
+
+[versions]
+# Centrally define versions here to reuse as variables in the following blocks.
+# This allows to sync versions for dependencies in this definition file.
+
+kotlin = "2.1.20"
+
+[plugins]
+
+# Define the plugins to use for gradle.
+# These plugins are the ones used to build the project.
+
+# Kotlin plugins
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+
+kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
+
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+
+# Spring Boot plugins
+spring-boot = { id = "org.springframework.boot", version = "3.4.4" }
+
+spring-dependency = { id = "io.spring.dependency-management", version = "1.1.7" }
+
+[libraries]
+# Centrally define dependencies that are used by the project.
+
+
+[bundles]
+# Centrally define bundles of dependencies in this file that are systematically used togehter.
+
