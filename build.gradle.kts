@@ -24,6 +24,10 @@ configurations {
     }
 }
 
+springBoot {
+    buildInfo()
+}
+
 repositories {
     mavenCentral()
 }
@@ -95,6 +99,9 @@ tasks.withType<ProcessResources> {
 }
 
 tasks.withType<Test> {
+    // Use system properties to set the active spring profile to "test", when tests are executed.
+    systemProperty("spring.profiles.active", "test")
+
     useJUnitPlatform()
 
     // Always generate the jacoco coverage report after tests were run.
