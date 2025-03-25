@@ -50,3 +50,19 @@ management:
       probes:
         enabled: true
       access: none
+
+logging:
+  pattern:
+    # Explicitly define the default console log pattern here.
+    # We add `%kvp` to the default pattern before the message to include SLF4J fluent api key-value pairs.
+    console: >-
+      %clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}){faint} 
+      %clr(${LOG_LEVEL_PATTERN:%5p}) 
+      %clr(${PID: }){magenta} 
+      %clr(---){faint} 
+      %clr([%15.15t]){faint} 
+      %clr(%-40.40logger{39}){cyan} 
+      %clr(:){faint} 
+      %kvp
+      %m%n
+      ${LOG_EXCEPTION_CONVERSION_WORD:%wEx}

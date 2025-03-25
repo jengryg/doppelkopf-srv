@@ -37,7 +37,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-web") {
+        exclude("org.apache.logging.log4j", "log4j-to-slf4j")
+    }
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.micrometer:micrometer-tracing-bridge-brave")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -54,6 +56,10 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    implementation("org.slf4j:slf4j-api")
+    implementation("ch.qos.logback:logback-classic")
+    implementation("ch.qos.logback:logback-core")
 }
 
 kotlin {
@@ -94,7 +100,11 @@ tasks.withType<ProcessResources> {
     ) {
         logger.debug("Processing resource: {}", this.path)
 
-        expand(project.properties)
+        // Disable expand until we really need it. Then we have to take a look at:
+        // https://stackoverflow.com/questions/60352025/gradle-copy-task-expand-yaml-file-escape-whole-string
+        // to avoid escapement issues in the yaml files.
+        //expand(project.properties)
+
     }
 }
 
