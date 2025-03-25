@@ -1,0 +1,14 @@
+# https://docs.spring.io/spring-boot/reference/features/external-config.html
+
+# NEVER USE THE LOCAL PROFILE IN ANY DEPLOYMENT! IT IS FOR LOCAL DEV USE ONLY.
+
+server:
+  # We assign different ports for local runs, such that we are able to run multiple services from this project at once.
+  # Each service should use another port number in the local profiles.
+  port: 17000
+
+management:
+  endpoints:
+    access:
+      # We expose all management endpoints for easier debugging in the local profile.
+      default: unrestricted

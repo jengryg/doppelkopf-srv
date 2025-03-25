@@ -1,0 +1,14 @@
+# https://docs.spring.io/spring-boot/reference/features/external-config.html
+
+# NEVER USE THE TEMP PROFILE IN ANY DEPLOYMENT! IT IS FOR LOCAL DEV USE ONLY.
+
+server:
+  # We assign different ports for temp runs, such that we are able to run multiple services from this project at once.
+  # Each service should use another port number in the temp profiles.
+  port: 16000
+
+management:
+  endpoints:
+    access:
+      # We expose all management endpoints for easier debugging in the temp profile.
+      default: unrestricted
