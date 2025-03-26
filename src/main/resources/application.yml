@@ -19,6 +19,9 @@ spring:
       # This value should be explicitly overridden in the corresponding profiles if necessary.
       ddl-auto: none
     database: postgresql
+  mvc:
+    problemdetails:
+      enabled: true
 
 management:
   endpoints:
