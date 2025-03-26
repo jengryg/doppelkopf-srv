@@ -18,6 +18,7 @@ spring:
     hibernate:
       # This value should be explicitly overridden in the corresponding profiles if necessary.
       ddl-auto: none
+    database: postgresql
 
 management:
   endpoints:
@@ -66,3 +67,12 @@ logging:
       %kvp
       %m%n
       ${LOG_EXCEPTION_CONVERSION_WORD:%wEx}
+
+app:
+  common:
+    # The stage identifier of the project.
+    # This must be overwritten in the application-{stage}.yml specific files or injected through your deployment process.
+    stage: "[overwrite this value]"
+    # The version of the project should be set during the build process.
+    # TODO: use ant-filter in gradle build to process this file and set the version from gradle build
+    version: "[overwrite this value]"
