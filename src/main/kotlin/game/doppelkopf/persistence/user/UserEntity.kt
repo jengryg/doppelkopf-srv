@@ -2,12 +2,12 @@ package game.doppelkopf.persistence.user
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import game.doppelkopf.persistence.BaseEntity
+import game.doppelkopf.persistence.game.GameEntity
+import game.doppelkopf.persistence.game.PlayerEntity
 import game.doppelkopf.security.Authority
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
+import jakarta.persistence.*
 
+@Suppress("unused")
 @Entity
 class UserEntity(
     @Column(unique = true)
@@ -33,4 +33,18 @@ class UserEntity(
      * Simple authority is wrapped inside a set for further processing and modifications.
      */
     val authorities: Set<String> get() = if (authority == Authority.NONE) emptySet() else setOf(authority.authority)
+
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "creator",
+        cascade = [CascadeType.ALL],
+    )
+    val createdGames = mutableSetOf<GameEntity>()
+
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "user",
+        cascade = [CascadeType.ALL],
+    )
+    val players = mutableSetOf<PlayerEntity>()
 }
