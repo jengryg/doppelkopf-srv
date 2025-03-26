@@ -8,7 +8,15 @@ server:
   port: 17000
 
 management:
+  endpoint:
+    health:
+      access: unrestricted
   endpoints:
     access:
       # We expose all management endpoints for easier debugging in the local profile.
       default: unrestricted
+
+app:
+  common:
+    stage: "local"
+    version: "0.0.0"

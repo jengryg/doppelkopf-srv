@@ -8,7 +8,15 @@ server:
   port: 16000
 
 management:
+  endpoint:
+    health:
+      access: unrestricted
   endpoints:
     access:
       # We expose all management endpoints for easier debugging in the temp profile.
       default: unrestricted
+
+app:
+  common:
+    stage: "temp"
+    version: "0.0.0"
