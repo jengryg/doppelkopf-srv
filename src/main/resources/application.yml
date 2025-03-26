@@ -76,3 +76,6 @@ app:
     # The version of the project should be set during the build process.
     # TODO: use ant-filter in gradle build to process this file and set the version from gradle build
     version: "[overwrite this value]"
+  meta:
+    api:
+      title: "Doppelkopf"

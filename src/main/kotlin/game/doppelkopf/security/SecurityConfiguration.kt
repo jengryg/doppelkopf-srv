@@ -51,14 +51,8 @@ class SecurityConfiguration(
             auth.requestMatchers(HttpMethod.POST, "/v1/auth/login").permitAll()
             // login matchers to allow GET and POST requests to the login endpoints
 
-            auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").let {
-                if (commonConfig.stage == "local" || commonConfig.stage == "temp" || commonConfig.stage == "test") {
-                    // if the application is configured for local, temp or test stage, the swagger ui is available
-                    it.permitAll()
-                } else {
-                    it.denyAll()
-                }
-            }
+            configureSpringDocOpenApi(auth)
+            // configure springdoc openapi pages
 
             auth.anyRequest().authenticated()
             // require login for all other urls/methods
@@ -113,6 +107,24 @@ class SecurityConfiguration(
                     }
                 )
             )
+    /**
+     * Configures access restrictions to the springdoc openapi and swagger-ui paths based on the [CommonConfig.stage]
+     */
+    private fun configureSpringDocOpenApi(
+        auth: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry
+    ) {
+        auth.requestMatchers(
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+        ).let {
+            if (commonConfig.stage == "local" || commonConfig.stage == "temp" || commonConfig.stage == "test") {
+                // if the application is configured for local, temp or test stage, the swagger ui is available
+                it.permitAll()
+            } else {
+                it.denyAll()
+            }
         }
     }
 }

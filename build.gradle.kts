@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.bouncycastle)
 
     testImplementation(libs.bundles.restassured)
+
+    implementation(libs.openapi.webmvc)
 }
 
 kotlin {

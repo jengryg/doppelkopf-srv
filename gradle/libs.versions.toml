@@ -40,6 +40,9 @@ restassured-core = { module = "io.rest-assured:rest-assured-all", version.ref = 
 
 restassured-kotlin = { module = "io.rest-assured:kotlin-extensions", version.ref = "restassured" }
 
+# springdoc openapi with ui
+openapi-webmvc = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version = "2.8.6" }
+
 [bundles]
 # Centrally define bundles of dependencies in this file that are systematically used togehter.
 
