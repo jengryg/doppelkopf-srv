@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -42,14 +42,16 @@ class SecurityConfiguration(
     @Bean
     fun filterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
         httpSecurity.csrf { csrf ->
-            // TODO: enable csrf and configure later
+            //csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             csrf.disable()
+            // TODO: enable the CSRF protection when we have the frontend integration
+            // See also https://spring.io/guides/tutorials/spring-security-and-angular-js
         }
 
         httpSecurity.authorizeHttpRequests { auth ->
             auth.requestMatchers(HttpMethod.GET, "/v1/auth/login").permitAll()
             auth.requestMatchers(HttpMethod.POST, "/v1/auth/login").permitAll()
-            // login matchers to allow GET and POST requests to the login endpoints
+            // login matchers to allow POST to the login endpoint
 
             configureSpringDocOpenApi(auth)
             // configure springdoc openapi pages
@@ -58,8 +60,23 @@ class SecurityConfiguration(
             // require login for all other urls/methods
         }
 
+        httpSecurity.exceptionHandling {
+            it.authenticationEntryPoint { request, response, authException ->
+                // 401 unauthorized for anonymous users
+                // prevents the redirection to the login form
+                response.status = HttpStatus.UNAUTHORIZED.value()
+            }
+        }
+
         httpSecurity.formLogin { login ->
             configureFormLogin(login)
+        }
+
+        httpSecurity.logout { logout ->
+            logout.logoutSuccessHandler { request, response, authentication ->
+                // 204 no content when logout worked
+                response.status = HttpStatus.NO_CONTENT.value()
+            }
         }
 
         return httpSecurity.build().also {
@@ -79,34 +96,15 @@ class SecurityConfiguration(
 
         login.failureHandler { request, response, exception ->
             // overwrite the default redirecting behaviour to return a json error response
-
             response.status = HttpStatus.UNAUTHORIZED.value()
-            response.contentType = MediaType.APPLICATION_JSON.toString()
-            response.writer.println(
-                // TODO: introduce problem+json standard
-                mapper.objectMapper.writeValueAsString(
-                    object {
-                        val message = HttpStatus.UNAUTHORIZED.reasonPhrase
-                        val error = exception.message ?: ""
-                    }
-                )
-            )
         }
 
         login.successHandler { request, response, authentication ->
-            // overwrite the default redirecting behaviour to return a json response
+            // overwrite the default redirecting behaviour to return a json error response
+            response.status = HttpStatus.NO_CONTENT.value()
+        }
+    }
 
-            val user = (authentication.principal as UserDetails).user
-
-            response.contentType = MediaType.APPLICATION_JSON.toString()
-            response.writer.println(
-                mapper.objectMapper.writeValueAsString(
-                    object {
-                        val username = user.username
-                        val id = user.id
-                    }
-                )
-            )
     /**
      * Configures access restrictions to the springdoc openapi and swagger-ui paths based on the [CommonConfig.stage]
      */

@@ -12,24 +12,22 @@ import kotlin.test.assertFalse
 
 class AuthControllerTest : BaseRestAssuredTest() {
     @Test
-    fun `http GET on login endpoint without having an active login`() {
+    fun `http GET on login endpoint without having an active login is 401`() {
         Given {
             auth().none()
         } When {
-            get("/v1/auth/login")
+            get("/v1/auth/status")
         } Then {
-            statusCode(204)
-        } Extract {
-            response().body.asByteArray().isEmpty()
+            statusCode(401)
         }
     }
 
     @Test
-    fun `http GET on login endpoint with rest assured supported testUser login`() {
+    fun `http GET on login endpoint with rest assured supported testUser login returns user`() {
         val response = Given {
             auth().form(testUserName, testUserPassword, formAuthConfig)
         } When {
-            get("/v1/auth/login")
+            get("/v1/auth/status")
         } Then {
             statusCode(200)
         } Extract {
@@ -41,11 +39,11 @@ class AuthControllerTest : BaseRestAssuredTest() {
     }
 
     @Test
-    fun `http GET on login endpoint with rest assured supported testAdmin login`() {
+    fun `http GET on login endpoint with rest assured supported testAdmin login returns admin`() {
         val response = Given {
             auth().form(testAdminName, testAdminPassword, formAuthConfig)
         } When {
-            get("/v1/auth/login")
+            get("/v1/auth/status")
         } Then {
             statusCode(200)
         } Extract {

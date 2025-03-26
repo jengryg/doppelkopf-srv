@@ -5,7 +5,6 @@ import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/v1/auth/login")
+@RequestMapping("/v1/auth/status")
 class AuthController : Logging {
     private val log = logger()
 
@@ -36,7 +35,7 @@ class AuthController : Logging {
                 )
             )
         } else {
-            return ResponseEntity(HttpStatus.NO_CONTENT)
+            return ResponseEntity.noContent().build()
         }
     }
 }
