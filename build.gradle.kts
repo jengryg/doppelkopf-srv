@@ -66,6 +66,8 @@ dependencies {
     implementation("ch.qos.logback:logback-core")
 
     implementation(libs.bouncycastle)
+
+    testImplementation(libs.bundles.restassured)
 }
 
 kotlin {

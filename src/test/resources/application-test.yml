@@ -1,0 +1,18 @@
+app:
+  common:
+    stage: "test"
+    version: "0.0.0"
+
+spring:
+  jpa:
+    hibernate:
+      # activate hibernates schema recreation for temp profile
+      ddl-auto: create
+  liquibase:
+    # disable liquibase for the temp profile
+    enabled: false
+
+
+logging:
+  level:
+    root: trace

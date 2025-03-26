@@ -7,6 +7,8 @@
 
 kotlin = "2.1.20"
 
+restassured = "5.5.1"
+
 [plugins]
 
 # Define the plugins to use for gradle.
@@ -33,6 +35,12 @@ mockk = { module = "io.mockk:mockk", version = "1.13.17" }
 # cryptography and de-/en-coding with bouncycastle
 bouncycastle = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.80" }
 
+# RestAsured
+restassured-core = { module = "io.rest-assured:rest-assured-all", version.ref = "restassured" }
+
+restassured-kotlin = { module = "io.rest-assured:kotlin-extensions", version.ref = "restassured" }
+
 [bundles]
 # Centrally define bundles of dependencies in this file that are systematically used togehter.
 
+restassured = ["restassured-core", "restassured-kotlin"]
