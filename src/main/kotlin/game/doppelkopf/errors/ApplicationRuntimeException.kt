@@ -14,13 +14,18 @@ import org.springframework.web.ErrorResponseException
  *
  * This class is just extending [ApplicationRuntimeException] to bridge the java implementation to Kotlin for easier usage.
  */
-open class ApplicationRuntimeException(
-    status: HttpStatusCode,
-    body: ProblemDetail,
-    cause: Throwable? = null,
-    messageDetailCode: String? = null,
-    messageDetailArguments: Array<out Any>? = null
+@Suppress("unused")
+open class ApplicationRuntimeException : ErrorResponseException {
+    constructor(
+        status: HttpStatusCode,
+        body: ProblemDetail,
+        cause: Throwable? = null,
+        messageDetailCode: String? = null,
+        messageDetailArguments: Array<out Any>? = null
+    ) : super(status, body, cause, messageDetailCode, messageDetailArguments)
 
-) : ErrorResponseException(
-    status, body, cause, messageDetailCode, messageDetailArguments
-)
+    constructor(
+        status: HttpStatusCode,
+        cause: Throwable? = null,
+    ) : super(status, cause)
+}
