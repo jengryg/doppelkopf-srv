@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.bouncycastle)
 
     testImplementation(libs.bundles.restassured)
+    testImplementation(libs.asserj)
 
     implementation(libs.openapi.webmvc)
 }
