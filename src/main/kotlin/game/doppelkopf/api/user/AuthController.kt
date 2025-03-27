@@ -1,6 +1,6 @@
 package game.doppelkopf.api.user
 
-import game.doppelkopf.api.user.dto.SimpleUserResponseDto
+import game.doppelkopf.api.user.dto.PublicUserInfoDto
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
 import game.doppelkopf.security.UserDetails
@@ -21,7 +21,7 @@ class AuthController : Logging {
         description = "This endpoint can be used to check the current login status of the user."
     )
     @GetMapping("/status")
-    fun login(@AuthenticationPrincipal userDetails: UserDetails?): ResponseEntity<SimpleUserResponseDto> {
+    fun status(@AuthenticationPrincipal userDetails: UserDetails?): ResponseEntity<PublicUserInfoDto> {
         log.atDebug()
             .setMessage("Current user login status obtained.")
             .addKeyValue("userDetails") { userDetails?.user }
@@ -29,7 +29,7 @@ class AuthController : Logging {
 
         if (userDetails != null) {
             return ResponseEntity.ok(
-                SimpleUserResponseDto(
+                PublicUserInfoDto(
                     id = userDetails.user.id,
                     name = userDetails.user.username
                 )
