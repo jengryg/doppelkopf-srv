@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/v1/auth/status")
+@RequestMapping("/v1/auth")
 class AuthController : Logging {
     private val log = logger()
 
@@ -20,7 +20,7 @@ class AuthController : Logging {
         summary = "Endpoint for the login page url of spring.",
         description = "This endpoint can be used to check the current login status of the user."
     )
-    @GetMapping
+    @GetMapping("/status")
     fun login(@AuthenticationPrincipal userDetails: UserDetails?): ResponseEntity<SimpleUserResponseDto> {
         log.atDebug()
             .setMessage("Current user login status obtained.")
