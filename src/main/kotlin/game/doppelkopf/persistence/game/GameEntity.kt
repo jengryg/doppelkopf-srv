@@ -1,6 +1,6 @@
 package game.doppelkopf.persistence.game
 
-import game.doppelkopf.core.GameState
+import game.doppelkopf.core.game.GameState
 import game.doppelkopf.persistence.BaseEntity
 import game.doppelkopf.persistence.user.UserEntity
 import jakarta.persistence.*
@@ -36,4 +36,9 @@ class GameEntity(
         cascade = [CascadeType.ALL],
     )
     val players = mutableSetOf<PlayerEntity>()
+
+    fun start() {
+        started = Instant.now()
+        state = GameState.STARTED
+    }
 }
