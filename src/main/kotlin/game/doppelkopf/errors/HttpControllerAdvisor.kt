@@ -4,10 +4,11 @@ import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
-import org.springframework.http.HttpStatus
-import org.springframework.http.ProblemDetail
+import org.springframework.http.*
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 
@@ -54,5 +55,18 @@ class HttpControllerAdvisor : ResponseEntityExceptionHandler(), Logging {
         ).also {
             it.title = "Application Error"
         }
+    }
+
+    override fun handleMethodArgumentNotValid(
+        ex: MethodArgumentNotValidException,
+        headers: HttpHeaders,
+        status: HttpStatusCode,
+        request: WebRequest
+    ): ResponseEntity<Any>? {
+        ex.body.setProperty("errors", ex.bindingResult.allErrors)
+        // Include the binding result errors in the ProblemDetail response that will be created by the super method.
+        // Note: For real production usage, you should implement a custom converter to filter what information is
+        // exposed here.
+        return super.handleMethodArgumentNotValid(ex, headers, status, request)
     }
 }
