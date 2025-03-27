@@ -14,7 +14,7 @@ class EntityNotFoundException(
     cause
 ) {
     init {
-        setTitle("Entity not found.")
+        setTitle("Entity not found")
         if (id != null) {
             setDetail("The entity of type ${kClass.simpleName} with id $id was not found.")
         } else {

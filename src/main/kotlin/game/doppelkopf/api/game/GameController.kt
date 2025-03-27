@@ -8,8 +8,10 @@ import game.doppelkopf.core.game.GameService
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.util.UriComponentsBuilder
 import java.util.*
 
 /**
@@ -17,14 +19,18 @@ import java.util.*
  */
 @RestController
 @RequestMapping("/v1/games")
-class GameController(private val gameService: GameService) {
+class GameController(
+    private val gameService: GameService
+) {
     @Operation(
         summary = "List games.",
         description = "Gets a list containing information about all games.",
     )
     @GetMapping("")
-    fun list(): List<GameInfoDto> {
-        return gameService.list().map { GameInfoDto(it) }
+    fun list(): ResponseEntity<List<GameInfoDto>> {
+        return ResponseEntity.ok(
+            gameService.list().map { GameInfoDto(it) }
+        )
     }
 
     @Operation(
@@ -35,8 +41,12 @@ class GameController(private val gameService: GameService) {
     fun create(
         @RequestBody @Valid gameCreateDto: GameCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
-    ): GameInfoDto {
-        return GameInfoDto(gameService.create(gameCreateDto, userDetails.user))
+    ): ResponseEntity<GameInfoDto> {
+        return GameInfoDto(gameService.create(gameCreateDto, userDetails.user)).let {
+            ResponseEntity.created(
+                UriComponentsBuilder.newInstance().path("/v1/games/{id}").build(it.id)
+            ).body(it)
+        }
     }
 
     @Operation(
@@ -44,8 +54,10 @@ class GameController(private val gameService: GameService) {
         description = "Gets the information about the game with the specified id.",
     )
     @GetMapping("/{id}")
-    fun show(@PathVariable id: UUID): GameInfoDto {
-        return GameInfoDto(gameService.load(id))
+    fun show(@PathVariable id: UUID): ResponseEntity<GameInfoDto> {
+        return ResponseEntity.ok(
+            GameInfoDto(gameService.load(id))
+        )
     }
 
     @Operation(
@@ -57,9 +69,9 @@ class GameController(private val gameService: GameService) {
         @PathVariable id: UUID,
         @RequestBody @Valid operation: GameOperationDto,
         @AuthenticationPrincipal userDetails: UserDetails
-    ): GameInfoDto {
+    ): ResponseEntity<GameInfoDto> {
         return when (operation.op) {
-            GameOperation.START -> GameInfoDto(gameService.start(id, userDetails.user))
+            GameOperation.START -> ResponseEntity.ok(GameInfoDto(gameService.start(id, userDetails.user)))
         }
     }
 }
