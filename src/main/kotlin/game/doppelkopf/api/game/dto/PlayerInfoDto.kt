@@ -20,6 +20,11 @@ class PlayerInfoDto(
     val seat: Int,
 
     @Schema(
+        description = "The UUID of the game this player is playing in.",
+    )
+    val gameId: UUID,
+
+    @Schema(
         description = "The user that is playing in the game as this player.",
     )
     val user: PublicUserInfoDto
@@ -27,6 +32,7 @@ class PlayerInfoDto(
     constructor(entity: PlayerEntity) : this(
         id = entity.id,
         seat = entity.seat,
+        gameId = entity.game.id,
         user = PublicUserInfoDto(entity.user)
     )
 }
