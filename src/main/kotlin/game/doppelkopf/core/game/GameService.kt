@@ -11,6 +11,7 @@ import game.doppelkopf.persistence.user.UserEntity
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import java.time.Instant
 import java.util.*
 
 @Service
@@ -72,8 +73,13 @@ class GameService(
             throw InvalidActionException("Game:Start", "The game has been started already.")
         }
 
-        game.start()
+        // the first dealer is decided randomly
+        game.players.random().dealer = true
 
-        return gameRepository.save(game)
+        // start the game
+        game.started = Instant.now()
+        game.state = GameState.WAITING_FOR_DEAL
+
+        return game
     }
 }

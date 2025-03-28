@@ -2,5 +2,5 @@ package game.doppelkopf.core.game
 
 enum class GameState {
     INITIALIZED,
-    STARTED
+    WAITING_FOR_DEAL,
 }

@@ -28,6 +28,7 @@ class GameEntity(
     var ended: Instant? = null
 
     @Column
+    @Enumerated(EnumType.STRING)
     var state: GameState = GameState.INITIALIZED
 
     @OneToMany(
@@ -37,8 +38,8 @@ class GameEntity(
     )
     val players = mutableSetOf<PlayerEntity>()
 
-    fun start() {
-        started = Instant.now()
-        state = GameState.STARTED
+    fun getPlayerOfOrNull(user: UserEntity): PlayerEntity? {
+        return players.singleOrNull { it.user == user }
+    }
     }
 }

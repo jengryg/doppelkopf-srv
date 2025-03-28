@@ -27,12 +27,18 @@ class PlayerInfoDto(
     @Schema(
         description = "The user that is playing in the game as this player.",
     )
-    val user: PublicUserInfoDto
+    val user: PublicUserInfoDto,
+
+    @Schema(
+        description = "Is this player is the current dealer in the game."
+    )
+    val dealer: Boolean
 ) {
     constructor(entity: PlayerEntity) : this(
         id = entity.id,
         seat = entity.seat,
         gameId = entity.game.id,
-        user = PublicUserInfoDto(entity.user)
+        user = PublicUserInfoDto(entity.user),
+        dealer = entity.dealer
     )
 }

@@ -27,4 +27,7 @@ class PlayerEntity(
 
     @Column
     val seat: Int,
-) : BaseEntity()
+) : BaseEntity() {
+    @Column
+    var dealer: Boolean = false
+}
