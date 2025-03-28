@@ -12,7 +12,7 @@ class ForbiddenActionException(
     cause
 ) {
     init {
-        setTitle("Forbidden action.")
+        setTitle("Forbidden action")
         if (reason != null) {
             setDetail("You are not allowed to perform the action '$action': $reason")
         } else {

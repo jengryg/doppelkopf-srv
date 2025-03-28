@@ -56,7 +56,7 @@ class GameControllerTest : BaseRestAssuredTest() {
         }
 
         assertThat(response.instance.toString()).isEqualTo("/v1/games/00000000-0000-0000-0000-000000000000")
-        assertThat(response.title).isEqualTo("Entity not found.")
+        assertThat(response.title).isEqualTo("Entity not found")
         assertThat(response.detail).isEqualTo("The entity of type GameEntity with id 00000000-0000-0000-0000-000000000000 was not found.")
     }
 

@@ -12,7 +12,7 @@ class InvalidActionException(
     cause
 ) {
     init {
-        setTitle("Invalid action.")
+        setTitle("Invalid action")
         if (reason != null) {
             setDetail("The action '$action' can not be performed: $reason")
         } else {
