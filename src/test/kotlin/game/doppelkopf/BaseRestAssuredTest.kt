@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import java.security.SecureRandom
+import java.util.*
 
 /**
  * Set up the SpringBoot Integration testing for RestAssured based API testing against the Spring Web Environment.
@@ -149,5 +150,9 @@ class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
             .addKeyValue("port") { serverPort }
             .addKeyValue("authUser") { testUser }
             .log()
+    }
+
+    companion object {
+        val zeroId = UUID.fromString("00000000-0000-0000-0000-000000000000")!!
     }
 }

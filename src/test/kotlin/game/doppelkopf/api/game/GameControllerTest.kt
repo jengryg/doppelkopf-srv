@@ -48,16 +48,16 @@ class GameControllerTest : BaseRestAssuredTest() {
         val response = Given {
             this
         } When {
-            get("/v1/games/00000000-0000-0000-0000-000000000000")
+            get("/v1/games/$zeroId")
         } Then {
             statusCode(404)
         } Extract {
             response().`as`(ProblemDetailResponse::class.java)
         }
 
-        assertThat(response.instance.toString()).isEqualTo("/v1/games/00000000-0000-0000-0000-000000000000")
+        assertThat(response.instance.toString()).isEqualTo("/v1/games/$zeroId")
         assertThat(response.title).isEqualTo("Entity not found")
-        assertThat(response.detail).isEqualTo("The entity of type GameEntity with id 00000000-0000-0000-0000-000000000000 was not found.")
+        assertThat(response.detail).isEqualTo("The entity of type GameEntity with id $zeroId was not found.")
     }
 
     @ParameterizedTest
