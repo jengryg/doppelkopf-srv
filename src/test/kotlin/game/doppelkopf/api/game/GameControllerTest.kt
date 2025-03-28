@@ -52,7 +52,6 @@ class GameControllerTest : BaseRestAssuredTest() {
         } Then {
             statusCode(404)
         } Extract {
-            println(response().asString())
             response().`as`(ProblemDetailResponse::class.java)
         }
 
@@ -81,8 +80,12 @@ class GameControllerTest : BaseRestAssuredTest() {
         }
 
         assertThat(response.creator.id).isEqualTo(testUser.id)
-        // The default login of
+        // The default login for the testing is testUser.
         assertThat(response.playerLimit).isEqualTo(playerLimit)
+        assertThat(response.players).hasSize(1)
+        assertThat(response.players.map { it.user.id }).containsExactly(testUser.id)
+        assertThat(response.players.map { it.seat }).containsExactly(0)
+        // Ensure that the creator was automatically added as player in seat position 0.
     }
 
     @ParameterizedTest
@@ -101,7 +104,6 @@ class GameControllerTest : BaseRestAssuredTest() {
         } Then {
             statusCode(400)
         } Extract {
-            println(response().asString())
             response().`as`(ProblemDetailResponse::class.java)
         }
 

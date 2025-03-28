@@ -6,6 +6,7 @@ import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.persistence.EntityNotFoundException
 import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.GameRepository
+import game.doppelkopf.persistence.game.PlayerEntity
 import game.doppelkopf.persistence.user.UserEntity
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
@@ -47,7 +48,12 @@ class GameService(
             GameEntity(
                 creator = user,
                 maxNumberOfPlayers = gameCreateDto.playerLimit
-            )
+            ).apply {
+                // add the creator as player to the game
+                players.add(
+                    PlayerEntity(user = user, game = this, seat = 0)
+                )
+            }
         )
     }
 
