@@ -2,6 +2,7 @@ package game.doppelkopf.persistence.game
 
 import game.doppelkopf.core.game.GameState
 import game.doppelkopf.persistence.BaseEntity
+import game.doppelkopf.persistence.play.RoundEntity
 import game.doppelkopf.persistence.user.UserEntity
 import jakarta.persistence.*
 import java.time.Instant
@@ -38,8 +39,18 @@ class GameEntity(
     )
     val players = mutableSetOf<PlayerEntity>()
 
+    @OneToMany(
+        fetch = FetchType.EAGER,
+        mappedBy = "game",
+        cascade = [CascadeType.ALL],
+    )
+    val rounds = mutableSetOf<RoundEntity>()
+
     fun getPlayerOfOrNull(user: UserEntity): PlayerEntity? {
         return players.singleOrNull { it.user == user }
     }
+
+    fun getLatestRoundOrNull(): RoundEntity? {
+        return rounds.maxByOrNull { it.number }
     }
 }

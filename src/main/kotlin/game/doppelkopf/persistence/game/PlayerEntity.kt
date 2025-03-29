@@ -1,11 +1,9 @@
 package game.doppelkopf.persistence.game
 
 import game.doppelkopf.persistence.BaseEntity
+import game.doppelkopf.persistence.play.RoundEntity
 import game.doppelkopf.persistence.user.UserEntity
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.*
 
 /**
  * [PlayerEntity] represents a specific [user] playing in a specific [game] sitting at [seat] position.
@@ -30,4 +28,11 @@ class PlayerEntity(
 ) : BaseEntity() {
     @Column
     var dealer: Boolean = false
+
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "dealer",
+        cascade = [CascadeType.ALL],
+    )
+    val dealtRounds = mutableSetOf<RoundEntity>()
 }
