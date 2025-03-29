@@ -18,22 +18,23 @@ class PlayerService(
     private val gameRepository: GameRepository,
     private val playerRepository: PlayerRepository
 ) {
-    fun list(): List<PlayerEntity> {
-        return playerRepository.findAll()
+    fun list(gameId: UUID): List<PlayerEntity> {
+        return gameRepository.findByIdOrNull(gameId)?.players?.toList()
+            ?: throw EntityNotFoundException.forEntity<GameEntity>(gameId)
     }
 
-    fun load(id: UUID): PlayerEntity {
-        return playerRepository.findByIdOrNull(id)
-            ?: throw EntityNotFoundException.forEntity<PlayerEntity>(id)
+    fun load(playerId: UUID): PlayerEntity {
+        return playerRepository.findByIdOrNull(playerId)
+            ?: throw EntityNotFoundException.forEntity<PlayerEntity>(playerId)
     }
 
     /**
      * A player is crated when [user] joins the game specified by [playerCreateDto] at the given seat position.
      */
     @Transactional
-    fun create(playerCreateDto: PlayerCreateDto, user: UserEntity): PlayerEntity {
-        val game = gameRepository.findByIdOrNull(playerCreateDto.gameId)
-            ?: throw EntityNotFoundException.forEntity<GameEntity>(playerCreateDto.gameId)
+    fun create(gameId: UUID, playerCreateDto: PlayerCreateDto, user: UserEntity): PlayerEntity {
+        val game = gameRepository.findByIdOrNull(gameId)
+            ?: throw EntityNotFoundException.forEntity<GameEntity>(gameId)
 
         val validatedSeat = canJoin(game, user, playerCreateDto.seat).getOrThrow()
 

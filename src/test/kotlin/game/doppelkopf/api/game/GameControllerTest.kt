@@ -7,53 +7,49 @@ import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.GameRepository
 import game.doppelkopf.persistence.game.PlayerEntity
-import io.restassured.http.ContentType
-import io.restassured.module.kotlin.extensions.Extract
-import io.restassured.module.kotlin.extensions.Given
-import io.restassured.module.kotlin.extensions.Then
-import io.restassured.module.kotlin.extensions.When
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.MethodOrderer
-import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestMethodOrder
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class GameControllerTest : BaseRestAssuredTest() {
     @Autowired
     private lateinit var gameRepository: GameRepository
 
     @Test
-    @Order(1)
     fun `get list with no games in database returns 200 empty list`() {
-        val response = Given {
-            this
-        } When {
-            get("/v1/games")
-        } Then {
-            statusCode(200)
-        } Extract {
-            response().jsonPath().getList<GameInfoDto>("$")
-        }
+        gameRepository.deleteAll()
+
+        val response = getResourceList<GameInfoDto>("/v1/games", 200)
 
         assertThat(response).isEmpty()
     }
 
     @Test
-    @Order(2)
-    fun `get specific with unknown uuid returns 404`() {
-        val response = Given {
-            this
-        } When {
-            get("/v1/games/$zeroId")
-        } Then {
-            statusCode(404)
-        } Extract {
-            response().`as`(ProblemDetailResponse::class.java)
+    fun `get list with some games in the database returns 200 with list of dto`() {
+        gameRepository.deleteAll()
+        val entities = listOf(
+            GameEntity(creator = testUser, maxNumberOfPlayers = 4),
+            GameEntity(creator = testUser, maxNumberOfPlayers = 5),
+            GameEntity(creator = testAdmin, maxNumberOfPlayers = 6),
+            GameEntity(creator = testAdmin, maxNumberOfPlayers = 7),
+        ).map {
+            gameRepository.save(it)
         }
+
+        val response = getResourceList<GameInfoDto>("/v1/games", 200)
+        assertThat(response).hasSize(4)
+
+        assertThat(response.map { it.id }).containsExactlyInAnyOrderElementsOf(entities.map { it.id })
+    }
+
+    @Test
+    fun `get specific with unknown uuid returns 404`() {
+        val response = getResource<ProblemDetailResponse>(
+            path = "/v1/games/$zeroId",
+            expectedStatus = 404
+        )
 
         assertThat(response.instance.toString()).isEqualTo("/v1/games/$zeroId")
         assertThat(response.title).isEqualTo("Entity not found")
@@ -62,75 +58,46 @@ class GameControllerTest : BaseRestAssuredTest() {
 
     @ParameterizedTest
     @ValueSource(ints = [4, 5, 6, 7, 8])
-    @Order(3)
     fun `create with valid player limit returns 201 and dto`(playerLimit: Int) {
-        val response = Given {
-            contentType(ContentType.JSON)
-            body(
-                GameCreateDto(
-                    playerLimit = playerLimit,
-                )
-            )
-        } When {
-            post("/v1/games")
-        } Then {
-            statusCode(201)
-        } Extract {
-            response().`as`(GameInfoDto::class.java)
+        val (response, location) = execCreateGame<GameInfoDto>(playerLimit, 201)
+
+        response.also {
+            assertThat(it.creator.id).isEqualTo(testUser.id)
+            assertThat(it.playerLimit).isEqualTo(playerLimit)
+
+            // Ensure that the creator was automatically added as player in seat position 0.
+            assertThat(it.players).hasSize(1)
+            assertThat(it.players.map { p -> p.user.id }).containsExactly(testUser.id)
+            assertThat(it.players.map { p -> p.seat }).containsExactly(0)
         }
 
-        assertThat(response.creator.id).isEqualTo(testUser.id)
-        // The default login for the testing is testUser.
-        assertThat(response.playerLimit).isEqualTo(playerLimit)
-        assertThat(response.players).hasSize(1)
-        assertThat(response.players.map { it.user.id }).containsExactly(testUser.id)
-        assertThat(response.players.map { it.seat }).containsExactly(0)
-        // Ensure that the creator was automatically added as player in seat position 0.
+
+        assertThat(location).isNotNull()
+
+        getResource<GameInfoDto>(location!!, 200).also {
+            assertThat(it.creator.id).isEqualTo(testUser.id)
+            assertThat(it.playerLimit).isEqualTo(playerLimit)
+
+            // Ensure that the creator was automatically added as player in seat position 0.
+            assertThat(it.players).hasSize(1)
+            assertThat(it.players.map { p -> p.user.id }).containsExactly(testUser.id)
+            assertThat(it.players.map { p -> p.seat }).containsExactly(0)
+        }
     }
 
     @ParameterizedTest
     @ValueSource(ints = [0, 1, 2, 3, -17, 42])
-    @Order(4)
     fun `create with invalid player limit returns 400 bad request`(playerLimit: Int) {
-        val response = Given {
-            contentType(ContentType.JSON)
-            body(
-                GameCreateDto(
-                    playerLimit = playerLimit,
-                )
-            )
-        } When {
-            post("/v1/games")
-        } Then {
-            statusCode(400)
-        } Extract {
-            response().`as`(ProblemDetailResponse::class.java)
-        }
+        val (response, location) = execCreateGame<ProblemDetailResponse>(playerLimit, 400)
 
         assertThat(response.instance.toString()).isEqualTo("/v1/games")
         assertThat(response.title).isEqualTo("Bad Request")
         assertThat(response.detail).isEqualTo("Invalid request content.")
+
+        assertThat(location).isNull()
     }
 
     @Test
-    @Order(4)
-    fun `get list with games in database returns 200 and list of dto`() {
-        val response = Given {
-            this
-        } When {
-            get("/v1/games")
-        } Then {
-            statusCode(200)
-        } Extract {
-            response().jsonPath().getList<GameInfoDto>("$")
-        }
-
-        assertThat(response).hasSize(5)
-        // the previous test should have created 5 games
-    }
-
-    @Test
-    @Order(5)
     fun `get specific by its id returns 200 and dto`() {
         val entity = GameEntity(
             creator = testAdmin,
@@ -147,15 +114,10 @@ class GameControllerTest : BaseRestAssuredTest() {
             }
         }.let { gameRepository.save(it) }
 
-        val response = Given {
-            this
-        } When {
-            get("/v1/games/${entity.id}")
-        } Then {
-            statusCode(200)
-        } Extract {
-            response().`as`(GameInfoDto::class.java)
-        }
+        val response = getResource<GameInfoDto>(
+            path = "/v1/games/${entity.id}",
+            expectedStatus = 200
+        )
 
         assertThat(response.id).isEqualTo(entity.id)
         assertThat(response.creator.id).isEqualTo(entity.creator.id)
@@ -163,5 +125,18 @@ class GameControllerTest : BaseRestAssuredTest() {
         assertThat(
             response.players.map { it.user.id }
         ).containsExactlyInAnyOrderElementsOf(testPlayers.map { it.id })
+    }
+
+    private final inline fun <reified T> execCreateGame(
+        playerLimit: Int,
+        expectedStatus: Int,
+    ): Pair<T, String?> {
+        return createResource<GameCreateDto, T>(
+            path = "/v1/games",
+            body = GameCreateDto(
+                playerLimit = playerLimit,
+            ),
+            expectedStatus = expectedStatus,
+        )
     }
 }

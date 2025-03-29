@@ -18,7 +18,7 @@ import java.util.*
  * List, create, join and start the game.
  */
 @RestController
-@RequestMapping("/v1/games")
+@RequestMapping("/v1")
 class GameController(
     private val gameService: GameService
 ) {
@@ -26,7 +26,7 @@ class GameController(
         summary = "List games.",
         description = "Gets a list containing information about all games.",
     )
-    @GetMapping("")
+    @GetMapping("/games")
     fun list(): ResponseEntity<List<GameInfoDto>> {
         return ResponseEntity.ok(
             gameService.list().map { GameInfoDto(it) }
@@ -37,7 +37,7 @@ class GameController(
         summary = "Create a new game.",
         description = "Creates a new game based on the provided data."
     )
-    @PostMapping("")
+    @PostMapping("/games")
     fun create(
         @RequestBody @Valid gameCreateDto: GameCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
@@ -53,7 +53,7 @@ class GameController(
         summary = "Show game.",
         description = "Gets the information about the game with the specified id.",
     )
-    @GetMapping("/{id}")
+    @GetMapping("/games/{id}")
     fun show(@PathVariable id: UUID): ResponseEntity<GameInfoDto> {
         return ResponseEntity.ok(
             GameInfoDto(gameService.load(id))
@@ -64,7 +64,7 @@ class GameController(
         summary = "Perform operation on the game.",
         description = "Perform operations on the game with the specified id."
     )
-    @PatchMapping("/{id}")
+    @PatchMapping("/games/{id}")
     fun patch(
         @PathVariable id: UUID,
         @RequestBody @Valid operation: GameOperationDto,

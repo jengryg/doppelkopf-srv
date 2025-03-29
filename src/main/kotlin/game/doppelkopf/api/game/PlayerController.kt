@@ -16,18 +16,20 @@ import java.util.*
  * Lets users join a game as player and provides information about the users own players.
  */
 @RestController
-@RequestMapping("/v1/players")
+@RequestMapping("/v1")
 class PlayerController(
     private val playerService: PlayerService
 ) {
     @Operation(
-        summary = "Obtain all players.",
-        description = "Gets a list containing information about all players."
+        summary = "Obtain all players of the specified game.",
+        description = "Gets a list containing information about all players of the specified game."
     )
-    @GetMapping("")
-    fun list(): ResponseEntity<List<PlayerInfoDto>> {
+    @GetMapping("/games/{gameId}/players")
+    fun list(
+        @PathVariable gameId: UUID,
+    ): ResponseEntity<List<PlayerInfoDto>> {
         return ResponseEntity.ok(
-            playerService.list().map { PlayerInfoDto(it) }
+            playerService.list(gameId).map { PlayerInfoDto(it) }
         )
     }
 
@@ -35,12 +37,15 @@ class PlayerController(
         summary = "Create a player by joining a game.",
         description = "Join the game at the seat position specified by the provided data."
     )
-    @PostMapping("")
+    @PostMapping("/games/{gameId}/players")
     fun create(
+        @PathVariable gameId: UUID,
         @RequestBody @Valid playerCreateDto: PlayerCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<PlayerInfoDto> {
-        return PlayerInfoDto(playerService.create(playerCreateDto, userDetails.user)).let {
+        val player = playerService.create(gameId, playerCreateDto, userDetails.user)
+
+        return PlayerInfoDto(player).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/players/{id}").build(it.id)
             ).body(it)
@@ -51,7 +56,7 @@ class PlayerController(
         summary = "Show player information.",
         description = "Gets the information about the player with the specified id."
     )
-    @GetMapping("/{id}")
+    @GetMapping("/players/{id}")
     fun show(
         @PathVariable id: UUID
     ): ResponseEntity<PlayerInfoDto> {

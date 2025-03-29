@@ -21,7 +21,7 @@ abstract class BaseEntity {
      * of entities from database via ORM.
      */
     @Id
-    @Column(length = 16, unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     var id: UUID = UUID.randomUUID()
 

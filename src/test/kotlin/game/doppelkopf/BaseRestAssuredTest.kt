@@ -2,19 +2,15 @@ package game.doppelkopf
 
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
-import game.doppelkopf.persistence.user.UserEntity
-import game.doppelkopf.persistence.user.UserRepository
-import game.doppelkopf.security.Authority
 import io.restassured.RestAssured
 import io.restassured.authentication.FormAuthConfig
-import org.bouncycastle.util.encoders.Base64
-import org.junit.jupiter.api.AfterAll
+import io.restassured.http.ContentType
+import io.restassured.module.kotlin.extensions.Extract
+import io.restassured.module.kotlin.extensions.Given
+import io.restassured.module.kotlin.extensions.Then
+import io.restassured.module.kotlin.extensions.When
 import org.junit.jupiter.api.BeforeAll
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.security.crypto.factory.PasswordEncoderFactories
-import java.security.SecureRandom
+import org.springframework.http.HttpHeaders
 import java.util.*
 
 /**
@@ -27,113 +23,11 @@ import java.util.*
 class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
     private val log = logger()
 
-    @Autowired
-    protected lateinit var userRepository: UserRepository
-
-    /**
-     * Test user username.
-     */
-    protected val testUserName = "test-user"
-
-    /**
-     * Test user password is randomly generated.
-     */
-    protected val testUserPassword =
-        Base64.toBase64String(ByteArray(32).also { SecureRandom.getInstanceStrong().nextBytes(it) })!!
-
-    /**
-     * Test admin username.
-     */
-    protected val testAdminName = "test-admin"
-
-
-    /**
-     * Test admin password is randomly generated
-     */
-    protected val testAdminPassword =
-        Base64.toBase64String(ByteArray(32).also { SecureRandom.getInstanceStrong().nextBytes(it) })!!
-
-    /**
-     * Test players usernames.
-     */
-    protected val testPlayerNames = List(8) { "test-player-$it" }
-
-    /**
-     * Test players passwords are randomly generated
-     */
-    protected val testPlayerPasswords = List(8) {
-        Base64.toBase64String(ByteArray(32).also { SecureRandom.getInstanceStrong().nextBytes(it) })!!
-    }
-
-    /**
-     * Test user that can be used to test the API that requires the "USER" authority.
-     */
-    protected lateinit var testUser: UserEntity
-
-    /**
-     * Test admin that can be used to test the API that requires the "ADMIN" authority.
-     */
-    protected lateinit var testAdmin: UserEntity
-
-    /**
-     * Test players #1 to #8 that can be used to test the game.
-     */
-    protected lateinit var testPlayers: List<UserEntity>
-
-    /**
-     * The [SpringBootTest.WebEnvironment.RANDOM_PORT] is injected into this variable for later usage.
-     */
-    @LocalServerPort
-    var serverPort: Int = 0
-
-    @BeforeAll
-    fun `setup test user accounts in database`() {
-        testUser = createTestUserEntity(testUserName, testUserPassword, Authority.USER)
-        testAdmin = createTestUserEntity(testAdminName, testAdminPassword, Authority.ADMIN)
-
-        testPlayers = List(8) {
-            createTestUserEntity(testPlayerNames[it], testPlayerPasswords[it], Authority.USER)
-        }
-    }
-
-    /**
-     * Creates user entities for the test runs and save them to the database.
-     *
-     * @param name the name for the test user
-     * @param password the password for the test user
-     * @param authority the [Authority] that the user should be assigned
-     * @return a [UserEntity] with the given [name], [password] and [authority]
-     */
-    private fun createTestUserEntity(
-        name: String,
-        password: String,
-        authority: Authority
-    ): UserEntity {
-        return userRepository.save(
-            UserEntity(
-                username = name,
-                password = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(password),
-                enabled = true,
-                locked = false,
-                authority = authority
-            )
-        ).also {
-            log.atDebug()
-                .setMessage("Created test user account in database.")
-                .addKeyValue("user") { it }
-                .log()
-        }
-    }
-
-    @AfterAll
-    fun `delete test user accounts from database`() {
-        userRepository.deleteAll()
-    }
-
     /**
      * The [FormAuthConfig] for the login api at `/v1/auth/login`.
      */
-    protected val formAuthConfig = FormAuthConfig("/v1/auth/login", "username", "password").withLoggingEnabled()
+    protected val formAuthConfig = FormAuthConfig("/v1/auth/login", "username", "password")
+        .withLoggingEnabled()!!
 
     @BeforeAll
     fun `setup containerized rest assured test`() {
@@ -150,6 +44,136 @@ class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
             .addKeyValue("port") { serverPort }
             .addKeyValue("authUser") { testUser }
             .log()
+    }
+
+    /**
+     * Executes the post request at the given [path] that allows to create a resource.
+     * This method does not use the HTTP Body to send data to the API, see other overloads of [createResource] for that.
+     *
+     * The response HTTP Status Code is expected to be [expectedStatus] and then the response body is cast to [T].
+     * Additionally, the HTTP Response Headers are checked for a [HttpHeaders.LOCATION] entry and extracted if present.
+     *
+     * @param T the type to use for the casting of the HTTP Response body
+     *
+     * @param path for HTTP POST
+     * @param expectedStatus the HTTP Status Code of the response we expect
+     *
+     * @return the Pair containing the response cast to [T] and the location reference for the resource as [String] if
+     * the location header was present in the response
+     */
+    protected final inline fun <reified T> createResource(
+        path: String,
+        expectedStatus: Int
+    ): Pair<T, String?> {
+        return Given {
+            contentType(ContentType.JSON)
+        } When {
+            post(path)
+        } Then {
+            statusCode(expectedStatus)
+        } Extract {
+            Pair(
+                first = response().`as`(T::class.java),
+                second = response().headers.let {
+                    if (it.hasHeaderWithName(HttpHeaders.LOCATION)) it.get(HttpHeaders.LOCATION).value else null
+                }
+            )
+        }
+    }
+
+    /**
+     * Executes the POST request at the given [path] that allows to create a resource.
+     * The HTTP Request body contains the [ContentType.JSON] of the given [body].
+     *
+     * The response HTTP Status Code is expected to be [expectedStatus] and then the response body is cast to [T].
+     * Additionally, the HTTP Response Headers are checked for a [HttpHeaders.LOCATION] entry and extracted if present.
+     *
+     * @param S the type of the HTTP Request body
+     * @param T the type to use for the casting of the HTTP Response body
+     *
+     * @param path for HTTP POST
+     * @param expectedStatus the HTTP Status Code of the response we expect
+     *
+     * @return the Pair containing the response cast to [T] and the location reference for the resource as [String] if
+     * the location header was present in the response
+     */
+    protected final inline fun <reified S, reified T> createResource(
+        path: String,
+        body: S,
+        expectedStatus: Int,
+    ): Pair<T, String?> {
+        return Given {
+            contentType(ContentType.JSON)
+            body(body)
+        } When {
+            post(path)
+        } Then {
+            statusCode(expectedStatus)
+        } Extract {
+            Pair(
+                first = response().`as`(T::class.java),
+                second = response().headers.let {
+                    if (it.hasHeaderWithName(HttpHeaders.LOCATION)) it.get(HttpHeaders.LOCATION).value else null
+                }
+            )
+        }
+    }
+
+    /**
+     * Executes the GET request to the given [path] that allows to retrieve a single resource.
+     *
+     * The response HTTP Status Code is expected to be [expectedStatus] and then the request body is cast to [T].
+     *
+     * @param T the type to use for the casting of the HTTP Response body
+     *
+     * @param path for HTTP GET
+     * @param expectedStatus the HTTP Status Code of the response we expect
+     *
+     * @return the response body cast to [T]
+     */
+    protected final inline fun <reified T> getResource(
+        path: String,
+        expectedStatus: Int
+    ): T {
+        return Given {
+            this
+        } When {
+            get(path)
+        } Then {
+            statusCode(expectedStatus)
+        } Extract {
+            response().`as`(T::class.java)
+        }
+    }
+
+    /**
+     * Executes the GET request to the given [path] that allows to retrieve a list of resources.
+     *
+     * The response HTTP Status Code is expected to be [expectedStatus] and then the request body is cast to a [List] of
+     * elements of type [T].
+     *
+     * @param T the type to use for the casting of the elements of the HTTP Response body
+     *
+     * @param path for HTTP GET
+     * @param expectedStatus the HTTP Status Code of the response we expect
+     *
+     * @return the response body cast to a [List] of [T]
+     *
+     * @see [getResource]
+     */
+    protected final inline fun <reified T> getResourceList(
+        path: String,
+        expectedStatus: Int
+    ): List<T> {
+        return Given {
+            this
+        } When {
+            get(path)
+        } Then {
+            statusCode(expectedStatus)
+        } Extract {
+            response().jsonPath().getList("$", T::class.java)
+        }
     }
 
     companion object {
