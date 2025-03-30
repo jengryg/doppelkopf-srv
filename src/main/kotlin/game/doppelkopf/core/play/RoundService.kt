@@ -3,6 +3,8 @@ package game.doppelkopf.core.play
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.game.GameState
+import game.doppelkopf.instrumentation.logging.Logging
+import game.doppelkopf.instrumentation.logging.logger
 import game.doppelkopf.persistence.EntityNotFoundException
 import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.GameRepository
@@ -19,7 +21,9 @@ import java.util.*
 class RoundService(
     private val gameRepository: GameRepository,
     private val roundRepository: RoundRepository,
-) {
+) : Logging {
+    private val log = logger()
+
     fun list(gameId: UUID): List<RoundEntity> {
         return gameRepository.findByIdOrNull(gameId)?.rounds?.toList()
             ?: throw EntityNotFoundException.forEntity<GameEntity>(gameId)
@@ -63,6 +67,13 @@ class RoundService(
 
         game.rounds.add(round)
         game.state = GameState.PLAYING_ROUND
+
+        log.atDebug()
+            .setMessage("Created new round.")
+            .addKeyValue("round") { round.toString() }
+            .addKeyValue("dealer") { dealer.toString() }
+            .addKeyValue("number") { round.number }
+            .log()
 
         // TODO: deal the actual cards to the players
 
