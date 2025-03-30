@@ -15,4 +15,5 @@ spring:
 
 logging:
   level:
-    root: trace
+    root: info
+    game.doppelkopf: debug
