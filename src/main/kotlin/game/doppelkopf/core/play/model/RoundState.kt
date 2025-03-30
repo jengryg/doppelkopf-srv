@@ -1,4 +1,4 @@
-package game.doppelkopf.core.play
+package game.doppelkopf.core.play.model
 
 enum class RoundState {
     INITIALIZED,

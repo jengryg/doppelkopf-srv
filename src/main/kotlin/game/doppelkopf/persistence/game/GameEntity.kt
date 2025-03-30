@@ -1,6 +1,6 @@
 package game.doppelkopf.persistence.game
 
-import game.doppelkopf.core.game.GameState
+import game.doppelkopf.core.game.model.GameState
 import game.doppelkopf.persistence.BaseEntity
 import game.doppelkopf.persistence.play.RoundEntity
 import game.doppelkopf.persistence.user.UserEntity

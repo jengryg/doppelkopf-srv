@@ -1,7 +1,7 @@
 package game.doppelkopf.api.play
 
 import game.doppelkopf.api.play.dto.RoundInfoDto
-import game.doppelkopf.core.play.RoundService
+import game.doppelkopf.core.play.RoundFacade
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -16,7 +16,7 @@ import java.util.*
 @RestController
 @RequestMapping("/v1")
 class RoundController(
-    private val roundService: RoundService
+    private val roundFacade: RoundFacade
 ) {
     @Operation(
         summary = "Obtain all rounds of a specific game.",
@@ -25,7 +25,7 @@ class RoundController(
     @GetMapping("/games/{gameId}/rounds")
     fun list(@PathVariable gameId: UUID): ResponseEntity<List<RoundInfoDto>> {
         return ResponseEntity.ok(
-            roundService.list(gameId).map { RoundInfoDto(it) }
+            roundFacade.list(gameId).map { RoundInfoDto(it) }
         )
     }
 
@@ -38,7 +38,7 @@ class RoundController(
         @PathVariable gameId: UUID,
         @AuthenticationPrincipal userDetails: UserDetails,
     ): ResponseEntity<RoundInfoDto> {
-        return RoundInfoDto(roundService.create(gameId, userDetails.user)).let {
+        return RoundInfoDto(roundFacade.create(gameId, userDetails.user)).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/rounds/{id}").build(it.id)
             ).body(it)
@@ -54,7 +54,7 @@ class RoundController(
         @PathVariable id: UUID
     ): ResponseEntity<RoundInfoDto> {
         return ResponseEntity.ok(
-            RoundInfoDto(roundService.load(id))
+            RoundInfoDto(roundFacade.load(id))
         )
     }
 }

@@ -2,7 +2,7 @@ package game.doppelkopf.api.game
 
 import game.doppelkopf.api.game.dto.PlayerCreateDto
 import game.doppelkopf.api.game.dto.PlayerInfoDto
-import game.doppelkopf.core.game.PlayerService
+import game.doppelkopf.core.game.PlayerFacade
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -18,7 +18,7 @@ import java.util.*
 @RestController
 @RequestMapping("/v1")
 class PlayerController(
-    private val playerService: PlayerService
+    private val playerFacade: PlayerFacade
 ) {
     @Operation(
         summary = "Obtain all players of the specified game.",
@@ -29,7 +29,7 @@ class PlayerController(
         @PathVariable gameId: UUID,
     ): ResponseEntity<List<PlayerInfoDto>> {
         return ResponseEntity.ok(
-            playerService.list(gameId).map { PlayerInfoDto(it) }
+            playerFacade.list(gameId).map { PlayerInfoDto(it) }
         )
     }
 
@@ -43,7 +43,7 @@ class PlayerController(
         @RequestBody @Valid playerCreateDto: PlayerCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<PlayerInfoDto> {
-        val player = playerService.create(gameId, playerCreateDto, userDetails.user)
+        val player = playerFacade.create(gameId, playerCreateDto, userDetails.user)
 
         return PlayerInfoDto(player).let {
             ResponseEntity.created(
@@ -61,7 +61,7 @@ class PlayerController(
         @PathVariable id: UUID
     ): ResponseEntity<PlayerInfoDto> {
         return ResponseEntity.ok(
-            PlayerInfoDto(playerService.load(id))
+            PlayerInfoDto(playerFacade.load(id))
         )
     }
 }

@@ -3,8 +3,8 @@ package game.doppelkopf.api.game
 import game.doppelkopf.api.game.dto.GameCreateDto
 import game.doppelkopf.api.game.dto.GameInfoDto
 import game.doppelkopf.api.game.dto.GameOperationDto
-import game.doppelkopf.core.game.GameOperation
-import game.doppelkopf.core.game.GameService
+import game.doppelkopf.core.game.model.GameOperation
+import game.doppelkopf.core.game.GameFacade
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -20,7 +20,7 @@ import java.util.*
 @RestController
 @RequestMapping("/v1")
 class GameController(
-    private val gameService: GameService
+    private val gameFacade: GameFacade
 ) {
     @Operation(
         summary = "List games.",
@@ -29,7 +29,7 @@ class GameController(
     @GetMapping("/games")
     fun list(): ResponseEntity<List<GameInfoDto>> {
         return ResponseEntity.ok(
-            gameService.list().map { GameInfoDto(it) }
+            gameFacade.list().map { GameInfoDto(it) }
         )
     }
 
@@ -42,7 +42,7 @@ class GameController(
         @RequestBody @Valid gameCreateDto: GameCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<GameInfoDto> {
-        return GameInfoDto(gameService.create(gameCreateDto, userDetails.user)).let {
+        return GameInfoDto(gameFacade.create(gameCreateDto, userDetails.user)).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/games/{id}").build(it.id)
             ).body(it)
@@ -56,7 +56,7 @@ class GameController(
     @GetMapping("/games/{id}")
     fun show(@PathVariable id: UUID): ResponseEntity<GameInfoDto> {
         return ResponseEntity.ok(
-            GameInfoDto(gameService.load(id))
+            GameInfoDto(gameFacade.load(id))
         )
     }
 
@@ -71,7 +71,7 @@ class GameController(
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<GameInfoDto> {
         return when (operation.op) {
-            GameOperation.START -> ResponseEntity.ok(GameInfoDto(gameService.start(id, userDetails.user)))
+            GameOperation.START -> ResponseEntity.ok(GameInfoDto(gameFacade.start(id, userDetails.user)))
         }
     }
 }

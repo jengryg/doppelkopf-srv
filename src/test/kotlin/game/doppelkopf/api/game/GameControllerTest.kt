@@ -3,19 +3,39 @@ package game.doppelkopf.api.game
 import game.doppelkopf.BaseRestAssuredTest
 import game.doppelkopf.api.game.dto.GameCreateDto
 import game.doppelkopf.api.game.dto.GameInfoDto
+import game.doppelkopf.api.game.dto.GameOperationDto
+import game.doppelkopf.core.errors.ForbiddenActionException
+import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.core.game.model.GameModelFactory
+import game.doppelkopf.core.game.model.GameOperation
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.GameRepository
 import game.doppelkopf.persistence.game.PlayerEntity
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.context.bean.override.convention.TestBean
+import java.util.*
 
 class GameControllerTest : BaseRestAssuredTest() {
     @Autowired
     private lateinit var gameRepository: GameRepository
+
+    @TestBean
+    private lateinit var gameModelFactory: GameModelFactory
+
+    companion object {
+        @Suppress("unused")
+        @JvmStatic
+        fun gameModelFactory(): GameModelFactory {
+            return mockk<GameModelFactory>()
+        }
+    }
 
     @Test
     fun `get list with no games in database returns 200 empty list`() {
@@ -127,6 +147,50 @@ class GameControllerTest : BaseRestAssuredTest() {
         ).containsExactlyInAnyOrderElementsOf(testPlayers.map { it.id })
     }
 
+    @Test
+    fun `start returns 400 when invalid action exception`() {
+        every { gameModelFactory.create(any()) } returns mockk {
+            every { start(testUser) } throws InvalidActionException(
+                "Game:Start",
+                "Mocked Model Exception."
+            )
+        }
+
+        val game = GameEntity(creator = testUser, maxNumberOfPlayers = 4).let {
+            gameRepository.save(it)
+        }
+
+        val response = execPatchGame<ProblemDetailResponse>(game.id, GameOperation.START, 400)
+
+        response.also {
+            assertThat(response.instance.toString()).isEqualTo("/v1/games/${game.id}")
+            assertThat(response.title).isEqualTo("Invalid action")
+            assertThat(response.detail).isEqualTo("The action 'Game:Start' can not be performed: Mocked Model Exception.")
+        }
+    }
+
+    @Test
+    fun `start returns 403 when forbidden action exception`() {
+        every { gameModelFactory.create(any()) } returns mockk {
+            every { start(testUser) } throws ForbiddenActionException(
+                "Game:Start",
+                "Mocked Model Exception."
+            )
+        }
+
+        val game = GameEntity(creator = testUser, maxNumberOfPlayers = 4).let {
+            gameRepository.save(it)
+        }
+
+        val response = execPatchGame<ProblemDetailResponse>(game.id, GameOperation.START, 403)
+
+        response.also {
+            assertThat(response.instance.toString()).isEqualTo("/v1/games/${game.id}")
+            assertThat(response.title).isEqualTo("Forbidden action")
+            assertThat(response.detail).isEqualTo("You are not allowed to perform the action 'Game:Start': Mocked Model Exception.")
+        }
+    }
+
     private final inline fun <reified T> execCreateGame(
         playerLimit: Int,
         expectedStatus: Int,
@@ -135,6 +199,20 @@ class GameControllerTest : BaseRestAssuredTest() {
             path = "/v1/games",
             body = GameCreateDto(
                 playerLimit = playerLimit,
+            ),
+            expectedStatus = expectedStatus,
+        )
+    }
+
+    private final inline fun <reified T> execPatchGame(
+        gameId: UUID,
+        operation: GameOperation,
+        expectedStatus: Int,
+    ): T {
+        return patchResource<GameOperationDto, T>(
+            path = "/v1/games/$gameId",
+            body = GameOperationDto(
+                op = operation
             ),
             expectedStatus = expectedStatus,
         )

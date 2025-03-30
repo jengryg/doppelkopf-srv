@@ -2,8 +2,8 @@ package game.doppelkopf.api.play
 
 import game.doppelkopf.BaseRestAssuredTest
 import game.doppelkopf.api.play.dto.RoundInfoDto
-import game.doppelkopf.core.game.GameState
-import game.doppelkopf.core.play.RoundState
+import game.doppelkopf.core.game.model.GameState
+import game.doppelkopf.core.play.model.RoundState
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.GameRepository

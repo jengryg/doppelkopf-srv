@@ -1,7 +1,7 @@
 package game.doppelkopf.persistence.play
 
-import game.doppelkopf.core.play.RoundContract
-import game.doppelkopf.core.play.RoundState
+import game.doppelkopf.core.play.model.RoundContract
+import game.doppelkopf.core.play.model.RoundState
 import game.doppelkopf.persistence.BaseEntity
 import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.PlayerEntity

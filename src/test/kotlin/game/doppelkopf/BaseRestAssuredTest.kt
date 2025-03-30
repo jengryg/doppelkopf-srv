@@ -120,6 +120,37 @@ class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
     }
 
     /**
+     * Executes the PATCH request to the given [path] that allows to modify a resource.
+     * The HTTP Request body contains the [ContentType.JSON] of the given [body].
+     *
+     * The response HTTP Status Code is expected to be [expectedStatus] and then the response body is cast to [T].
+     *
+     * @param S the type of the HTTP Request body
+     * @param T the type to use for the casting of the HTTP Response body
+     *
+     * @param path for HTTP PATCH
+     * @param expectedStatus the HTTP Status Code of the response we expect
+     *
+     * @return the response body cast to [T]
+     */
+    protected final inline fun <reified S, reified T> patchResource(
+        path: String,
+        body: S,
+        expectedStatus: Int,
+    ): T {
+        return Given {
+            contentType(ContentType.JSON)
+            body(body)
+        } When {
+            patch(path)
+        } Then {
+            statusCode(expectedStatus)
+        } Extract {
+            response().`as`(T::class.java)
+        }
+    }
+
+    /**
      * Executes the GET request to the given [path] that allows to retrieve a single resource.
      *
      * The response HTTP Status Code is expected to be [expectedStatus] and then the request body is cast to [T].

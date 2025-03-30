@@ -1,8 +1,8 @@
 package game.doppelkopf.core.game
 
 import game.doppelkopf.api.game.dto.GameCreateDto
-import game.doppelkopf.core.errors.ForbiddenActionException
-import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.core.game.model.GameModel
+import game.doppelkopf.core.game.model.GameModelFactory
 import game.doppelkopf.persistence.EntityNotFoundException
 import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.GameRepository
@@ -11,12 +11,12 @@ import game.doppelkopf.persistence.user.UserEntity
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import java.time.Instant
 import java.util.*
 
 @Service
-class GameService(
-    private val gameRepository: GameRepository
+class GameFacade(
+    private val gameRepository: GameRepository,
+    private val gameModelFactory: GameModelFactory,
 ) {
     /**
      * @return a list of all [GameEntity] in the database.
@@ -59,26 +59,13 @@ class GameService(
     }
 
     /**
-     * Start the game specified by [id].
+     * Initialize the [GameModel] for the game with [id] and start it.
      */
     @Transactional
     fun start(id: UUID, user: UserEntity): GameEntity {
         val game = load(id)
 
-        if (game.creator != user) {
-            throw ForbiddenActionException("Game:Start", "Only the creator of the game can start it.")
-        }
-
-        if (game.state != GameState.INITIALIZED) {
-            throw InvalidActionException("Game:Start", "The game has been started already.")
-        }
-
-        // the first dealer is decided randomly
-        game.players.random().dealer = true
-
-        // start the game
-        game.started = Instant.now()
-        game.state = GameState.WAITING_FOR_DEAL
+        gameModelFactory.create(game).start(user)
 
         return game
     }

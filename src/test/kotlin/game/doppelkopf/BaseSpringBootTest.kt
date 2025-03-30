@@ -1,14 +1,14 @@
 package game.doppelkopf
 
-import io.mockk.clearAllMocks
-import io.mockk.unmockkAll
-import org.junit.jupiter.api.BeforeAll
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
 import game.doppelkopf.persistence.user.UserEntity
 import game.doppelkopf.persistence.user.UserRepository
 import game.doppelkopf.security.Authority
+import io.mockk.clearAllMocks
+import io.mockk.unmockkAll
 import org.bouncycastle.util.encoders.Base64
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
