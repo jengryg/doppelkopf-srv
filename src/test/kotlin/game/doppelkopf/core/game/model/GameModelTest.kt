@@ -130,7 +130,7 @@ class GameModelTest {
             }
 
             assertThatThrownBy {
-                GameModel(game).nextRound(UserEntity(username = "username", password = "password"))
+                GameModel(game).dealNextRound(UserEntity(username = "username", password = "password"))
             }.isInstanceOf(InvalidActionException::class.java)
                 .hasMessageContaining("The action 'Round:Create' can not be performed: The game is currently not in the WAITING_FOR_DEAL state.")
         }
@@ -145,7 +145,7 @@ class GameModelTest {
             }
 
             assertThatThrownBy {
-                GameModel(game).nextRound(UserEntity(username = "username", password = "password"))
+                GameModel(game).dealNextRound(UserEntity(username = "username", password = "password"))
             }.isInstanceOf(ForbiddenActionException::class.java)
                 .hasMessageContaining("You are not allowed to perform the action 'Round:Create': Only the current dealer of the game can start this round.")
         }

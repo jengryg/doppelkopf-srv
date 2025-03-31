@@ -34,7 +34,7 @@ class RoundFacade(
             gameModelFactory.create(it)
         }
 
-        val round = game.nextRound(user)
+        val round = game.dealNextRound(user)
 
         // TODO: deal the actual cards to the players
 

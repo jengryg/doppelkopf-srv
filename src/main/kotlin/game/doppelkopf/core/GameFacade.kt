@@ -68,8 +68,6 @@ class GameFacade(
     fun start(id: UUID, user: UserEntity): GameEntity {
         val game = load(id)
 
-        gameModelFactory.create(game).start(user)
-
-        return game
+        return gameModelFactory.create(game).start(user)
     }
 }

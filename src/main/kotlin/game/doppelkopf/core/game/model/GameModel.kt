@@ -1,14 +1,16 @@
 package game.doppelkopf.core.game.model
 
-import game.doppelkopf.core.errors.ForbiddenActionException
-import game.doppelkopf.core.errors.InvalidActionException
-import game.doppelkopf.core.play.model.RoundState
+import game.doppelkopf.core.errors.ofForbiddenAction
+import game.doppelkopf.core.errors.ofInvalidAction
+import game.doppelkopf.core.game.enums.GameState
+import game.doppelkopf.core.play.enums.RoundState
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
 import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.PlayerEntity
 import game.doppelkopf.persistence.play.RoundEntity
 import game.doppelkopf.persistence.user.UserEntity
+import org.springframework.lang.CheckReturnValue
 import java.time.Instant
 
 class GameModel(
@@ -16,18 +18,8 @@ class GameModel(
 ) : Logging {
     private val log = logger()
 
-    fun start(user: UserEntity) {
-        if (game.creator != user) {
-            throw ForbiddenActionException("Game:Start", "Only the creator of the game can start it.")
-        }
-
-        if (game.state != GameState.INITIALIZED) {
-            throw InvalidActionException("Game:Start", "The game has been started already.")
-        }
-
-        if (game.players.size < 4) {
-            throw InvalidActionException("Game:Start", "The game needs to have at least 4 players.")
-        }
+    fun start(user: UserEntity): GameEntity {
+        canStart(user).getOrThrow()
 
         // the first dealer is decided randomly
         game.players.random().dealer = true
@@ -35,24 +27,34 @@ class GameModel(
         // start the game
         game.started = Instant.now()
         game.state = GameState.WAITING_FOR_DEAL
+
+        return game
+    }
+
+    @CheckReturnValue
+    fun canStart(user: UserEntity): Result<Unit> {
+        return when {
+            !userIsCreator(user) -> Result.ofForbiddenAction(
+                "Game:Start",
+                "Only the creator of the game can start it."
+            )
+
+            !isInInitializeState() -> Result.ofInvalidAction(
+                "Game:Start",
+                "The game has been started already."
+            )
+
+            !hasAtLeastFourPlayers() -> Result.ofInvalidAction(
+                "Game:Start",
+                "The game needs to have at least 4 players."
+            )
+
+            else -> Result.success(Unit)
+        }
     }
 
     fun join(user: UserEntity, seat: Int): PlayerEntity {
-        if (game.state != GameState.INITIALIZED) {
-            throw InvalidActionException("Game:Join", "You can not join a game that has already started.")
-        }
-
-        if (game.players.count() >= game.maxNumberOfPlayers) {
-            throw InvalidActionException("Game:Join", "This game is already at its maximum capacity.")
-        }
-
-        if (game.players.any { it.user == user }) {
-            throw InvalidActionException("Game:Join", "You already joined this game.")
-        }
-
-        if (game.players.any { it.seat == seat }) {
-            throw InvalidActionException("Game:Join", "The seat you have chosen is already taken by another player.")
-        }
+        canJoin(user, seat).getOrThrow()
 
         return PlayerEntity(
             user = user,
@@ -63,19 +65,35 @@ class GameModel(
         }
     }
 
-    fun nextRound(user: UserEntity): RoundEntity {
-        if (game.state != GameState.WAITING_FOR_DEAL) {
-            throw InvalidActionException(
-                "Round:Create",
-                "The game is currently not in the ${GameState.WAITING_FOR_DEAL.name} state."
+    @CheckReturnValue
+    fun canJoin(user: UserEntity, seat: Int): Result<Unit> {
+        return when {
+            !isInInitializeState() -> Result.ofInvalidAction(
+                "Game:Join",
+                "You can not join a game that has already started."
             )
+
+            !hasPlayerCapacity() -> Result.ofInvalidAction(
+                "Game:Join",
+                "This game is already at its maximum capacity."
+            )
+
+            !userIsNotPlayer(user) -> Result.ofInvalidAction(
+                "Game:Join",
+                "You already joined this game."
+            )
+
+            !isSeatFree(seat) -> Result.ofInvalidAction(
+                "Game:Join",
+                "The seat you have chosen is already taken by another player."
+            )
+
+            else -> Result.success(Unit)
         }
+    }
 
-        val dealer = game.getPlayerOfOrNull(user)?.takeIf { it.dealer } ?: throw ForbiddenActionException(
-            "Round:Create",
-            "Only the current dealer of the game can start this round."
-        )
-
+    fun dealNextRound(user: UserEntity): RoundEntity {
+        val dealer = getValidDealer(user).getOrThrow()
         val previousRound = game.getLatestRoundOrNull()
 
         val round = RoundEntity(
@@ -90,13 +108,56 @@ class GameModel(
         game.rounds.add(round)
         game.state = GameState.PLAYING_ROUND
 
-        log.atDebug()
-            .setMessage("Created new round.")
-            .addKeyValue("round") { round.toString() }
-            .addKeyValue("dealer") { dealer.toString() }
-            .addKeyValue("number") { round.number }
-            .log()
-
         return round
+    }
+
+
+    @CheckReturnValue
+    fun getValidDealer(user: UserEntity): Result<PlayerEntity> {
+        if (!isWaitingForDeal()) {
+            return Result.ofInvalidAction(
+                "Round:Create",
+                "The game is currently not in the ${GameState.WAITING_FOR_DEAL.name} state."
+            )
+        }
+
+        val dealer = game.getPlayerOfOrNull(user)?.takeIf { it.dealer }
+
+        return when (dealer) {
+            null -> Result.ofForbiddenAction(
+                "Round:Create",
+                "Only the current dealer of the game can start this round."
+            )
+
+            else -> Result.success(dealer)
+        }
+    }
+
+    private fun userIsCreator(user: UserEntity): Boolean {
+        return game.creator == user
+    }
+
+    private fun isInInitializeState(): Boolean {
+        return game.state == GameState.INITIALIZED
+    }
+
+    private fun hasAtLeastFourPlayers(): Boolean {
+        return game.players.size >= 4
+    }
+
+    private fun hasPlayerCapacity(): Boolean {
+        return game.players.size < game.maxNumberOfPlayers
+    }
+
+    private fun userIsNotPlayer(user: UserEntity): Boolean {
+        return game.players.all { it.user != user }
+    }
+
+    private fun isSeatFree(seat: Int): Boolean {
+        return game.players.all { it.seat != seat }
+    }
+
+    private fun isWaitingForDeal(): Boolean {
+        return game.state == GameState.WAITING_FOR_DEAL
     }
 }
