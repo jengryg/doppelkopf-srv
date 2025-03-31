@@ -1,4 +1,4 @@
-package game.doppelkopf.core.game.model
+package game.doppelkopf.core.game.enums
 
 enum class GameOperation {
     /**

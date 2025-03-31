@@ -1,6 +1,6 @@
 package game.doppelkopf.api.game.dto
 
-import game.doppelkopf.core.game.model.GameOperation
+import game.doppelkopf.core.game.enums.GameOperation
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(

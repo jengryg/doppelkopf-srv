@@ -1,6 +1,5 @@
-package game.doppelkopf.core.play
+package game.doppelkopf.core
 
-import game.doppelkopf.core.game.GameFacade
 import game.doppelkopf.core.game.model.GameModelFactory
 import game.doppelkopf.persistence.EntityNotFoundException
 import game.doppelkopf.persistence.play.RoundEntity

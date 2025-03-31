@@ -6,8 +6,8 @@ import game.doppelkopf.api.game.dto.GameInfoDto
 import game.doppelkopf.api.game.dto.GameOperationDto
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.core.game.enums.GameOperation
 import game.doppelkopf.core.game.model.GameModelFactory
-import game.doppelkopf.core.game.model.GameOperation
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.GameRepository
@@ -154,13 +154,13 @@ class GameControllerTest : BaseRestAssuredTest() {
     inner class Starting {
         @Test
         fun `start returns 200 when model returns successful`() {
-            every { gameModelFactory.create(any()) } returns mockk {
-                every { start(testUser) } returns Unit
-                // the starting method of the model is tested in the model test, we just mock it here
-            }
-
             val entity = createGameOfUser(testUser).let {
                 gameRepository.save(it)
+            }
+
+            every { gameModelFactory.create(any()) } returns mockk {
+                every { start(testUser) } returns entity
+                // the starting method of the model is tested in the model test, we just mock it here
             }
 
             val response = execPatchGame<GameInfoDto>(entity.id, GameOperation.START, 200)

@@ -1,7 +1,7 @@
 package game.doppelkopf.api.play
 
 import game.doppelkopf.api.play.dto.RoundInfoDto
-import game.doppelkopf.core.play.RoundFacade
+import game.doppelkopf.core.RoundFacade
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity

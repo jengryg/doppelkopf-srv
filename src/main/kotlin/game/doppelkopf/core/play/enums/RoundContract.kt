@@ -1,4 +1,4 @@
-package game.doppelkopf.core.play.model
+package game.doppelkopf.core.play.enums
 
 enum class RoundContract {
     UNDECIDED,

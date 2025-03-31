@@ -1,7 +1,6 @@
-package game.doppelkopf.core.game
+package game.doppelkopf.core
 
 import game.doppelkopf.api.game.dto.GameCreateDto
-import game.doppelkopf.core.game.model.GameModel
 import game.doppelkopf.core.game.model.GameModelFactory
 import game.doppelkopf.persistence.EntityNotFoundException
 import game.doppelkopf.persistence.game.GameEntity
@@ -59,7 +58,11 @@ class GameFacade(
     }
 
     /**
-     * Initialize the [GameModel] for the game with [id] and start it.
+     * Start the game with [id] as [user].
+     *
+     * @param id the [UUID] of the game to start
+     * @param user the user that wants to start the game, must be the creator
+     * @return the [GameEntity] of the started game
      */
     @Transactional
     fun start(id: UUID, user: UserEntity): GameEntity {

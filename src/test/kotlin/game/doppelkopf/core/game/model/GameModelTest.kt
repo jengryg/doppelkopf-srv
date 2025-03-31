@@ -2,6 +2,7 @@ package game.doppelkopf.core.game.model
 
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.core.game.enums.GameState
 import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.PlayerEntity
 import game.doppelkopf.persistence.user.UserEntity
