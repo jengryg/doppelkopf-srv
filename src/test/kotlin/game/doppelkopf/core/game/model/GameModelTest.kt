@@ -3,11 +3,12 @@ package game.doppelkopf.core.game.model
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.game.enums.GameState
+import game.doppelkopf.core.play.enums.RoundState
 import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.PlayerEntity
 import game.doppelkopf.persistence.user.UserEntity
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -20,7 +21,25 @@ class GameModelTest {
 
     @Nested
     inner class StartMethod {
-        // TODO happy case
+        @Test
+        fun `start sets dealer and advances state`() {
+            val user = UserEntity(username = "username", password = "password")
+            val game = GameEntity(
+                creator = user,
+                maxNumberOfPlayers = 8
+            ).apply {
+                state = GameState.INITIALIZED
+                repeat(4) { players.add(PlayerEntity(user = mockk(), game = this, seat = it + 1)) }
+            }
+
+            assertThatCode {
+                GameModel(game).start(user)
+            }.doesNotThrowAnyException()
+
+            assertThat(game.state).isEqualTo(GameState.WAITING_FOR_DEAL)
+            assertThat(game.started).isNotNull
+            assertThat(game.players.count { it.dealer }).isEqualTo(1)
+        }
 
         @Test
         fun `start throws exception when user is not the creator`() {
@@ -64,7 +83,22 @@ class GameModelTest {
 
     @Nested
     inner class JoinMethod {
-        // TODO happy case
+        @Test
+        fun `join creates PlayerEntity and assigns it to the game`() {
+            val user = UserEntity(username = "username", password = "password")
+            val game = createTestGameEntity()
+
+            val player = GameModel(game).join(user, 7)
+
+            assertThat(game.players).hasSize(1)
+            // the test game entity has no players by default
+
+            assertThat(game.players).contains(player)
+            assertThat(player.user).isEqualTo(user)
+            assertThat(player.game).isEqualTo(game)
+            assertThat(player.seat).isEqualTo(7)
+            assertThat(player.dealer).isFalse()
+        }
 
         @ParameterizedTest
         @EnumSource(GameState::class, names = ["INITIALIZED"], mode = EnumSource.Mode.EXCLUDE)
@@ -120,7 +154,36 @@ class GameModelTest {
 
     @Nested
     inner class NextRoundMethod {
-        // TODO happy case
+        @Test
+        fun `dealNextRound returns RoundEntity and assigns it to the game`() {
+            val game = createTestGameEntity().apply {
+                state = GameState.WAITING_FOR_DEAL
+            }
+            val players = List(4) {
+                PlayerEntity(
+                    user = UserEntity(username = "username", password = "password"),
+                    game = game,
+                    seat = it
+                ).apply {
+                    dealer = false
+                }
+            }
+            val dealer = players.first().apply {
+                dealer = true
+            }
+
+            game.players.addAll(players)
+
+            val round = GameModel(game).dealNextRound(dealer.user)
+
+            assertThat(game.state).isEqualTo(GameState.PLAYING_ROUND)
+
+            assertThat(round.game).isEqualTo(game)
+            assertThat(round.number).isEqualTo(1)
+            assertThat(round.dealer).isEqualTo(dealer)
+            assertThat(round.state).isEqualTo(RoundState.INITIALIZED)
+            assertThat(round.started).isNotNull()
+        }
 
         @ParameterizedTest
         @EnumSource(value = GameState::class, names = ["WAITING_FOR_DEAL"], mode = EnumSource.Mode.EXCLUDE)
