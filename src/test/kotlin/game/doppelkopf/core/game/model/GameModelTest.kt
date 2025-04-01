@@ -1,6 +1,7 @@
 package game.doppelkopf.core.game.model
 
 import game.doppelkopf.core.errors.ForbiddenActionException
+import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.game.enums.GameState
 import game.doppelkopf.core.play.enums.RoundState
@@ -211,6 +212,155 @@ class GameModelTest {
                 GameModel(game).dealNextRound(UserEntity(username = "username", password = "password"))
             }.isInstanceOf(ForbiddenActionException::class.java)
                 .hasMessageContaining("You are not allowed to perform the action 'Round:Create': Only the current dealer of the game can start this round.")
+        }
+    }
+
+    @Nested
+    inner class GetFourPlayersBehind {
+        @ParameterizedTest
+        @ValueSource(ints = [0, 1, 2, 3])
+        fun `get four players behind returns in circular increasing seat position order for 4 players`(given: Int) {
+            val game = createTestGameEntity()
+            // Players are not assumed to be in correct order in the game entity, thus (6 - it).
+            // Player at index 3 is the one with the lowest seat number here.
+            val players = List(4) { PlayerEntity(user = mockk(), game = game, seat = 6 - it) }.onEach {
+                game.players.add(it)
+            }
+
+            val quad = GameModel(game).getFourPlayersBehind(players[given])
+            val seatCompare = quad.toList().zipWithNext { a, b -> a.seat < b.seat }
+            // Due to circularity, depending on the starting position, we can not have more than 1 break of the seat
+            // position order.
+            assertThat(seatCompare.count { !it }).isEqualTo(
+                when (given) {
+                    0 -> 0 // without circular breaking
+                    else -> 1 // In all other cases, we expect exactly one circular order break.
+                }
+            )
+
+            // No player was let out in the selection
+            assertThat(quad.toList().map { it.id }).containsExactlyInAnyOrderElementsOf(players.map { it.id })
+            // Since we have 4 players, we expect the last one in the selection to be the given player.
+            assertThat(quad.fourth).isEqualTo(players[given])
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = [0, 1, 2, 3, 4])
+        fun `get four players behind returns in circular increasing seat position order for 5 players`(given: Int) {
+            val game = createTestGameEntity()
+            // Simplify test by assume players are already in correct order here.
+            val players = List(5) { PlayerEntity(user = mockk(), game = game, seat = it) }.onEach {
+                game.players.add(it)
+            }
+
+            val quad = GameModel(game).getFourPlayersBehind(players[given])
+            val seatCompare = quad.toList().zipWithNext { a, b -> a.seat < b.seat }
+            // Due to circularity, depending on the starting position, we can not have more than 1 break of the seat
+            // position order.
+            assertThat(seatCompare.count { !it }).isEqualTo(
+                when (given) {
+                    0, 4 -> 0 // without circular breaking
+                    else -> 1 // In all other cases, we expect exactly one circular order break.
+                }
+            )
+
+            // Since we have more than 4 players, the given one is left out of the selection.
+            assertThat(quad.toList().map { it.id }).doesNotContain(players[given].id)
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = [0, 1, 2, 3, 4, 5])
+        fun `get four players behind returns in circular increasing seat position order for 6 players`(given: Int) {
+            val game = createTestGameEntity()
+            // Simplify test by assume players are already in correct order here.
+            val players = List(6) { PlayerEntity(user = mockk(), game = game, seat = it) }.onEach {
+                game.players.add(it)
+            }
+
+            val quad = GameModel(game).getFourPlayersBehind(players[given])
+            val seatCompare = quad.toList().zipWithNext { a, b -> a.seat < b.seat }
+            // Due to circularity, depending on the starting position, we can not have more than 1 break of the seat
+            // position order.
+            assertThat(seatCompare.count { !it }).isEqualTo(
+                when (given) {
+                    0, 1, 5 -> 0 // without circular breaking
+                    else -> 1 // In all other cases, we expect exactly one circular order break.
+                }
+            )
+
+            // Since we have more than 4 players, the given one is left out of the selection.
+            assertThat(quad.toList().map { it.id }).doesNotContain(players[given].id)
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = [0, 1, 2, 3, 4, 5, 6])
+        fun `get four players behind returns in circular increasing seat position order for 7 players`(given: Int) {
+            val game = createTestGameEntity()
+            // Simplify test by assume players are already in correct order here.
+            val players = List(7) { PlayerEntity(user = mockk(), game = game, seat = it) }.onEach {
+                game.players.add(it)
+            }
+
+            val quad = GameModel(game).getFourPlayersBehind(players[given])
+            val seatCompare = quad.toList().zipWithNext { a, b -> a.seat < b.seat }
+            // Due to circularity, depending on the starting position, we can not have more than 1 break of the seat
+            // position order.
+            assertThat(seatCompare.count { !it }).isEqualTo(
+                when (given) {
+                    0, 1, 2, 6 -> 0 // without circular breaking
+                    else -> 1 // In all other cases, we expect exactly one circular order break.
+                }
+            )
+            // Since we have more than 4 players, the given one is left out of the selection.
+            assertThat(quad.toList().map { it.id }).doesNotContain(players[given].id)
+
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = [0, 1, 2, 3, 4, 5, 6, 7])
+        fun `get four players behind returns in circular increasing seat position order for 8 players`(given: Int) {
+            val game = createTestGameEntity()
+            // Simplify test by assume players are already in correct order here.
+            val players = List(8) { PlayerEntity(user = mockk(), game = game, seat = it) }.onEach {
+                game.players.add(it)
+            }
+
+            val quad = GameModel(game).getFourPlayersBehind(players[given])
+            val seatCompare = quad.toList().zipWithNext { a, b -> a.seat < b.seat }
+            // Due to circularity, depending on the starting position, we can not have more than 1 break of the seat
+            // position order.
+            assertThat(seatCompare.count { !it }).isEqualTo(
+                when (given) {
+                    0, 1, 2, 3, 7 -> 0 // 0,1 without circular breaking
+                    else -> 1 // In all other cases, we expect exactly one circular order break.
+                }
+            )
+
+            // Since we have more than 4 players, the given one is left out of the selection.
+            assertThat(quad.toList().map { it.id }).doesNotContain(players[given].id)
+        }
+
+        @Test
+        fun `get four players behind fails game when given player not at the game`() {
+            val game = createTestGameEntity()
+            repeat(4) { game.players.add(PlayerEntity(user = mockk(), game = game, seat = it)) }
+
+            assertThatThrownBy {
+                GameModel(game).getFourPlayersBehind(PlayerEntity(user = mockk(), game = game, seat = 17))
+            }.isInstanceOf(GameFailedException::class.java)
+                .hasMessageContaining("Could not determine the position of PlayerEntity")
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = [0, 1, 2, 3])
+        fun `get four players behind fails when game has not at least 4 players`(playerCount: Int) {
+            val game = createTestGameEntity()
+            repeat(playerCount) { game.players.add(mockk()) }
+
+            assertThatThrownBy {
+                GameModel(game).getFourPlayersBehind(mockk())
+            }.isInstanceOf(GameFailedException::class.java)
+                .hasMessageContaining("Can not determine 4 players when game has only $playerCount players.")
         }
     }
 

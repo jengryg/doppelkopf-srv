@@ -1,5 +1,6 @@
 package game.doppelkopf.core.game.model
 
+import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.ofForbiddenAction
 import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.game.enums.GameState
@@ -10,6 +11,7 @@ import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.PlayerEntity
 import game.doppelkopf.persistence.play.RoundEntity
 import game.doppelkopf.persistence.user.UserEntity
+import game.doppelkopf.utils.Quadruple
 import org.springframework.lang.CheckReturnValue
 import java.time.Instant
 
@@ -159,5 +161,30 @@ class GameModel(
 
     private fun isWaitingForDeal(): Boolean {
         return game.state == GameState.WAITING_FOR_DEAL
+    }
+
+    /**
+     * Determines the 4 players in order that sit behind the given [player].
+     * Order is calculated circular in ascending order of seat numbers starting from the seat number of the [player].
+     *
+     * Note: If a game has only 4 players, the last active player is the returned [Quadruple] is [player].
+     *
+     * @return the [Quadruple] of the players behind [player]
+     */
+    fun getFourPlayersBehind(player: PlayerEntity): Quadruple<PlayerEntity> {
+        if (!hasAtLeastFourPlayers()) {
+            throw GameFailedException("Can not determine 4 players when game has only ${game.players.size} players.")
+        }
+
+        val sortedPlayers = game.players.sortedBy { it.seat }
+        val startIndex = sortedPlayers.indexOf(player).takeIf { it != -1 }
+            ?: throw GameFailedException("Could not determine the position of $player.")
+
+        // 0 is the given player, we start with the player sitting directly behind, i.e. with position 1
+        val players = (1..4).map { position ->
+            sortedPlayers[(startIndex + position) % sortedPlayers.size]
+        }
+
+        return Quadruple(players[0], players[1], players[2], players[3])
     }
 }
