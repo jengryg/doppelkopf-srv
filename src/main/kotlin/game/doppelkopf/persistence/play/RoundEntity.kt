@@ -1,5 +1,6 @@
 package game.doppelkopf.persistence.play
 
+import game.doppelkopf.core.cards.DeckMode
 import game.doppelkopf.core.play.enums.RoundContract
 import game.doppelkopf.core.play.enums.RoundState
 import game.doppelkopf.persistence.BaseEntity
@@ -38,4 +39,14 @@ class RoundEntity(
     @Column
     @Enumerated(EnumType.STRING)
     var type: RoundContract = RoundContract.UNDECIDED
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    var deck: DeckMode = DeckMode.DIAMONDS
+
+    @OneToMany(
+        fetch = FetchType.EAGER,
+        mappedBy = "round",
+    )
+    val hands = mutableSetOf<HandEntity>()
 }

@@ -1,7 +1,9 @@
 package game.doppelkopf.core
 
 import game.doppelkopf.core.game.model.GameModelFactory
+import game.doppelkopf.core.play.model.RoundModelFactory
 import game.doppelkopf.persistence.EntityNotFoundException
+import game.doppelkopf.persistence.play.HandRepository
 import game.doppelkopf.persistence.play.RoundEntity
 import game.doppelkopf.persistence.play.RoundRepository
 import game.doppelkopf.persistence.user.UserEntity
@@ -15,6 +17,8 @@ class RoundFacade(
     private val gameFacade: GameFacade,
     private val roundRepository: RoundRepository,
     private val gameModelFactory: GameModelFactory,
+    private val roundModelFactory: RoundModelFactory,
+    private val handRepository: HandRepository,
 ) {
     fun list(gameId: UUID): List<RoundEntity> {
         return gameFacade.load(gameId).rounds.toList()
@@ -35,9 +39,12 @@ class RoundFacade(
         }
 
         val round = game.dealNextRound(user)
+        val activePlayers = game.getFourPlayersBehind(round.dealer)
 
-        // TODO: deal the actual cards to the players
+        val hands = roundModelFactory.create(round).createPlayerHands(activePlayers)
 
-        return roundRepository.save(round)
+        return roundRepository.save(round).also {
+            handRepository.saveAll(hands.toList())
+        }
     }
 }
