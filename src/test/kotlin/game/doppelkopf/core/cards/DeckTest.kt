@@ -16,8 +16,13 @@ class DeckTest {
 
         assertThat(deck.mode).isEqualTo(deckMode)
         assertThat(deck.cards).hasSize(48)
-        assertThat(deck.handSize()).isEqualTo(12)
-        assertThat(deck.shuffled()).containsExactlyInAnyOrderElementsOf(deck.cards.values)
+
+        val hands = deck.dealHandCards()
+
+        // TODO: seeded randomness
+        val cards = hands.first.plus(hands.second).plus(hands.third).plus(hands.fourth)
+
+        assertThat(cards).containsExactlyInAnyOrderElementsOf(deck.cards.values)
     }
 
     @ParameterizedTest

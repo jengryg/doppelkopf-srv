@@ -1,5 +1,7 @@
 package game.doppelkopf.core.cards
 
+import game.doppelkopf.utils.Quadruple
+
 /**
  * Use [Deck.create] to instantiate a new [Deck] for the given [DeckMode].
  * Uses [CardRankingFactory] to create a ranking map based on the [DeckMode] that determines the ranking of the cards
@@ -25,19 +27,18 @@ class Deck private constructor(
     }.associateBy { it.encoded }.toMap()
 
     /**
-     * @return a shuffled list of all cards in this deck
+     * @return a [Quadruple] containing four [List] of [Card], one list for each player hand
      */
-    fun shuffled(): List<Card> {
+    fun dealHandCards(): Quadruple<List<Card>> {
         return cards.keys.shuffled()
-            .map { cards[it]!! }
-        // TODO: seeded randomness
-    }
-
-    /**
-     * @return the size of the deck divided by 4
-     */
-    fun handSize() : Int {
-        return cards.size / 4
+            .map { cards[it]!! }.chunked(cards.size / 4).let {
+                Quadruple(
+                    it[0],
+                    it[1],
+                    it[2],
+                    it[3],
+                )
+            }
     }
 
     fun getCards(encodings: List<String>): List<Card> {
