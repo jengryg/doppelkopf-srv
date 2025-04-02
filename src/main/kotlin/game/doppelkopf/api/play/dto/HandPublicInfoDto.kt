@@ -1,7 +1,7 @@
 package game.doppelkopf.api.play.dto
 
 import game.doppelkopf.core.play.enums.Bidding
-import game.doppelkopf.core.play.enums.PublicDeclaration
+import game.doppelkopf.core.play.enums.DeclarationPublic
 import game.doppelkopf.core.play.enums.Team
 import game.doppelkopf.persistence.play.HandEntity
 import io.swagger.v3.oas.annotations.media.Schema
@@ -29,7 +29,7 @@ class HandPublicInfoDto(
     @Schema(
         description = "The declaration of this hand."
     )
-    val declared: PublicDeclaration,
+    val declared: DeclarationPublic,
 
     @Schema(
         description = "The bid of this hand."
@@ -45,7 +45,7 @@ class HandPublicInfoDto(
         id = handEntity.id,
         roundId = handEntity.round.id,
         playerId = handEntity.player.id,
-        declared = handEntity.declared.publicDeclaration,
+        declared = handEntity.declared.declarationPublic,
         bid = handEntity.bidding,
         publicTeam = handEntity.publicTeam,
     )

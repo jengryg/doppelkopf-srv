@@ -7,10 +7,7 @@ import game.doppelkopf.api.play.dto.HandForPlayerDto
 import game.doppelkopf.api.play.dto.HandPublicInfoDto
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
-import game.doppelkopf.core.play.enums.Bidding
-import game.doppelkopf.core.play.enums.Declaration
-import game.doppelkopf.core.play.enums.PublicDeclaration
-import game.doppelkopf.core.play.enums.Team
+import game.doppelkopf.core.play.enums.*
 import game.doppelkopf.core.play.model.HandModelFactory
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.game.GameEntity
@@ -85,7 +82,7 @@ class HandControllerTest : BaseRestAssuredTest() {
                 assertThat(it.roundId).isEqualTo(round.id)
                 assertThat(it.publicTeam).isEqualTo(Team.NA)
                 assertThat(it.bid).isEqualTo(Bidding.NOTHING)
-                assertThat(it.declared).isEqualTo(PublicDeclaration.NOTHING)
+                assertThat(it.declared).isEqualTo(DeclarationPublic.NOTHING)
             }
         }
     }
@@ -145,7 +142,7 @@ class HandControllerTest : BaseRestAssuredTest() {
         fun `declare on unknown uuid returns 404`() {
             val (response, location) = execDeclaration<ProblemDetailResponse>(
                 handId = zeroId,
-                declaration = Declaration.HEALTHY,
+                declarationOption = DeclarationOption.HEALTHY,
                 expectedStatus = 404
             )
 
@@ -170,7 +167,7 @@ class HandControllerTest : BaseRestAssuredTest() {
 
             val (response, location) = execDeclaration<ProblemDetailResponse>(
                 handId = hand.id,
-                declaration = Declaration.HEALTHY,
+                declarationOption = DeclarationOption.HEALTHY,
                 expectedStatus = 403
             )
 
@@ -195,7 +192,7 @@ class HandControllerTest : BaseRestAssuredTest() {
 
             val (response, location) = execDeclaration<ProblemDetailResponse>(
                 handId = hand.id,
-                declaration = Declaration.HEALTHY,
+                declarationOption = DeclarationOption.HEALTHY,
                 expectedStatus = 400
             )
 
@@ -217,7 +214,7 @@ class HandControllerTest : BaseRestAssuredTest() {
 
             val (response, location) = execDeclaration<HandForPlayerDto>(
                 handId = hand.id,
-                declaration = Declaration.HEALTHY,
+                declarationOption = DeclarationOption.HEALTHY,
                 expectedStatus = 201
             )
 
@@ -238,7 +235,7 @@ class HandControllerTest : BaseRestAssuredTest() {
         fun `bid on unknown uuid returns 404`() {
             val (response, location) = execBid<ProblemDetailResponse>(
                 handId = zeroId,
-                bid = Bidding.WEDDING,
+                bidOption = BiddingOption.WEDDING,
                 expectedStatus = 404
             )
 
@@ -263,7 +260,7 @@ class HandControllerTest : BaseRestAssuredTest() {
 
             val (response, location) = execBid<ProblemDetailResponse>(
                 handId = hand.id,
-                bid = Bidding.WEDDING,
+                bidOption = BiddingOption.WEDDING,
                 expectedStatus = 403
             )
 
@@ -288,7 +285,7 @@ class HandControllerTest : BaseRestAssuredTest() {
 
             val (response, location) = execBid<ProblemDetailResponse>(
                 handId = hand.id,
-                bid = Bidding.WEDDING,
+                bidOption = BiddingOption.WEDDING,
                 expectedStatus = 400
             )
 
@@ -310,7 +307,7 @@ class HandControllerTest : BaseRestAssuredTest() {
 
             val (response, location) = execBid<HandForPlayerDto>(
                 handId = hand.id,
-                bid = Bidding.WEDDING,
+                bidOption = BiddingOption.WEDDING,
                 expectedStatus = 201
             )
 
@@ -354,13 +351,13 @@ class HandControllerTest : BaseRestAssuredTest() {
 
     private final inline fun <reified T> execDeclaration(
         handId: UUID,
-        declaration: Declaration,
+        declarationOption: DeclarationOption,
         expectedStatus: Int,
     ): Pair<T, String?> {
         return createResource<DeclarationCreateDto, T>(
             path = "/v1/hands/$handId/declarations",
             body = DeclarationCreateDto(
-                declaration = declaration
+                declaration = declarationOption
             ),
             expectedStatus = expectedStatus
         )
@@ -368,13 +365,13 @@ class HandControllerTest : BaseRestAssuredTest() {
 
     private final inline fun <reified T> execBid(
         handId: UUID,
-        bid: Bidding,
+        bidOption: BiddingOption,
         expectedStatus: Int
     ): Pair<T, String?> {
         return createResource<BidCreateDto, T>(
             path = "/v1/hands/$handId/bids",
             body = BidCreateDto(
-                bid = bid
+                bid = bidOption
             ),
             expectedStatus = expectedStatus
         )

@@ -1,8 +1,8 @@
 package game.doppelkopf.core
 
 import game.doppelkopf.core.errors.ForbiddenActionException
-import game.doppelkopf.core.play.enums.Bidding
-import game.doppelkopf.core.play.enums.Declaration
+import game.doppelkopf.core.play.enums.BiddingOption
+import game.doppelkopf.core.play.enums.DeclarationOption
 import game.doppelkopf.core.play.model.HandModelFactory
 import game.doppelkopf.persistence.EntityNotFoundException
 import game.doppelkopf.persistence.play.HandEntity
@@ -36,20 +36,20 @@ class HandFacade(
         return hand
     }
 
-    fun declare(handId: UUID, declaration: Declaration, user: UserEntity): HandEntity {
+    fun declare(handId: UUID, declarationOption: DeclarationOption, user: UserEntity): HandEntity {
         val entity = load(handId, user)
         val hand = handModelFactory.create(entity)
 
-        hand.declare(declaration)
+        hand.declare(declarationOption)
 
         return entity
     }
 
-    fun bid(handId: UUID, bid: Bidding, user: UserEntity): HandEntity {
+    fun bid(handId: UUID, biddingOption: BiddingOption, user: UserEntity): HandEntity {
         val entity = load(handId, user)
         val hand = handModelFactory.create(entity)
 
-        hand.bid(bid)
+        hand.bid(biddingOption)
 
         return entity
     }

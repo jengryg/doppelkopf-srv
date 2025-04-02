@@ -1,23 +1,33 @@
 package game.doppelkopf.core.play.enums
 
 /**
- * [Declaration] defines the options players have to declare their hand.
- * The [publicDeclaration] represents the corresponding public representation of the choice, to hide [SILENT_MARRIAGE]
- * options from the other players.
+ * [Declaration] is made by the players at the beginning of the round in the auction phase.
  */
-enum class Declaration(val publicDeclaration: PublicDeclaration) {
-    NOTHING(PublicDeclaration.NOTHING),
-    HEALTHY(PublicDeclaration.HEALTHY),
-    SILENT_MARRIAGE(PublicDeclaration.HEALTHY),
-    RESERVATION(PublicDeclaration.RESERVATION),
+enum class Declaration(val declarationPublic: DeclarationPublic) {
+    NOTHING(DeclarationPublic.NOTHING),
+    HEALTHY(DeclarationPublic.HEALTHY),
+    SILENT_MARRIAGE(DeclarationPublic.HEALTHY),
+    RESERVATION(DeclarationPublic.RESERVATION),
 }
 
 /**
- * [PublicDeclaration] is used to communicate the choice of the players to each other.
+ * [DeclarationPublic] is used to communicate the choice of the players to each other.
  * It hides the [Declaration.SILENT_MARRIAGE] option, that must not be shown to other players.
  */
-enum class PublicDeclaration {
+enum class DeclarationPublic {
     NOTHING,
     HEALTHY,
     RESERVATION,
+}
+
+/**
+ * [DeclarationOption] is used to provide the choice to the player making it.
+ * It prevents [Declaration.NOTHING] option, that is only for internal state management.
+ */
+enum class DeclarationOption(
+    val internal: Declaration
+) {
+    HEALTHY(Declaration.HEALTHY),
+    SILENT_MARRIAGE(Declaration.SILENT_MARRIAGE),
+    RESERVATION(Declaration.RESERVATION),
 }

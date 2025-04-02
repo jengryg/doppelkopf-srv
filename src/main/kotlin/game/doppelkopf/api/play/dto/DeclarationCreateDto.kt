@@ -1,6 +1,6 @@
 package game.doppelkopf.api.play.dto
 
-import game.doppelkopf.core.play.enums.Declaration
+import game.doppelkopf.core.play.enums.DeclarationOption
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(
@@ -10,5 +10,5 @@ class DeclarationCreateDto(
     @Schema(
         description = "The declaration to make."
     )
-    val declaration: Declaration
+    val declaration: DeclarationOption
 )
