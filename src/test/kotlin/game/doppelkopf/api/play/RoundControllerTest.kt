@@ -118,6 +118,28 @@ class RoundControllerTest : BaseRestAssuredTest() {
             assertThat(response.title).isEqualTo("Entity not found")
             assertThat(response.detail).isEqualTo("The entity of type RoundEntity with id $zeroId was not found.")
         }
+
+        @Test
+        fun `get specific round with known uuid returns 200 and dto`() {
+            val game = createGameEntity(testUser).apply {
+                rounds.add(RoundEntity(game = this, dealer = players.first(), 1))
+            }.let {
+                gameRepository.save(it)
+            }
+            playerRepository.saveAll(game.players)
+            val round = game.rounds.first()
+
+            val response = getResource<RoundInfoDto>(
+                path = "/v1/rounds/${round.id}",
+                expectedStatus = 200
+            )
+
+            assertThat(response.id).isEqualTo(round.id)
+            assertThat(response.number).isEqualTo(round.number)
+            assertThat(response.dealer.id).isEqualTo(round.dealer.id)
+            assertThat(response.gameId).isEqualTo(game.id)
+            assertThat(response.state).isEqualTo(round.state)
+        }
     }
 
     @Nested
