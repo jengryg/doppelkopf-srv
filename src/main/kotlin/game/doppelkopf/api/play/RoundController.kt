@@ -1,9 +1,12 @@
 package game.doppelkopf.api.play
 
 import game.doppelkopf.api.play.dto.RoundInfoDto
+import game.doppelkopf.api.play.dto.RoundOperationDto
 import game.doppelkopf.core.RoundFacade
+import game.doppelkopf.core.play.enums.RoundOperation
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -56,5 +59,21 @@ class RoundController(
         return ResponseEntity.ok(
             RoundInfoDto(roundFacade.load(id))
         )
+    }
+
+    @Operation(
+        summary = "Perform operation on the round.",
+        description = "Performs operations on the round with specified id."
+    )
+    @PatchMapping("/rounds/{id}")
+    fun path(
+        @PathVariable id: UUID,
+        @RequestBody @Valid operation: RoundOperationDto,
+        @AuthenticationPrincipal userDetails: UserDetails
+    ): ResponseEntity<RoundInfoDto> {
+        return when (operation.op) {
+            RoundOperation.DECLARE_EVALUATION -> ResponseEntity.ok(RoundInfoDto(roundFacade.evaluateDeclarations(id)))
+            RoundOperation.BID_EVALUATION -> ResponseEntity.ok(RoundInfoDto(roundFacade.evaluateBids(id)))
+        }
     }
 }

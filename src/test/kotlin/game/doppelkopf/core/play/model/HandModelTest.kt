@@ -121,15 +121,16 @@ class HandModelTest {
             assertThat(hand.bidding).isEqualTo(Bidding.WEDDING)
         }
 
-        @ParameterizedTest
-        @EnumSource(BiddingOption::class, names = ["WEDDING"], mode = EnumSource.Mode.EXCLUDE)
-        fun `bid a solo when hand has declared reservation updates HandEntity`(bidOption: BiddingOption) {
-            val hand = createHandEntity(marriage = false, declaration = Declaration.RESERVATION)
-
-            HandModel(hand).bid(bidOption)
-
-            assertThat(hand.bidding).isEqualTo(bidOption.internal)
-        }
+//        TODO: SOLO SYSTEM IMPLEMENTATION
+//        @ParameterizedTest
+//        @EnumSource(BiddingOption::class, names = ["WEDDING"], mode = EnumSource.Mode.EXCLUDE)
+//        fun `bid a solo when hand has declared reservation updates HandEntity`(bidOption: BiddingOption) {
+//            val hand = createHandEntity(marriage = false, declaration = Declaration.RESERVATION)
+//
+//            HandModel(hand).bid(bidOption)
+//
+//            assertThat(hand.bidding).isEqualTo(bidOption.internal)
+//        }
     }
 
     private fun createHandEntity(

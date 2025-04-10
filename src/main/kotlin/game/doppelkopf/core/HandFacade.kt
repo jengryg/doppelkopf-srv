@@ -4,10 +4,13 @@ import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.play.enums.BiddingOption
 import game.doppelkopf.core.play.enums.DeclarationOption
 import game.doppelkopf.core.play.model.HandModelFactory
+import game.doppelkopf.core.play.processor.BiddingProcessor
+import game.doppelkopf.core.play.processor.DeclarationProcessor
 import game.doppelkopf.persistence.EntityNotFoundException
 import game.doppelkopf.persistence.play.HandEntity
 import game.doppelkopf.persistence.play.HandRepository
 import game.doppelkopf.persistence.user.UserEntity
+import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.*
@@ -16,7 +19,7 @@ import java.util.*
 class HandFacade(
     private val roundFacade: RoundFacade,
     private val handRepository: HandRepository,
-    private val handModelFactory: HandModelFactory
+    private val handModelFactory: HandModelFactory,
 ) {
     fun list(roundId: UUID): List<HandEntity> {
         return roundFacade.load(roundId).hands.toList()
@@ -36,20 +39,32 @@ class HandFacade(
         return hand
     }
 
+    @Transactional
     fun declare(handId: UUID, declarationOption: DeclarationOption, user: UserEntity): HandEntity {
         val entity = load(handId, user)
         val hand = handModelFactory.create(entity)
 
         hand.declare(declarationOption)
 
+        // Try to run the processor, ignore if not ready.
+        DeclarationProcessor.createWhenReady(entity.round).onSuccess {
+            it.process()
+        }
+
         return entity
     }
 
+    @Transactional
     fun bid(handId: UUID, biddingOption: BiddingOption, user: UserEntity): HandEntity {
         val entity = load(handId, user)
         val hand = handModelFactory.create(entity)
 
         hand.bid(biddingOption)
+
+        // Try to run the processor, ignore if not ready.
+        BiddingProcessor.createWhenReady(entity.round).onSuccess {
+            it.process()
+        }
 
         return entity
     }

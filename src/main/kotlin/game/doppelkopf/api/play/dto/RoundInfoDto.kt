@@ -1,6 +1,7 @@
 package game.doppelkopf.api.play.dto
 
 import game.doppelkopf.api.game.dto.PlayerInfoDto
+import game.doppelkopf.core.play.enums.RoundContractPublic
 import game.doppelkopf.core.play.enums.RoundState
 import game.doppelkopf.persistence.play.RoundEntity
 import io.swagger.v3.oas.annotations.media.Schema
@@ -33,7 +34,12 @@ class RoundInfoDto(
     @Schema(
         description = "The current state of the round."
     )
-    val state: RoundState
+    val state: RoundState,
+
+    @Schema(
+        description = "The public contract information of the round."
+    )
+    val contract: RoundContractPublic,
 ) {
     constructor(roundEntity: RoundEntity) : this(
         id = roundEntity.id,
@@ -41,5 +47,6 @@ class RoundInfoDto(
         dealer = PlayerInfoDto(roundEntity.dealer),
         number = roundEntity.number,
         state = roundEntity.state,
+        contract = roundEntity.contract.roundContractPublic
     )
 }

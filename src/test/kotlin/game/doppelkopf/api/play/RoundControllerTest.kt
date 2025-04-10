@@ -2,11 +2,16 @@ package game.doppelkopf.api.play
 
 import game.doppelkopf.BaseRestAssuredTest
 import game.doppelkopf.api.play.dto.RoundInfoDto
+import game.doppelkopf.api.play.dto.RoundOperationDto
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.game.model.GameModelFactory
+import game.doppelkopf.core.play.enums.RoundOperation
 import game.doppelkopf.core.play.enums.RoundState
 import game.doppelkopf.core.play.model.RoundModelFactory
+import game.doppelkopf.core.play.processor.BiddingProcessor
+import game.doppelkopf.core.play.processor.DeclarationProcessor
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.GameRepository
@@ -15,10 +20,10 @@ import game.doppelkopf.persistence.game.PlayerRepository
 import game.doppelkopf.persistence.play.HandEntity
 import game.doppelkopf.persistence.play.HandRepository
 import game.doppelkopf.persistence.play.RoundEntity
+import game.doppelkopf.persistence.play.RoundRepository
 import game.doppelkopf.persistence.user.UserEntity
 import game.doppelkopf.utils.Quadruple
-import io.mockk.every
-import io.mockk.mockk
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Nested
@@ -35,7 +40,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
     private lateinit var playerRepository: PlayerRepository
 
     @Autowired
-    private lateinit var roundRepository: PlayerRepository
+    private lateinit var roundRepository: RoundRepository
 
     @Autowired
     private lateinit var handRepository: HandRepository
@@ -231,6 +236,106 @@ class RoundControllerTest : BaseRestAssuredTest() {
         }
     }
 
+    @Nested
+    inner class EvalDeclarations {
+        @Test
+        fun `eval declaration returns 200 when processor successful`() {
+            mockkObject(DeclarationProcessor.Companion)
+            val processor = mockk<DeclarationProcessor> { every { process() } just Runs }
+            every {
+                DeclarationProcessor.Companion.createWhenReady(any())
+            } returns Result.success(processor)
+
+            val game = createGameEntity(testUser).let { gameRepository.save(it) }
+            val round = createRoundEntity(game).let { roundRepository.save(it) }
+
+            val response = execPatchRound<RoundInfoDto>(round.id, RoundOperation.DECLARE_EVALUATION, 200)
+
+            assertThat(response.id).isEqualTo(round.id)
+
+            verify(exactly = 1) { DeclarationProcessor.Companion.createWhenReady(round) }
+            verify(exactly = 1) { processor.process() }
+            unmockkObject(DeclarationProcessor.Companion)
+        }
+
+        @Test
+        fun `eval declaration returns 400 when invalid action exception`() {
+            mockkObject(DeclarationProcessor.Companion)
+            every { DeclarationProcessor.Companion.createWhenReady(any()) } returns Result.ofInvalidAction(
+                "Declaration:Process",
+                "Mocked Model Exception."
+            )
+
+            val game = createGameEntity(testUser).let { gameRepository.save(it) }
+            val round = createRoundEntity(game).let { roundRepository.save(it) }
+
+            val response = execPatchRound<ProblemDetailResponse>(round.id, RoundOperation.DECLARE_EVALUATION, 400)
+
+            response.also {
+                assertThat(response.instance.toString()).isEqualTo("/v1/rounds/${round.id}")
+                assertThat(response.title).isEqualTo("Invalid action")
+                assertThat(response.detail).isEqualTo("The action 'Declaration:Process' can not be performed: Mocked Model Exception.")
+            }
+
+            verify(exactly = 1) { DeclarationProcessor.Companion.createWhenReady(round) }
+            unmockkObject(DeclarationProcessor.Companion)
+        }
+    }
+
+    @Nested
+    inner class EvalBids {
+        @Test
+        fun `eval bids returns 200 when processor successful`() {
+            mockkObject(BiddingProcessor)
+            val processor = mockk<BiddingProcessor> { every { process() } just Runs }
+            every {
+                BiddingProcessor.Companion.createWhenReady(any())
+            } returns Result.success(processor)
+
+            val game = createGameEntity(testUser).let { gameRepository.save(it) }
+            val round = createRoundEntity(game).let { roundRepository.save(it) }
+
+            val response = execPatchRound<RoundInfoDto>(round.id, RoundOperation.BID_EVALUATION, 200)
+
+            assertThat(response.id).isEqualTo(round.id)
+
+            verify(exactly = 1) { BiddingProcessor.Companion.createWhenReady(round) }
+            verify(exactly = 1) { processor.process() }
+            unmockkObject(BiddingProcessor)
+        }
+
+        @Test
+        fun `eval bids returns 400 when invalid action exception`() {
+            mockkObject(BiddingProcessor)
+            every { BiddingProcessor.Companion.createWhenReady(any()) } returns Result.ofInvalidAction(
+                "Bidding:Process",
+                "Mocked Model Exception."
+            )
+
+            val game = createGameEntity(testUser).let { gameRepository.save(it) }
+            val round = createRoundEntity(game).let { roundRepository.save(it) }
+
+            val response = execPatchRound<ProblemDetailResponse>(round.id, RoundOperation.BID_EVALUATION, 400)
+
+            response.also {
+                assertThat(response.instance.toString()).isEqualTo("/v1/rounds/${round.id}")
+                assertThat(response.title).isEqualTo("Invalid action")
+                assertThat(response.detail).isEqualTo("The action 'Bidding:Process' can not be performed: Mocked Model Exception.")
+            }
+
+            verify { BiddingProcessor.Companion.createWhenReady(round) }
+            unmockkObject(BiddingProcessor)
+        }
+    }
+
+    private fun createRoundEntity(gameEntity: GameEntity): RoundEntity {
+        return RoundEntity(
+            game = gameEntity,
+            dealer = gameEntity.getPlayerOfOrNull(gameEntity.creator)!!,
+            number = 1
+        )
+    }
+
     private fun createGameEntity(creator: UserEntity): GameEntity {
         return GameEntity(
             creator = creator,
@@ -250,6 +355,20 @@ class RoundControllerTest : BaseRestAssuredTest() {
     ): Pair<T, String?> {
         return createResource<T>(
             path = "/v1/games/${gameId}/rounds",
+            expectedStatus = expectedStatus
+        )
+    }
+
+    private final inline fun <reified T> execPatchRound(
+        roundId: UUID,
+        operation: RoundOperation,
+        expectedStatus: Int
+    ): T {
+        return patchResource<RoundOperationDto, T>(
+            path = "/v1/rounds/$roundId",
+            body = RoundOperationDto(
+                op = operation
+            ),
             expectedStatus = expectedStatus
         )
     }

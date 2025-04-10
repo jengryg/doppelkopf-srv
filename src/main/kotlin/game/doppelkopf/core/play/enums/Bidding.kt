@@ -8,20 +8,21 @@ import game.doppelkopf.core.cards.DeckMode
 enum class Bidding(
     val roundContract: RoundContract,
     val deckMode: DeckMode,
+    val isSolo: Boolean,
 ) {
-    NOTHING(roundContract = RoundContract.UNDECIDED, deckMode = DeckMode.DIAMONDS),
+    NOTHING(roundContract = RoundContract.UNDECIDED, deckMode = DeckMode.DIAMONDS, isSolo = false),
 
-    WEDDING(roundContract = RoundContract.WEDDING, deckMode = DeckMode.DIAMONDS),
+    WEDDING(roundContract = RoundContract.WEDDING, deckMode = DeckMode.DIAMONDS, isSolo = false),
 
-    SOLO_DIAMONDS(roundContract = RoundContract.SOLO, deckMode = DeckMode.DIAMONDS),
-    SOLO_HEARTS(roundContract = RoundContract.SOLO, deckMode = DeckMode.HEARTS),
-    SOLO_SPADES(roundContract = RoundContract.SOLO, deckMode = DeckMode.SPADES),
-    SOLO_CLUBS(roundContract = RoundContract.SOLO, deckMode = DeckMode.CLUBS),
+    SOLO_DIAMONDS(roundContract = RoundContract.SOLO, deckMode = DeckMode.DIAMONDS, isSolo = true),
+    SOLO_HEARTS(roundContract = RoundContract.SOLO, deckMode = DeckMode.HEARTS, isSolo = true),
+    SOLO_SPADES(roundContract = RoundContract.SOLO, deckMode = DeckMode.SPADES, isSolo = true),
+    SOLO_CLUBS(roundContract = RoundContract.SOLO, deckMode = DeckMode.CLUBS, isSolo = true),
 
-    SOLO_QUEENS(roundContract = RoundContract.SOLO, deckMode = DeckMode.QUEENS),
-    SOLO_JACKS(roundContract = RoundContract.SOLO, deckMode = DeckMode.JACKS),
+    SOLO_QUEENS(roundContract = RoundContract.SOLO, deckMode = DeckMode.QUEENS, isSolo = true),
+    SOLO_JACKS(roundContract = RoundContract.SOLO, deckMode = DeckMode.JACKS, isSolo = true),
 
-    SOLO_FREE(roundContract = RoundContract.SOLO, deckMode = DeckMode.FREE),
+    SOLO_FREE(roundContract = RoundContract.SOLO, deckMode = DeckMode.FREE, isSolo = true),
 }
 
 /**
@@ -33,13 +34,14 @@ enum class BiddingOption(
 ) {
     WEDDING(Bidding.WEDDING),
 
-    SOLO_DIAMONDS(Bidding.SOLO_DIAMONDS),
-    SOLO_HEARTS(Bidding.SOLO_HEARTS),
-    SOLO_SPADES(Bidding.SOLO_SPADES),
-    SOLO_CLUBS(Bidding.SOLO_CLUBS),
-
-    SOLO_QUEENS(Bidding.SOLO_QUEENS),
-    SOLO_JACKS(Bidding.SOLO_JACKS),
-
-    SOLO_FREE(Bidding.SOLO_FREE),
+//    TODO: SOLO SYSTEM IMPLEMENTATION
+//    SOLO_DIAMONDS(Bidding.SOLO_DIAMONDS),
+//    SOLO_HEARTS(Bidding.SOLO_HEARTS),
+//    SOLO_SPADES(Bidding.SOLO_SPADES),
+//    SOLO_CLUBS(Bidding.SOLO_CLUBS),
+//
+//    SOLO_QUEENS(Bidding.SOLO_QUEENS),
+//    SOLO_JACKS(Bidding.SOLO_JACKS),
+//
+//    SOLO_FREE(Bidding.SOLO_FREE),
 }

@@ -38,7 +38,7 @@ class RoundEntity(
 
     @Column
     @Enumerated(EnumType.STRING)
-    var type: RoundContract = RoundContract.UNDECIDED
+    var contract: RoundContract = RoundContract.UNDECIDED
 
     @Column
     @Enumerated(EnumType.STRING)

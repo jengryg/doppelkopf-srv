@@ -2,6 +2,8 @@ package game.doppelkopf.core
 
 import game.doppelkopf.core.game.model.GameModelFactory
 import game.doppelkopf.core.play.model.RoundModelFactory
+import game.doppelkopf.core.play.processor.BiddingProcessor
+import game.doppelkopf.core.play.processor.DeclarationProcessor
 import game.doppelkopf.persistence.EntityNotFoundException
 import game.doppelkopf.persistence.play.HandRepository
 import game.doppelkopf.persistence.play.RoundEntity
@@ -46,5 +48,25 @@ class RoundFacade(
         return roundRepository.save(round).also {
             handRepository.saveAll(hands.toList())
         }
+    }
+
+    @Transactional
+    fun evaluateDeclarations(roundId: UUID): RoundEntity {
+        val round = load(roundId)
+
+        // Force the evaluation, thus we need to throw when not ready.
+        DeclarationProcessor.createWhenReady(round).getOrThrow().process()
+
+        return round
+    }
+
+    @Transactional
+    fun evaluateBids(roundId: UUID): RoundEntity {
+        val round = load(roundId)
+
+        // Force the evaluation, thus we need to throw when not ready.
+        BiddingProcessor.createWhenReady(round).getOrThrow().process()
+
+        return round
     }
 }
