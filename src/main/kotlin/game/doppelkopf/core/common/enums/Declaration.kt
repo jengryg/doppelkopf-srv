@@ -1,4 +1,4 @@
-package game.doppelkopf.core.play.enums
+package game.doppelkopf.core.common.enums
 
 /**
  * [Declaration] is made by the players at the beginning of the round in the auction phase.

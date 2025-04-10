@@ -5,9 +5,9 @@ import game.doppelkopf.api.play.dto.BidCreateDto
 import game.doppelkopf.api.play.dto.DeclarationCreateDto
 import game.doppelkopf.api.play.dto.HandForPlayerDto
 import game.doppelkopf.api.play.dto.HandPublicInfoDto
+import game.doppelkopf.core.common.enums.*
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
-import game.doppelkopf.core.play.enums.*
 import game.doppelkopf.core.play.model.HandModelFactory
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.game.GameEntity

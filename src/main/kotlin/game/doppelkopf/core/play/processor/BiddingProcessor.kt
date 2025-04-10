@@ -2,9 +2,9 @@ package game.doppelkopf.core.play.processor
 
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.ofInvalidAction
-import game.doppelkopf.core.play.enums.Bidding
-import game.doppelkopf.core.play.enums.Declaration
-import game.doppelkopf.core.play.enums.RoundState
+import game.doppelkopf.core.common.enums.Bidding
+import game.doppelkopf.core.common.enums.Declaration
+import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.persistence.play.RoundEntity
 
 /**

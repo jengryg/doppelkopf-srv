@@ -1,8 +1,8 @@
 package game.doppelkopf.core
 
 import game.doppelkopf.core.errors.ForbiddenActionException
-import game.doppelkopf.core.play.enums.BiddingOption
-import game.doppelkopf.core.play.enums.DeclarationOption
+import game.doppelkopf.core.common.enums.BiddingOption
+import game.doppelkopf.core.common.enums.DeclarationOption
 import game.doppelkopf.core.play.model.HandModelFactory
 import game.doppelkopf.core.play.processor.BiddingProcessor
 import game.doppelkopf.core.play.processor.DeclarationProcessor

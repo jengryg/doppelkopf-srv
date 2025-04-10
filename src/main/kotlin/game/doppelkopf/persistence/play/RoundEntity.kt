@@ -1,8 +1,8 @@
 package game.doppelkopf.persistence.play
 
 import game.doppelkopf.core.cards.DeckMode
-import game.doppelkopf.core.play.enums.RoundContract
-import game.doppelkopf.core.play.enums.RoundState
+import game.doppelkopf.core.common.enums.RoundContract
+import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.persistence.BaseEntity
 import game.doppelkopf.persistence.game.GameEntity
 import game.doppelkopf.persistence.game.PlayerEntity

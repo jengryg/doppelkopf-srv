@@ -1,4 +1,4 @@
-package game.doppelkopf.core.game.enums
+package game.doppelkopf.core.common.enums
 
 enum class GameState {
     INITIALIZED,

@@ -1,4 +1,4 @@
-package game.doppelkopf.core.play.enums
+package game.doppelkopf.core.common.enums
 
 /**
  * [RoundContract] defines the basic rules of the round to play.

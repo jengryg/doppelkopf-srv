@@ -1,6 +1,6 @@
 package game.doppelkopf.api.play.dto
 
-import game.doppelkopf.core.play.enums.Team
+import game.doppelkopf.core.common.enums.Team
 import game.doppelkopf.persistence.play.HandEntity
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*

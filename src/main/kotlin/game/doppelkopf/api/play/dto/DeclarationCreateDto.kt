@@ -1,6 +1,6 @@
 package game.doppelkopf.api.play.dto
 
-import game.doppelkopf.core.play.enums.DeclarationOption
+import game.doppelkopf.core.common.enums.DeclarationOption
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(

@@ -1,10 +1,10 @@
 package game.doppelkopf.core.play.model
 
 import game.doppelkopf.core.errors.ofInvalidAction
-import game.doppelkopf.core.play.enums.Bidding
-import game.doppelkopf.core.play.enums.BiddingOption
-import game.doppelkopf.core.play.enums.Declaration
-import game.doppelkopf.core.play.enums.DeclarationOption
+import game.doppelkopf.core.common.enums.Bidding
+import game.doppelkopf.core.common.enums.BiddingOption
+import game.doppelkopf.core.common.enums.Declaration
+import game.doppelkopf.core.common.enums.DeclarationOption
 import game.doppelkopf.persistence.play.HandEntity
 import org.springframework.lang.CheckReturnValue
 

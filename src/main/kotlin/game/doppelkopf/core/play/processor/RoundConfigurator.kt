@@ -1,9 +1,9 @@
 package game.doppelkopf.core.play.processor
 
 import game.doppelkopf.core.cards.DeckMode
-import game.doppelkopf.core.play.enums.RoundContract
-import game.doppelkopf.core.play.enums.RoundState
-import game.doppelkopf.core.play.enums.Team
+import game.doppelkopf.core.common.enums.RoundContract
+import game.doppelkopf.core.common.enums.RoundState
+import game.doppelkopf.core.common.enums.Team
 import game.doppelkopf.persistence.play.RoundEntity
 
 object RoundConfigurator {

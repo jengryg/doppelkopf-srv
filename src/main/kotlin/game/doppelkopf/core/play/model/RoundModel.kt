@@ -2,7 +2,7 @@ package game.doppelkopf.core.play.model
 
 import game.doppelkopf.core.cards.Card
 import game.doppelkopf.core.cards.Deck
-import game.doppelkopf.core.play.enums.Team
+import game.doppelkopf.core.common.enums.Team
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
 import game.doppelkopf.persistence.game.PlayerEntity

@@ -1,4 +1,4 @@
-package game.doppelkopf.core.play.enums
+package game.doppelkopf.core.common.enums
 
 enum class Team {
     RE,

@@ -1,4 +1,4 @@
-package game.doppelkopf.core.play.enums
+package game.doppelkopf.core.common.enums
 
 import game.doppelkopf.core.cards.DeckMode
 
