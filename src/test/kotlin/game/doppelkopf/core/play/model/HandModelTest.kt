@@ -1,6 +1,6 @@
 package game.doppelkopf.core.play.model
 
-import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.core.common.errors.InvalidActionException
 import game.doppelkopf.core.common.enums.Bidding
 import game.doppelkopf.core.common.enums.BiddingOption
 import game.doppelkopf.core.common.enums.Declaration

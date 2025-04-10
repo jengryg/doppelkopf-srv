@@ -3,9 +3,9 @@ package game.doppelkopf.api.play
 import game.doppelkopf.BaseRestAssuredTest
 import game.doppelkopf.api.play.dto.RoundInfoDto
 import game.doppelkopf.api.play.dto.RoundOperationDto
-import game.doppelkopf.core.errors.ForbiddenActionException
-import game.doppelkopf.core.errors.InvalidActionException
-import game.doppelkopf.core.errors.ofInvalidAction
+import game.doppelkopf.core.common.errors.ForbiddenActionException
+import game.doppelkopf.core.common.errors.InvalidActionException
+import game.doppelkopf.core.common.errors.ofInvalidAction
 import game.doppelkopf.core.game.model.GameModelFactory
 import game.doppelkopf.core.common.enums.RoundOperation
 import game.doppelkopf.core.common.enums.RoundState

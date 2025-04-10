@@ -1,8 +1,8 @@
 package game.doppelkopf.core.game.model
 
-import game.doppelkopf.core.errors.GameFailedException
-import game.doppelkopf.core.errors.ofForbiddenAction
-import game.doppelkopf.core.errors.ofInvalidAction
+import game.doppelkopf.core.common.errors.GameFailedException
+import game.doppelkopf.core.common.errors.ofForbiddenAction
+import game.doppelkopf.core.common.errors.ofInvalidAction
 import game.doppelkopf.core.common.enums.GameState
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.instrumentation.logging.Logging

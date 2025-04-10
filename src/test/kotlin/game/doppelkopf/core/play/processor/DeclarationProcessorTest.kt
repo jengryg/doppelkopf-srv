@@ -1,6 +1,6 @@
 package game.doppelkopf.core.play.processor
 
-import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.core.common.errors.InvalidActionException
 import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.persistence.play.RoundEntity

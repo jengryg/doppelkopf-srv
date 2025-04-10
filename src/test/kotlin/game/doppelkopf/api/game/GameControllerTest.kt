@@ -4,8 +4,8 @@ import game.doppelkopf.BaseRestAssuredTest
 import game.doppelkopf.api.game.dto.GameCreateDto
 import game.doppelkopf.api.game.dto.GameInfoDto
 import game.doppelkopf.api.game.dto.GameOperationDto
-import game.doppelkopf.core.errors.ForbiddenActionException
-import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.core.common.errors.ForbiddenActionException
+import game.doppelkopf.core.common.errors.InvalidActionException
 import game.doppelkopf.core.game.enums.GameOperation
 import game.doppelkopf.core.game.model.GameModelFactory
 import game.doppelkopf.errors.ProblemDetailResponse
