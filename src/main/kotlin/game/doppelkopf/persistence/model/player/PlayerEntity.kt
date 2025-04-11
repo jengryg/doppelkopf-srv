@@ -28,9 +28,8 @@ class PlayerEntity(
     @Column
     override val seat: Int,
 ) : BaseEntity(), IPlayerProperties {
-    // TODO: dealer should be a game property
     @Column
-    var dealer: Boolean = false
+    override var dealer: Boolean = false
 
     @OneToMany(
         fetch = FetchType.LAZY,
