@@ -2,7 +2,7 @@ package game.doppelkopf.api.play
 
 import game.doppelkopf.api.play.dto.RoundInfoDto
 import game.doppelkopf.api.play.dto.RoundOperationDto
-import game.doppelkopf.core.RoundFacade
+import game.doppelkopf.core.handler.RoundFacade
 import game.doppelkopf.core.common.enums.RoundOperation
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation

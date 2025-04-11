@@ -1,4 +1,4 @@
-package game.doppelkopf.core
+package game.doppelkopf.core.handler
 
 import game.doppelkopf.core.common.errors.ForbiddenActionException
 import game.doppelkopf.core.common.enums.BiddingOption
