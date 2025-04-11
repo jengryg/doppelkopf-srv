@@ -12,7 +12,7 @@ import jakarta.persistence.*
 @Entity
 class UserEntity(
     @Column(unique = true)
-    var username: String,
+    override var username: String,
 
     @Column
     @JsonIgnore

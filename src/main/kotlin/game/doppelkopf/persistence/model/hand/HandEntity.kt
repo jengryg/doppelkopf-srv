@@ -27,40 +27,32 @@ class HandEntity(
     val cardsRemaining: MutableList<String>,
 
     @Column
-    val hasMarriage: Boolean,
+    override val hasMarriage: Boolean,
 ) : BaseEntity(), IHandProperties {
     @ElementCollection
     var cardsPlayed: MutableList<String> = mutableListOf()
 
     @Column
-    var declared: Declaration = Declaration.NOTHING
+    override var declared: Declaration = Declaration.NOTHING
 
     @Column
-    var bidding: Bidding = Bidding.NOTHING
+    override var bidding: Bidding = Bidding.NOTHING
 
     @Column
-    var isMarried: Boolean = false
+    override var isMarried: Boolean = false
 
     @Column
-    var playsSolo: Boolean = false
+    override var playsSolo: Boolean = false
 
-    /**
-     * [internalTeam] should only be used internally and not be communicated to the outside since it could leak
-     * information about the game to the players in advance.
-     */
-    @Column
-    var internalTeam: Team = Team.NA
 
-    /**
-     * [playerTeam] should only be shown to the [player] of this hand to prevent information leakage about the game to
-     * other players.
-     */
     @Column
-    var playerTeam: Team = Team.NA
+    override var internalTeam: Team = Team.NA
 
-    /**
-     * [publicTeam] is safe to be shown to all players of the game at any time.
-     */
+
     @Column
-    var publicTeam: Team = Team.NA
+    override var playerTeam: Team = Team.NA
+
+
+    @Column
+    override var publicTeam: Team = Team.NA
 }

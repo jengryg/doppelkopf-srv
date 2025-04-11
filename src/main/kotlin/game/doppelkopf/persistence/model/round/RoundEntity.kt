@@ -26,7 +26,7 @@ class RoundEntity(
     val dealer: PlayerEntity,
 
     @Column
-    val number: Int,
+    override val number: Int,
 ) : BaseEntity(), IRoundProperties {
     @Column
     override var started: Instant? = null
@@ -36,15 +36,15 @@ class RoundEntity(
 
     @Column
     @Enumerated(EnumType.STRING)
-    var state: RoundState = RoundState.INITIALIZED
+    override var state: RoundState = RoundState.INITIALIZED
 
     @Column
     @Enumerated(EnumType.STRING)
-    var contract: RoundContract = RoundContract.UNDECIDED
+    override var contract: RoundContract = RoundContract.UNDECIDED
 
     @Column
     @Enumerated(EnumType.STRING)
-    var deck: DeckMode = DeckMode.DIAMONDS
+    override var deck: DeckMode = DeckMode.DIAMONDS
 
     @OneToMany(
         fetch = FetchType.EAGER,

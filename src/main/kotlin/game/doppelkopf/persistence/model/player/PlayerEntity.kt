@@ -26,8 +26,9 @@ class PlayerEntity(
     val game: GameEntity,
 
     @Column
-    val seat: Int,
+    override val seat: Int,
 ) : BaseEntity(), IPlayerProperties {
+    // TODO: dealer should be a game property
     @Column
     var dealer: Boolean = false
 

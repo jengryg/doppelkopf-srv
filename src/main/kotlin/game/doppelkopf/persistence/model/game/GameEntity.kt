@@ -22,7 +22,7 @@ class GameEntity(
     val creator: UserEntity,
 
     @Column
-    val maxNumberOfPlayers: Int,
+    override val maxNumberOfPlayers: Int,
 ) : BaseEntity(), IGameProperties {
     @Column
     override var started: Instant? = null
@@ -32,7 +32,7 @@ class GameEntity(
 
     @Column
     @Enumerated(EnumType.STRING)
-    var state: GameState = GameState.INITIALIZED
+    override var state: GameState = GameState.INITIALIZED
 
     @OneToMany(
         fetch = FetchType.EAGER,
