@@ -1,6 +1,7 @@
 package game.doppelkopf.persistence.model.user
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import game.doppelkopf.core.model.user.IUserProperties
 import game.doppelkopf.persistence.model.BaseEntity
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.player.PlayerEntity
@@ -28,7 +29,7 @@ class UserEntity(
     @Enumerated(EnumType.STRING)
     @JsonIgnore
     var authority: Authority = Authority.NONE
-) : BaseEntity() {
+) : BaseEntity(), IUserProperties {
     /**
      * Simple authority is wrapped inside a set for further processing and modifications.
      */

@@ -1,5 +1,6 @@
 package game.doppelkopf.persistence.model.player
 
+import game.doppelkopf.core.model.player.IPlayerProperties
 import game.doppelkopf.persistence.model.BaseEntity
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.round.RoundEntity
@@ -26,7 +27,7 @@ class PlayerEntity(
 
     @Column
     val seat: Int,
-) : BaseEntity() {
+) : BaseEntity(), IPlayerProperties {
     @Column
     var dealer: Boolean = false
 

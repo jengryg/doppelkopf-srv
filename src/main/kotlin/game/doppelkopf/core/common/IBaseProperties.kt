@@ -29,6 +29,4 @@ interface IBaseProperties {
      * We always initialize it, to handle it as non-nullable [Instant] property.
      */
     var updated: Instant
-
-
 }

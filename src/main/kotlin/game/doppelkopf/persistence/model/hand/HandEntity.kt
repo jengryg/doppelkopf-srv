@@ -3,6 +3,7 @@ package game.doppelkopf.persistence.model.hand
 import game.doppelkopf.core.common.enums.Bidding
 import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.core.common.enums.Team
+import game.doppelkopf.core.model.hand.IHandProperties
 import game.doppelkopf.persistence.model.BaseEntity
 import game.doppelkopf.persistence.model.player.PlayerEntity
 import game.doppelkopf.persistence.model.round.RoundEntity
@@ -27,7 +28,7 @@ class HandEntity(
 
     @Column
     val hasMarriage: Boolean,
-) : BaseEntity() {
+) : BaseEntity(), IHandProperties {
     @ElementCollection
     var cardsPlayed: MutableList<String> = mutableListOf()
 
