@@ -13,5 +13,5 @@ interface IGameProperties : IBaseProperties, IStartedEnded {
     /**
      * Current [GameState] of this game.
      */
-    val state: GameState
+    var state: GameState
 }
