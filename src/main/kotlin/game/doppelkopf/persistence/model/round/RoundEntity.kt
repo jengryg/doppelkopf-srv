@@ -44,7 +44,7 @@ class RoundEntity(
 
     @Column
     @Enumerated(EnumType.STRING)
-    override var deck: DeckMode = DeckMode.DIAMONDS
+    override var deckMode: DeckMode = DeckMode.DIAMONDS
 
     @OneToMany(
         fetch = FetchType.EAGER,

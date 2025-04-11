@@ -25,5 +25,5 @@ interface IRoundProperties : IBaseProperties, IStartedEnded {
     /**
      * Current [DeckMode] of this round.
      */
-    val deck: DeckMode
+    val deckMode: DeckMode
 }

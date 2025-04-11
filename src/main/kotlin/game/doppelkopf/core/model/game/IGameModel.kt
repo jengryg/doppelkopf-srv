@@ -7,7 +7,7 @@ import game.doppelkopf.core.model.user.IUserModel
 import game.doppelkopf.persistence.model.game.GameEntity
 
 /**
- * [IGameModel] defines the final contract for the [GameModel] to enable automatic delegation of [IGameProperties]
+ * [IGameModel] defines the final contract to enable automatic delegation of [IGameProperties]
  * and demand manual delegation of [IGameModel] properties not inherited from [IGameProperties] and [IBaseModel].
  */
 interface IGameModel : IGameProperties, IBaseModel<GameEntity> {

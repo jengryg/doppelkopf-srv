@@ -9,7 +9,7 @@ class RoundModelFactory {
     fun create(roundEntity: RoundEntity): RoundModel {
         return RoundModel(
             roundEntity,
-            Deck.create(roundEntity.deck)
+            Deck.create(roundEntity.deckMode)
         )
     }
 }

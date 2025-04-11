@@ -15,7 +15,7 @@ object RoundConfigurator {
             // Teams are just determined by QueenOfClubs, and each player is allowed to see their own team.
             it.playerTeam = it.internalTeam
         }
-        round.deck = DeckMode.DIAMONDS
+        round.deckMode = DeckMode.DIAMONDS
         round.state = RoundState.AUCTIONED
         round.contract = RoundContract.NORMAL
     }
@@ -29,7 +29,7 @@ object RoundConfigurator {
             // Silent Marriage means there are 3 KO and 1 RE players, as determined by the distribution of queen of clubs.
             it.playerTeam = it.internalTeam
         }
-        round.deck = DeckMode.DIAMONDS
+        round.deckMode = DeckMode.DIAMONDS
         round.state = RoundState.AUCTIONED
         round.contract = RoundContract.SILENT_MARRIAGE
     }
@@ -55,7 +55,7 @@ object RoundConfigurator {
                 }
             }
         }
-        round.deck = DeckMode.DIAMONDS
+        round.deckMode = DeckMode.DIAMONDS
         round.state = RoundState.AUCTIONED
         round.contract = RoundContract.WEDDING
     }
