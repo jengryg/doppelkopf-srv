@@ -3,7 +3,7 @@ package game.doppelkopf.api.play.dto
 import game.doppelkopf.core.common.enums.Bidding
 import game.doppelkopf.core.common.enums.DeclarationPublic
 import game.doppelkopf.core.common.enums.Team
-import game.doppelkopf.persistence.play.HandEntity
+import game.doppelkopf.persistence.model.hand.HandEntity
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 

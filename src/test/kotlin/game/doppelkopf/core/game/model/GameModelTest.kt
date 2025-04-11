@@ -5,9 +5,9 @@ import game.doppelkopf.core.common.errors.GameFailedException
 import game.doppelkopf.core.common.errors.InvalidActionException
 import game.doppelkopf.core.common.enums.GameState
 import game.doppelkopf.core.common.enums.RoundState
-import game.doppelkopf.persistence.game.GameEntity
-import game.doppelkopf.persistence.game.PlayerEntity
-import game.doppelkopf.persistence.user.UserEntity
+import game.doppelkopf.persistence.model.game.GameEntity
+import game.doppelkopf.persistence.model.player.PlayerEntity
+import game.doppelkopf.persistence.model.user.UserEntity
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Nested

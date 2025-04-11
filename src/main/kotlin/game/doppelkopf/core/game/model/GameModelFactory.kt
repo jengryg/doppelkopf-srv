@@ -1,6 +1,6 @@
 package game.doppelkopf.core.game.model
 
-import game.doppelkopf.persistence.game.GameEntity
+import game.doppelkopf.persistence.model.game.GameEntity
 import org.springframework.stereotype.Service
 
 @Service

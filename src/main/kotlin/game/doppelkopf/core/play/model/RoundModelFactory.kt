@@ -1,7 +1,7 @@
 package game.doppelkopf.core.play.model
 
 import game.doppelkopf.core.cards.Deck
-import game.doppelkopf.persistence.play.RoundEntity
+import game.doppelkopf.persistence.model.round.RoundEntity
 import org.springframework.stereotype.Service
 
 @Service

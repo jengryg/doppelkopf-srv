@@ -1,9 +1,9 @@
-package game.doppelkopf.persistence.user
+package game.doppelkopf.persistence.model.user
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import game.doppelkopf.persistence.BaseEntity
-import game.doppelkopf.persistence.game.GameEntity
-import game.doppelkopf.persistence.game.PlayerEntity
+import game.doppelkopf.persistence.model.BaseEntity
+import game.doppelkopf.persistence.model.game.GameEntity
+import game.doppelkopf.persistence.model.player.PlayerEntity
 import game.doppelkopf.security.Authority
 import jakarta.persistence.*
 

@@ -1,8 +1,9 @@
-package game.doppelkopf.persistence.game
+package game.doppelkopf.persistence.model.player
 
-import game.doppelkopf.persistence.BaseEntity
-import game.doppelkopf.persistence.play.RoundEntity
-import game.doppelkopf.persistence.user.UserEntity
+import game.doppelkopf.persistence.model.BaseEntity
+import game.doppelkopf.persistence.model.game.GameEntity
+import game.doppelkopf.persistence.model.round.RoundEntity
+import game.doppelkopf.persistence.model.user.UserEntity
 import jakarta.persistence.*
 
 /**

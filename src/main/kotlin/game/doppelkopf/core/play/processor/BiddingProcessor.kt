@@ -5,7 +5,7 @@ import game.doppelkopf.core.common.errors.ofInvalidAction
 import game.doppelkopf.core.common.enums.Bidding
 import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.core.common.enums.RoundState
-import game.doppelkopf.persistence.play.RoundEntity
+import game.doppelkopf.persistence.model.round.RoundEntity
 
 /**
  * [BiddingProcessor] can only be instantiated if the round is ready.

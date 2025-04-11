@@ -1,10 +1,11 @@
-package game.doppelkopf.persistence.play
+package game.doppelkopf.persistence.model.hand
 
 import game.doppelkopf.core.common.enums.Bidding
 import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.core.common.enums.Team
-import game.doppelkopf.persistence.BaseEntity
-import game.doppelkopf.persistence.game.PlayerEntity
+import game.doppelkopf.persistence.model.BaseEntity
+import game.doppelkopf.persistence.model.player.PlayerEntity
+import game.doppelkopf.persistence.model.round.RoundEntity
 import jakarta.persistence.*
 
 @Entity

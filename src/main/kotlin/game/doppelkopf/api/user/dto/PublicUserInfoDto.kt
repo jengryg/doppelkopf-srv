@@ -1,6 +1,6 @@
 package game.doppelkopf.api.user.dto
 
-import game.doppelkopf.persistence.user.UserEntity
+import game.doppelkopf.persistence.model.user.UserEntity
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 

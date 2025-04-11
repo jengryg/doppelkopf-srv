@@ -3,7 +3,7 @@ package game.doppelkopf.core.play.processor
 import game.doppelkopf.core.common.errors.InvalidActionException
 import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.core.common.enums.RoundState
-import game.doppelkopf.persistence.play.RoundEntity
+import game.doppelkopf.persistence.model.round.RoundEntity
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested

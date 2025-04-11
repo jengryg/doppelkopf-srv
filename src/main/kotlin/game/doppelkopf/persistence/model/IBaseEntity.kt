@@ -1,4 +1,4 @@
-package game.doppelkopf.persistence
+package game.doppelkopf.persistence.model
 
 import game.doppelkopf.core.common.IBaseProperties
 import java.util.*

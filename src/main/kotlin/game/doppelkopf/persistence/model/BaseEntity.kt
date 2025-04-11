@@ -1,4 +1,4 @@
-package game.doppelkopf.persistence
+package game.doppelkopf.persistence.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.Column

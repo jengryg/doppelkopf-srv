@@ -1,8 +1,8 @@
-package game.doppelkopf.persistence.play
+package game.doppelkopf.persistence.model.player
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-interface HandRepository : JpaRepository<HandEntity, UUID>
+interface PlayerRepository : JpaRepository<PlayerEntity, UUID>

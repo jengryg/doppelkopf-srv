@@ -5,7 +5,7 @@ import game.doppelkopf.core.common.enums.Bidding
 import game.doppelkopf.core.common.enums.BiddingOption
 import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.core.common.enums.DeclarationOption
-import game.doppelkopf.persistence.play.HandEntity
+import game.doppelkopf.persistence.model.hand.HandEntity
 import org.springframework.lang.CheckReturnValue
 
 class HandModel(

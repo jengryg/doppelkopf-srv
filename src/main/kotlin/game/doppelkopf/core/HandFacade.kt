@@ -6,10 +6,10 @@ import game.doppelkopf.core.common.enums.DeclarationOption
 import game.doppelkopf.core.play.model.HandModelFactory
 import game.doppelkopf.core.play.processor.BiddingProcessor
 import game.doppelkopf.core.play.processor.DeclarationProcessor
-import game.doppelkopf.persistence.EntityNotFoundException
-import game.doppelkopf.persistence.play.HandEntity
-import game.doppelkopf.persistence.play.HandRepository
-import game.doppelkopf.persistence.user.UserEntity
+import game.doppelkopf.persistence.errors.EntityNotFoundException
+import game.doppelkopf.persistence.model.hand.HandEntity
+import game.doppelkopf.persistence.model.hand.HandRepository
+import game.doppelkopf.persistence.model.user.UserEntity
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service

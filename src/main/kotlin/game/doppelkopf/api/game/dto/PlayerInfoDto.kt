@@ -1,7 +1,7 @@
 package game.doppelkopf.api.game.dto
 
 import game.doppelkopf.api.user.dto.PublicUserInfoDto
-import game.doppelkopf.persistence.game.PlayerEntity
+import game.doppelkopf.persistence.model.player.PlayerEntity
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 

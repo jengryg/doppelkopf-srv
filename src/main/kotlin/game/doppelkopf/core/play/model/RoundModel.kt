@@ -5,9 +5,9 @@ import game.doppelkopf.core.cards.Deck
 import game.doppelkopf.core.common.enums.Team
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
-import game.doppelkopf.persistence.game.PlayerEntity
-import game.doppelkopf.persistence.play.HandEntity
-import game.doppelkopf.persistence.play.RoundEntity
+import game.doppelkopf.persistence.model.player.PlayerEntity
+import game.doppelkopf.persistence.model.hand.HandEntity
+import game.doppelkopf.persistence.model.round.RoundEntity
 import game.doppelkopf.utils.Quadruple
 
 class RoundModel(

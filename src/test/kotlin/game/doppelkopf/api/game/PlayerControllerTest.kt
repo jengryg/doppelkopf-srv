@@ -7,10 +7,10 @@ import game.doppelkopf.core.common.errors.ForbiddenActionException
 import game.doppelkopf.core.common.errors.InvalidActionException
 import game.doppelkopf.core.game.model.GameModelFactory
 import game.doppelkopf.errors.ProblemDetailResponse
-import game.doppelkopf.persistence.game.GameEntity
-import game.doppelkopf.persistence.game.GameRepository
-import game.doppelkopf.persistence.game.PlayerEntity
-import game.doppelkopf.persistence.user.UserEntity
+import game.doppelkopf.persistence.model.game.GameEntity
+import game.doppelkopf.persistence.model.game.GameRepository
+import game.doppelkopf.persistence.model.player.PlayerEntity
+import game.doppelkopf.persistence.model.user.UserEntity
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat

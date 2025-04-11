@@ -7,10 +7,10 @@ import game.doppelkopf.core.common.enums.GameState
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
-import game.doppelkopf.persistence.game.GameEntity
-import game.doppelkopf.persistence.game.PlayerEntity
-import game.doppelkopf.persistence.play.RoundEntity
-import game.doppelkopf.persistence.user.UserEntity
+import game.doppelkopf.persistence.model.game.GameEntity
+import game.doppelkopf.persistence.model.player.PlayerEntity
+import game.doppelkopf.persistence.model.round.RoundEntity
+import game.doppelkopf.persistence.model.user.UserEntity
 import game.doppelkopf.utils.Quadruple
 import org.springframework.lang.CheckReturnValue
 import java.time.Instant

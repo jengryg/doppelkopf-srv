@@ -1,9 +1,10 @@
-package game.doppelkopf.persistence.game
+package game.doppelkopf.persistence.model.game
 
 import game.doppelkopf.core.common.enums.GameState
-import game.doppelkopf.persistence.BaseEntity
-import game.doppelkopf.persistence.play.RoundEntity
-import game.doppelkopf.persistence.user.UserEntity
+import game.doppelkopf.persistence.model.BaseEntity
+import game.doppelkopf.persistence.model.player.PlayerEntity
+import game.doppelkopf.persistence.model.round.RoundEntity
+import game.doppelkopf.persistence.model.user.UserEntity
 import jakarta.persistence.*
 import java.time.Instant
 

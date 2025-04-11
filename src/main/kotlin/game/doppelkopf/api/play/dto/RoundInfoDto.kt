@@ -3,7 +3,7 @@ package game.doppelkopf.api.play.dto
 import game.doppelkopf.api.game.dto.PlayerInfoDto
 import game.doppelkopf.core.common.enums.RoundContractPublic
 import game.doppelkopf.core.common.enums.RoundState
-import game.doppelkopf.persistence.play.RoundEntity
+import game.doppelkopf.persistence.model.round.RoundEntity
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 

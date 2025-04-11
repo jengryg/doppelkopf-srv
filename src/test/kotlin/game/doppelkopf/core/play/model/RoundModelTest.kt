@@ -2,9 +2,9 @@ package game.doppelkopf.core.play.model
 
 import game.doppelkopf.core.cards.Deck
 import game.doppelkopf.core.cards.DeckMode
-import game.doppelkopf.persistence.game.GameEntity
-import game.doppelkopf.persistence.game.PlayerEntity
-import game.doppelkopf.persistence.play.RoundEntity
+import game.doppelkopf.persistence.model.game.GameEntity
+import game.doppelkopf.persistence.model.player.PlayerEntity
+import game.doppelkopf.persistence.model.round.RoundEntity
 import game.doppelkopf.utils.Quadruple
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat

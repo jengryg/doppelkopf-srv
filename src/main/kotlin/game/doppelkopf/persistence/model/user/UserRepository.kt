@@ -1,4 +1,4 @@
-package game.doppelkopf.persistence.user
+package game.doppelkopf.persistence.model.user
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository

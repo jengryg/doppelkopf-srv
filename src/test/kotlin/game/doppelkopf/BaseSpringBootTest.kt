@@ -2,8 +2,8 @@ package game.doppelkopf
 
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
-import game.doppelkopf.persistence.user.UserEntity
-import game.doppelkopf.persistence.user.UserRepository
+import game.doppelkopf.persistence.model.user.UserEntity
+import game.doppelkopf.persistence.model.user.UserRepository
 import game.doppelkopf.security.Authority
 import io.mockk.clearAllMocks
 import io.mockk.unmockkAll
