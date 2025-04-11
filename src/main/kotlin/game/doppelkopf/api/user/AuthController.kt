@@ -24,14 +24,14 @@ class AuthController : Logging {
     fun status(@AuthenticationPrincipal userDetails: UserDetails?): ResponseEntity<PublicUserInfoDto> {
         log.atDebug()
             .setMessage("Current user login status obtained.")
-            .addKeyValue("userDetails") { userDetails?.user }
+            .addKeyValue("userDetails") { userDetails?.entity }
             .log()
 
         if (userDetails != null) {
             return ResponseEntity.ok(
                 PublicUserInfoDto(
-                    id = userDetails.user.id,
-                    name = userDetails.user.username
+                    id = userDetails.entity.id,
+                    name = userDetails.entity.username
                 )
             )
         } else {

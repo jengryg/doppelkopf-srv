@@ -43,7 +43,7 @@ class PlayerController(
         @RequestBody @Valid playerCreateDto: PlayerCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<PlayerInfoDto> {
-        val player = playerFacade.create(gameId, playerCreateDto, userDetails.user)
+        val player = playerFacade.create(gameId, playerCreateDto, userDetails.entity)
 
         return PlayerInfoDto(player).let {
             ResponseEntity.created(

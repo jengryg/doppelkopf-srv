@@ -1,31 +1,32 @@
 package game.doppelkopf.security
 
+import game.doppelkopf.core.model.user.UserModel
 import game.doppelkopf.persistence.model.user.UserEntity
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails as IUserDetails
 
 class UserDetails(
-    val user: UserEntity
+    val entity: UserEntity
 ) : IUserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return user.authorities.map { SimpleGrantedAuthority(it) }.toMutableSet()
+        return entity.authorities.map { SimpleGrantedAuthority(it) }.toMutableSet()
     }
 
     override fun getPassword(): String {
-        return user.password
+        return entity.password
     }
 
     override fun getUsername(): String {
-        return user.username
+        return entity.username
     }
 
     override fun isAccountNonLocked(): Boolean {
-        return !user.locked
+        return !entity.locked
     }
 
     override fun isEnabled(): Boolean {
-        return user.enabled
+        return entity.enabled
     }
 
     override fun isAccountNonExpired(): Boolean {

@@ -41,7 +41,7 @@ class RoundController(
         @PathVariable gameId: UUID,
         @AuthenticationPrincipal userDetails: UserDetails,
     ): ResponseEntity<RoundInfoDto> {
-        return RoundInfoDto(roundFacade.create(gameId, userDetails.user)).let {
+        return RoundInfoDto(roundFacade.create(gameId, userDetails.entity)).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/rounds/{id}").build(it.id)
             ).body(it)

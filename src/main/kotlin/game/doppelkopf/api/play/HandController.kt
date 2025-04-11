@@ -42,7 +42,7 @@ class HandController(
         @AuthenticationPrincipal userDetails: UserDetails,
     ): ResponseEntity<HandForPlayerDto> {
         return ResponseEntity.ok(
-            HandForPlayerDto(handFacade.load(handId, userDetails.user))
+            HandForPlayerDto(handFacade.load(handId, userDetails.entity))
         )
     }
 
@@ -56,7 +56,7 @@ class HandController(
         @RequestBody declarationCreateDto: DeclarationCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<HandForPlayerDto> {
-        return HandForPlayerDto(handFacade.declare(handId, declarationCreateDto.declaration, userDetails.user)).let {
+        return HandForPlayerDto(handFacade.declare(handId, declarationCreateDto.declaration, userDetails.entity)).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/hands/{id}").build(it.id)
             ).body(it)
@@ -73,7 +73,7 @@ class HandController(
         @RequestBody bidCreateDto: BidCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<HandForPlayerDto> {
-        return HandForPlayerDto(handFacade.bid(handId, bidCreateDto.bid, userDetails.user)).let {
+        return HandForPlayerDto(handFacade.bid(handId, bidCreateDto.bid, userDetails.entity)).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/hands/{id}").build(it.id)
             ).body(it)

@@ -42,7 +42,7 @@ class GameController(
         @RequestBody @Valid gameCreateDto: GameCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<GameInfoDto> {
-        return GameInfoDto(gameFacade.create(gameCreateDto, userDetails.user)).let {
+        return GameInfoDto(gameFacade.create(gameCreateDto, userDetails.entity)).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/games/{id}").build(it.id)
             ).body(it)
@@ -71,7 +71,7 @@ class GameController(
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<GameInfoDto> {
         return when (operation.op) {
-            GameOperation.START -> ResponseEntity.ok(GameInfoDto(gameFacade.start(id, userDetails.user)))
+            GameOperation.START -> ResponseEntity.ok(GameInfoDto(gameFacade.start(id, userDetails.entity)))
         }
     }
 }
