@@ -29,10 +29,10 @@ class RoundEntity(
     val number: Int,
 ) : BaseEntity(), IRoundProperties {
     @Column
-    var started: Instant? = null
+    override var started: Instant? = null
 
     @Column
-    var ended: Instant? = null
+    override var ended: Instant? = null
 
     @Column
     @Enumerated(EnumType.STRING)
