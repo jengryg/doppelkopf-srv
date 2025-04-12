@@ -1,6 +1,6 @@
 package game.doppelkopf.core.model.player
 
-import game.doppelkopf.core.common.IBaseModel
+import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.game.GameModel
 import game.doppelkopf.core.model.round.RoundModel
 import game.doppelkopf.core.model.user.UserModel
@@ -11,8 +11,8 @@ import game.doppelkopf.persistence.model.player.PlayerEntity
  * relations of [PlayerEntity].
  */
 abstract class PlayerModelAbstract(
-    override val entity: PlayerEntity
-) : IPlayerProperties by entity, IBaseModel<PlayerEntity> {
+    entity: PlayerEntity
+) : IPlayerProperties by entity, ModelAbstract<PlayerEntity>(entity) {
     val game: GameModel
         get() = GameModel(entity.game)
 

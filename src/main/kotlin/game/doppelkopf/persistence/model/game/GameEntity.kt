@@ -47,12 +47,4 @@ class GameEntity(
         cascade = [CascadeType.ALL],
     )
     val rounds = mutableSetOf<RoundEntity>()
-
-    fun getPlayerOfOrNull(user: UserEntity): PlayerEntity? {
-        return players.singleOrNull { it.user == user }
-    }
-
-    fun getLatestRoundOrNull(): RoundEntity? {
-        return rounds.maxByOrNull { it.number }
-    }
 }

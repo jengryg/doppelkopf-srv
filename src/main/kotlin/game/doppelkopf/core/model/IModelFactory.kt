@@ -1,6 +1,5 @@
 package game.doppelkopf.core.model
 
-import game.doppelkopf.core.common.IBaseModel
 import game.doppelkopf.persistence.model.BaseEntity
 
 /**

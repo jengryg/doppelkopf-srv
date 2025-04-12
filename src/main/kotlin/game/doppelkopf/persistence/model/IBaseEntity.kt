@@ -1,7 +1,6 @@
 package game.doppelkopf.persistence.model
 
 import game.doppelkopf.core.common.IBaseProperties
-import java.util.*
 
 /**
  * [IBaseEntity] defines the minimum properties we require for an entity that allows persistence of an [IBaseProperties]
@@ -16,13 +15,15 @@ interface IBaseEntity : IBaseProperties {
     var version: Long?
 
     /**
-     * @return [UUID.hashCode] of the [id]
+     * Implement [hashCode] based on the [id] of the implementing class using [java.util.UUID.hashCode].
      */
     override fun hashCode(): Int
 
     /**
-     * @param other the object to compare to
-     * @return true if and only if the [other] has the same underlying class and [id]
+     * Implement [equals] using [org.hibernate.Hibernate.getClass] to check the underlying classes of proxies.
+     * Finally, check the underlying [id].
      */
     override fun equals(other: Any?): Boolean
+
+    override fun toString(): String
 }

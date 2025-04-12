@@ -15,7 +15,7 @@ interface IRoundProperties : IBaseProperties, IStartedEnded {
     /**
      * Current [RoundState] of this round.
      */
-    val state: RoundState
+    var state: RoundState
 
     /**
      * Current [RoundContract] of this round.

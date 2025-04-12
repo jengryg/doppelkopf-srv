@@ -1,6 +1,6 @@
 package game.doppelkopf.core.model.user
 
-import game.doppelkopf.core.common.IBaseModel
+import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.game.GameModel
 import game.doppelkopf.core.model.player.PlayerModel
 import game.doppelkopf.persistence.model.user.UserEntity
@@ -10,8 +10,8 @@ import game.doppelkopf.persistence.model.user.UserEntity
  * relations of [UserEntity].
  */
 abstract class UserModelAbstract(
-    override val entity: UserEntity
-) : IUserProperties by entity, IBaseModel<UserEntity> {
+    entity: UserEntity
+) : IUserProperties by entity, ModelAbstract<UserEntity>(entity) {
     val createdGames: List<GameModel>
         get() = entity.createdGames.map { GameModel(it) }
 

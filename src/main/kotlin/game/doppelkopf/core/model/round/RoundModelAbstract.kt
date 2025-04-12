@@ -1,7 +1,7 @@
 package game.doppelkopf.core.model.round
 
 import game.doppelkopf.core.cards.Deck
-import game.doppelkopf.core.common.IBaseModel
+import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.game.GameModel
 import game.doppelkopf.core.model.hand.HandModel
 import game.doppelkopf.core.model.player.PlayerModel
@@ -12,8 +12,8 @@ import game.doppelkopf.persistence.model.round.RoundEntity
  * relations of [RoundEntity].
  */
 abstract class RoundModelAbstract(
-    override val entity: RoundEntity
-) : IRoundProperties by entity, IBaseModel<RoundEntity> {
+    entity: RoundEntity
+) : IRoundProperties by entity, ModelAbstract<RoundEntity>(entity) {
     val game: GameModel
         get() = GameModel(entity.game)
 
