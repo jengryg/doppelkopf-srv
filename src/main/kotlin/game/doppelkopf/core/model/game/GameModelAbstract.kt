@@ -20,13 +20,23 @@ abstract class GameModelAbstract(
         get() = entity.players.map { PlayerModel(it) }
 
     fun addPlayer(player: PlayerModel) {
+        if (entity.players.contains(player.entity)) {
+            return
+        }
         entity.players.add(player.entity)
+    }
+
+    fun getCurrentDealer(): PlayerModel {
+        return players.single { it.dealer }
     }
 
     val rounds: List<RoundModel>
         get() = entity.rounds.map { RoundModel(it) }
 
     fun addRound(round: RoundModel) {
+        if (entity.rounds.contains(round.entity)) {
+            return
+        }
         entity.rounds.add(round.entity)
     }
 }

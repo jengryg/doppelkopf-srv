@@ -2,9 +2,7 @@ package game.doppelkopf.core.model.hand
 
 import game.doppelkopf.core.cards.Card
 import game.doppelkopf.core.common.IBaseModel
-import game.doppelkopf.core.model.player.PlayerModelAbstract
 import game.doppelkopf.core.model.player.PlayerModel
-import game.doppelkopf.core.model.round.RoundModelAbstract
 import game.doppelkopf.core.model.round.RoundModel
 import game.doppelkopf.persistence.model.hand.HandEntity
 
@@ -15,10 +13,10 @@ import game.doppelkopf.persistence.model.hand.HandEntity
 abstract class HandModelAbstract(
     override val entity: HandEntity
 ) : IHandProperties by entity, IBaseModel<HandEntity> {
-    val round: RoundModelAbstract
+    val round: RoundModel
         get() = RoundModel(entity.round)
 
-    val player: PlayerModelAbstract
+    val player: PlayerModel
         get() = PlayerModel(entity.player)
 
     val cardsRemaining: List<Card>
