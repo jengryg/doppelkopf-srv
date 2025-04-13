@@ -2,12 +2,14 @@ package game.doppelkopf
 
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
+import game.doppelkopf.persistence.BaseEntityRepository
 import game.doppelkopf.persistence.model.user.UserEntity
 import game.doppelkopf.persistence.model.user.UserRepository
 import game.doppelkopf.security.Authority
 import io.mockk.clearAllMocks
 import io.mockk.unmockkAll
 import org.bouncycastle.util.encoders.Base64
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.TestInstance
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import java.security.SecureRandom
 
@@ -34,6 +37,14 @@ abstract class BaseSpringBootTest : Logging {
 
     @Autowired
     protected lateinit var userRepository: UserRepository
+
+    /**
+     * Inject all [BaseEntityRepository] of the current spring context.
+     * We call [JpaRepository.deleteAll] on all entries in this list [AfterAll] tests are done to ensure an empty
+     * test-container based database.
+     */
+    @Autowired
+    protected lateinit var repositories: List<BaseEntityRepository<*>>
 
     /**
      * Test user username.
@@ -97,9 +108,13 @@ abstract class BaseSpringBootTest : Logging {
         `reset mockk`()
     }
 
-    fun `setup test user accounts in database`() {
-        userRepository.deleteAll()
+    @AfterAll
+    fun `delete all entities in all repositories to provide a clean testcontainers environment`() {
+        // Delete all entities in all repositories.
+        repositories.forEach { it.deleteAll() }
+    }
 
+    fun `setup test user accounts in database`() {
         testUser = createTestUserEntity(testUserName, testUserPassword, Authority.USER)
         testAdmin = createTestUserEntity(testAdminName, testAdminPassword, Authority.ADMIN)
 

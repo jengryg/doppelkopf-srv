@@ -1,8 +1,7 @@
 package game.doppelkopf.persistence.model.round
 
-import org.springframework.data.jpa.repository.JpaRepository
+import game.doppelkopf.persistence.BaseEntityRepository
 import org.springframework.stereotype.Repository
-import java.util.*
 
 @Repository
-interface RoundRepository : JpaRepository<RoundEntity, UUID>
+interface RoundRepository : BaseEntityRepository<RoundEntity>
