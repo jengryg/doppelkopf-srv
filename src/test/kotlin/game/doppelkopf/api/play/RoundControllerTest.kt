@@ -7,10 +7,9 @@ import game.doppelkopf.core.common.enums.RoundOperation
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.common.errors.ForbiddenActionException
 import game.doppelkopf.core.common.errors.InvalidActionException
-import game.doppelkopf.core.common.errors.ofInvalidAction
+import game.doppelkopf.core.handler.round.RoundBiddingEvaluationHandler
 import game.doppelkopf.core.handler.round.RoundDealHandler
-import game.doppelkopf.core.play.processor.BiddingProcessor
-import game.doppelkopf.core.play.processor.DeclarationProcessor
+import game.doppelkopf.core.handler.round.RoundDeclarationEvaluationHandler
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.game.GameRepository
@@ -21,7 +20,10 @@ import game.doppelkopf.persistence.model.round.RoundEntity
 import game.doppelkopf.persistence.model.round.RoundRepository
 import game.doppelkopf.persistence.model.user.UserEntity
 import game.doppelkopf.utils.Quadruple
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockkConstructor
+import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -215,34 +217,27 @@ class RoundControllerTest : BaseRestAssuredTest() {
     inner class EvalDeclarations {
         @Test
         fun `eval declaration returns 200 when processor successful`() {
-            mockkObject(DeclarationProcessor.Companion)
-            val processor = mockk<DeclarationProcessor> { every { process() } just Runs }
-            every {
-                DeclarationProcessor.Companion.createWhenReady(any())
-            } returns Result.success(processor)
-
             val game = createGameEntity(testUser).let { gameRepository.save(it) }
             val round = createRoundEntity(game).let { roundRepository.save(it) }
+
+            mockkConstructor(RoundDeclarationEvaluationHandler::class)
+            every { anyConstructed<RoundDeclarationEvaluationHandler>().doHandle() } returns round
 
             val response = execPatchRound<RoundInfoDto>(round.id, RoundOperation.DECLARE_EVALUATION, 200)
 
             assertThat(response.id).isEqualTo(round.id)
-
-            verify(exactly = 1) { DeclarationProcessor.Companion.createWhenReady(round) }
-            verify(exactly = 1) { processor.process() }
-            unmockkObject(DeclarationProcessor.Companion)
         }
 
         @Test
         fun `eval declaration returns 400 when invalid action exception`() {
-            mockkObject(DeclarationProcessor.Companion)
-            every { DeclarationProcessor.Companion.createWhenReady(any()) } returns Result.ofInvalidAction(
+            val game = createGameEntity(testUser).let { gameRepository.save(it) }
+            val round = createRoundEntity(game).let { roundRepository.save(it) }
+
+            mockkConstructor(RoundDeclarationEvaluationHandler::class)
+            every { anyConstructed<RoundDeclarationEvaluationHandler>().doHandle() } throws InvalidActionException(
                 "Declaration:Process",
                 "Mocked Model Exception."
             )
-
-            val game = createGameEntity(testUser).let { gameRepository.save(it) }
-            val round = createRoundEntity(game).let { roundRepository.save(it) }
 
             val response = execPatchRound<ProblemDetailResponse>(round.id, RoundOperation.DECLARE_EVALUATION, 400)
 
@@ -251,9 +246,6 @@ class RoundControllerTest : BaseRestAssuredTest() {
                 assertThat(response.title).isEqualTo("Invalid action")
                 assertThat(response.detail).isEqualTo("The action 'Declaration:Process' can not be performed: Mocked Model Exception.")
             }
-
-            verify(exactly = 1) { DeclarationProcessor.Companion.createWhenReady(round) }
-            unmockkObject(DeclarationProcessor.Companion)
         }
     }
 
@@ -261,34 +253,27 @@ class RoundControllerTest : BaseRestAssuredTest() {
     inner class EvalBids {
         @Test
         fun `eval bids returns 200 when processor successful`() {
-            mockkObject(BiddingProcessor)
-            val processor = mockk<BiddingProcessor> { every { process() } just Runs }
-            every {
-                BiddingProcessor.Companion.createWhenReady(any())
-            } returns Result.success(processor)
-
             val game = createGameEntity(testUser).let { gameRepository.save(it) }
             val round = createRoundEntity(game).let { roundRepository.save(it) }
+
+            mockkConstructor(RoundBiddingEvaluationHandler::class)
+            every { anyConstructed<RoundBiddingEvaluationHandler>().doHandle() } returns round
 
             val response = execPatchRound<RoundInfoDto>(round.id, RoundOperation.BID_EVALUATION, 200)
 
             assertThat(response.id).isEqualTo(round.id)
-
-            verify(exactly = 1) { BiddingProcessor.Companion.createWhenReady(round) }
-            verify(exactly = 1) { processor.process() }
-            unmockkObject(BiddingProcessor)
         }
 
         @Test
         fun `eval bids returns 400 when invalid action exception`() {
-            mockkObject(BiddingProcessor)
-            every { BiddingProcessor.Companion.createWhenReady(any()) } returns Result.ofInvalidAction(
+            val game = createGameEntity(testUser).let { gameRepository.save(it) }
+            val round = createRoundEntity(game).let { roundRepository.save(it) }
+
+            mockkConstructor(RoundBiddingEvaluationHandler::class)
+            every { anyConstructed<RoundBiddingEvaluationHandler>().doHandle() } throws InvalidActionException(
                 "Bidding:Process",
                 "Mocked Model Exception."
             )
-
-            val game = createGameEntity(testUser).let { gameRepository.save(it) }
-            val round = createRoundEntity(game).let { roundRepository.save(it) }
 
             val response = execPatchRound<ProblemDetailResponse>(round.id, RoundOperation.BID_EVALUATION, 400)
 
@@ -297,9 +282,6 @@ class RoundControllerTest : BaseRestAssuredTest() {
                 assertThat(response.title).isEqualTo("Invalid action")
                 assertThat(response.detail).isEqualTo("The action 'Bidding:Process' can not be performed: Mocked Model Exception.")
             }
-
-            verify { BiddingProcessor.Companion.createWhenReady(round) }
-            unmockkObject(BiddingProcessor)
         }
     }
 

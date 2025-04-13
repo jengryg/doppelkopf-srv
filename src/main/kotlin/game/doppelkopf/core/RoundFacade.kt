@@ -1,10 +1,11 @@
 package game.doppelkopf.core
 
+import game.doppelkopf.core.handler.round.RoundBiddingEvaluationHandler
 import game.doppelkopf.core.handler.round.RoundDealHandler
+import game.doppelkopf.core.handler.round.RoundDeclarationEvaluationHandler
 import game.doppelkopf.core.model.game.GameModel
+import game.doppelkopf.core.model.round.RoundModel
 import game.doppelkopf.core.model.user.UserModel
-import game.doppelkopf.core.play.processor.BiddingProcessor
-import game.doppelkopf.core.play.processor.DeclarationProcessor
 import game.doppelkopf.persistence.errors.EntityNotFoundException
 import game.doppelkopf.persistence.model.hand.HandRepository
 import game.doppelkopf.persistence.model.round.RoundEntity
@@ -52,21 +53,15 @@ class RoundFacade(
 
     @Transactional
     fun evaluateDeclarations(roundId: UUID): RoundEntity {
-        val round = load(roundId)
-
-        // Force the evaluation, thus we need to throw when not ready.
-        DeclarationProcessor.createWhenReady(round).getOrThrow().process()
-
-        return round
+        return RoundDeclarationEvaluationHandler(
+            round = RoundModel(load(roundId))
+        ).doHandle()
     }
 
     @Transactional
     fun evaluateBids(roundId: UUID): RoundEntity {
-        val round = load(roundId)
-
-        // Force the evaluation, thus we need to throw when not ready.
-        BiddingProcessor.createWhenReady(round).getOrThrow().process()
-
-        return round
+        return RoundBiddingEvaluationHandler(
+            round = RoundModel(load(roundId))
+        ).doHandle()
     }
 }

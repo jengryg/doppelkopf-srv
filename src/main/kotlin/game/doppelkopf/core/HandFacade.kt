@@ -5,9 +5,10 @@ import game.doppelkopf.core.common.enums.DeclarationOption
 import game.doppelkopf.core.common.errors.ForbiddenActionException
 import game.doppelkopf.core.handler.hand.HandBiddingHandler
 import game.doppelkopf.core.handler.hand.HandDeclareHandler
+import game.doppelkopf.core.handler.round.RoundBiddingEvaluationHandler
+import game.doppelkopf.core.handler.round.RoundDeclarationEvaluationHandler
 import game.doppelkopf.core.model.hand.HandModel
-import game.doppelkopf.core.play.processor.BiddingProcessor
-import game.doppelkopf.core.play.processor.DeclarationProcessor
+import game.doppelkopf.core.model.round.RoundModel
 import game.doppelkopf.persistence.errors.EntityNotFoundException
 import game.doppelkopf.persistence.model.hand.HandEntity
 import game.doppelkopf.persistence.model.hand.HandRepository
@@ -45,9 +46,11 @@ class HandFacade(
         return HandDeclareHandler(
             hand = HandModel(load(handId, user))
         ).doHandle(declarationOption).also {
-            // Try to run the processor, ignore if not ready.
-            DeclarationProcessor.createWhenReady(it.round).onSuccess { processor ->
-                processor.process()
+            // Try to evaluate the declarations, ignore if not ready.
+            val evalHandler = RoundDeclarationEvaluationHandler(RoundModel(it.round))
+
+            evalHandler.canHandle().onSuccess {
+                evalHandler.doHandle()
             }
         }
     }
@@ -57,9 +60,11 @@ class HandFacade(
         return HandBiddingHandler(
             hand = HandModel(load(handId, user))
         ).doHandle(biddingOption).also {
-            // Try to run the processor, ignore if not ready.
-            BiddingProcessor.createWhenReady(it.round).onSuccess { processor ->
-                processor.process()
+            // Try to evaluate the bids, ignore if not ready.
+            val evalHandler = RoundBiddingEvaluationHandler(RoundModel(it.round))
+
+            evalHandler.canHandle().onSuccess {
+                evalHandler.doHandle()
             }
         }
     }
