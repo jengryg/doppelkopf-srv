@@ -1,10 +1,10 @@
 package game.doppelkopf.core
 
 import game.doppelkopf.api.game.dto.PlayerCreateDto
-import game.doppelkopf.core.game.model.GameModelFactory
+import game.doppelkopf.core.handler.game.GameJoinHandler
+import game.doppelkopf.core.model.game.GameModel
+import game.doppelkopf.core.model.user.UserModel
 import game.doppelkopf.persistence.errors.EntityNotFoundException
-import game.doppelkopf.persistence.model.game.GameEntity
-import game.doppelkopf.persistence.model.game.GameRepository
 import game.doppelkopf.persistence.model.player.PlayerEntity
 import game.doppelkopf.persistence.model.player.PlayerRepository
 import game.doppelkopf.persistence.model.user.UserEntity
@@ -15,13 +15,11 @@ import java.util.*
 
 @Service
 class PlayerFacade(
-    private val gameRepository: GameRepository,
-    private val playerRepository: PlayerRepository,
-    private val gameModelFactory: GameModelFactory,
+    private val gameFacade: GameFacade,
+    private val playerRepository: PlayerRepository
 ) {
     fun list(gameId: UUID): List<PlayerEntity> {
-        return gameRepository.findByIdOrNull(gameId)?.players?.toList()
-            ?: throw EntityNotFoundException.forEntity<GameEntity>(gameId)
+        return gameFacade.load(gameId).players.toList()
     }
 
     fun load(playerId: UUID): PlayerEntity {
@@ -34,10 +32,10 @@ class PlayerFacade(
      */
     @Transactional
     fun create(gameId: UUID, playerCreateDto: PlayerCreateDto, user: UserEntity): PlayerEntity {
-        val game = gameRepository.findByIdOrNull(gameId)
-            ?: throw EntityNotFoundException.forEntity<GameEntity>(gameId)
-
-        return gameModelFactory.create(game).join(user, playerCreateDto.seat).let {
+        return GameJoinHandler(
+            game = GameModel(gameFacade.load(gameId)),
+            user = UserModel(user)
+        ).doHandle(playerCreateDto.seat).let {
             playerRepository.save(it)
         }
     }

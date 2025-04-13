@@ -4,39 +4,38 @@ import game.doppelkopf.BaseRestAssuredTest
 import game.doppelkopf.api.game.dto.GameCreateDto
 import game.doppelkopf.api.game.dto.GameInfoDto
 import game.doppelkopf.api.game.dto.GameOperationDto
+import game.doppelkopf.core.common.enums.GameOperation
 import game.doppelkopf.core.common.errors.ForbiddenActionException
 import game.doppelkopf.core.common.errors.InvalidActionException
-import game.doppelkopf.core.game.enums.GameOperation
-import game.doppelkopf.core.game.model.GameModelFactory
+import game.doppelkopf.core.handler.game.GameStartHandler
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.game.GameRepository
 import game.doppelkopf.persistence.model.player.PlayerEntity
 import game.doppelkopf.persistence.model.user.UserEntity
+import io.mockk.clearAllMocks
 import io.mockk.every
-import io.mockk.mockk
+import io.mockk.mockkConstructor
+import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.bean.override.convention.TestBean
 import java.util.*
 
 class GameControllerTest : BaseRestAssuredTest() {
     @Autowired
     private lateinit var gameRepository: GameRepository
 
-    @TestBean
-    private lateinit var gameModelFactory: GameModelFactory
-
-    companion object {
-        @Suppress("unused")
-        @JvmStatic
-        fun gameModelFactory(): GameModelFactory {
-            return mockk<GameModelFactory>()
-        }
+    @BeforeEach
+    @AfterEach
+    fun `unmock all`() {
+        clearAllMocks()
+        unmockkAll()
     }
 
     @Nested
@@ -154,40 +153,38 @@ class GameControllerTest : BaseRestAssuredTest() {
     inner class Starting {
         @Test
         fun `start returns 200 when model returns successful`() {
-            val entity = createGameOfUser(testUser).let {
+            val game = createGameOfUser(testUser).let {
                 gameRepository.save(it)
             }
 
-            every { gameModelFactory.create(any()) } returns mockk {
-                every { start(testUser) } returns entity
-                // the starting method of the model is tested in the model test, we just mock it here
-            }
+            mockkConstructor(GameStartHandler::class)
+            every { anyConstructed<GameStartHandler>().doHandle() } returns game
 
-            val response = execPatchGame<GameInfoDto>(entity.id, GameOperation.START, 200)
+            val response = execPatchGame<GameInfoDto>(game.id, GameOperation.START, 200)
 
-            assertThat(response.id).isEqualTo(entity.id)
-            assertThat(response.creator.id).isEqualTo(entity.creator.id)
-            assertThat(response.playerLimit).isEqualTo(entity.maxNumberOfPlayers)
-            assertThat(response.players).hasSize(entity.players.size)
+            assertThat(response.id).isEqualTo(game.id)
+            assertThat(response.creator.id).isEqualTo(game.creator.id)
+            assertThat(response.playerLimit).isEqualTo(game.maxNumberOfPlayers)
+            assertThat(response.players).hasSize(game.players.size)
         }
 
         @Test
         fun `start returns 400 when invalid action exception`() {
-            every { gameModelFactory.create(any()) } returns mockk {
-                every { start(testUser) } throws InvalidActionException(
-                    "Game:Start",
-                    "Mocked Model Exception."
-                )
-            }
-
-            val entity = createGameOfUser(testUser).let {
+            val game = createGameOfUser(testUser).let {
                 gameRepository.save(it)
             }
 
-            val response = execPatchGame<ProblemDetailResponse>(entity.id, GameOperation.START, 400)
+            mockkConstructor(GameStartHandler::class)
+            every { anyConstructed<GameStartHandler>().doHandle() } throws InvalidActionException(
+                "Game:Start",
+                "Mocked Model Exception."
+            )
+
+
+            val response = execPatchGame<ProblemDetailResponse>(game.id, GameOperation.START, 400)
 
             response.also {
-                assertThat(response.instance.toString()).isEqualTo("/v1/games/${entity.id}")
+                assertThat(response.instance.toString()).isEqualTo("/v1/games/${game.id}")
                 assertThat(response.title).isEqualTo("Invalid action")
                 assertThat(response.detail).isEqualTo("The action 'Game:Start' can not be performed: Mocked Model Exception.")
             }
@@ -195,21 +192,20 @@ class GameControllerTest : BaseRestAssuredTest() {
 
         @Test
         fun `start returns 403 when forbidden action exception`() {
-            every { gameModelFactory.create(any()) } returns mockk {
-                every { start(testUser) } throws ForbiddenActionException(
-                    "Game:Start",
-                    "Mocked Model Exception."
-                )
-            }
-
-            val entity = createGameOfUser(testAdmin).let {
+            val game = createGameOfUser(testAdmin).let {
                 gameRepository.save(it)
             }
 
-            val response = execPatchGame<ProblemDetailResponse>(entity.id, GameOperation.START, 403)
+            mockkConstructor(GameStartHandler::class)
+            every { anyConstructed<GameStartHandler>().doHandle() } throws ForbiddenActionException(
+                "Game:Start",
+                "Mocked Model Exception."
+            )
+
+            val response = execPatchGame<ProblemDetailResponse>(game.id, GameOperation.START, 403)
 
             response.also {
-                assertThat(response.instance.toString()).isEqualTo("/v1/games/${entity.id}")
+                assertThat(response.instance.toString()).isEqualTo("/v1/games/${game.id}")
                 assertThat(response.title).isEqualTo("Forbidden action")
                 assertThat(response.detail).isEqualTo("You are not allowed to perform the action 'Game:Start': Mocked Model Exception.")
             }

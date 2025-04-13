@@ -1,7 +1,8 @@
 package game.doppelkopf.core
 
-import game.doppelkopf.core.game.model.GameModelFactory
-import game.doppelkopf.core.play.model.RoundModelFactory
+import game.doppelkopf.core.handler.round.RoundDealHandler
+import game.doppelkopf.core.model.game.GameModel
+import game.doppelkopf.core.model.user.UserModel
 import game.doppelkopf.core.play.processor.BiddingProcessor
 import game.doppelkopf.core.play.processor.DeclarationProcessor
 import game.doppelkopf.persistence.errors.EntityNotFoundException
@@ -18,8 +19,6 @@ import java.util.*
 class RoundFacade(
     private val gameFacade: GameFacade,
     private val roundRepository: RoundRepository,
-    private val gameModelFactory: GameModelFactory,
-    private val roundModelFactory: RoundModelFactory,
     private val handRepository: HandRepository,
 ) {
     fun list(gameId: UUID): List<RoundEntity> {
@@ -32,21 +31,22 @@ class RoundFacade(
     }
 
     /**
-     * A round is created when the [user] deals the cards to the players.
+     * Start a new round in the game with [gameId] as [user].
+     *
+     * @param gameId the [UUID] of the game to start
+     * @param user the user that want to start the round, must be the dealer
+     *
+     * @return the [RoundEntity] created
      */
     @Transactional
     fun create(gameId: UUID, user: UserEntity): RoundEntity {
-        val game = gameFacade.load(gameId).let {
-            gameModelFactory.create(it)
-        }
-
-        val round = game.dealNextRound(user)
-        val activePlayers = game.getFourPlayersBehind(round.dealer)
-
-        val hands = roundModelFactory.create(round).createPlayerHands(activePlayers)
-
-        return roundRepository.save(round).also {
-            handRepository.saveAll(hands.toList())
+        return RoundDealHandler(
+            game = GameModel(gameFacade.load(gameId)),
+            user = UserModel(user)
+        ).doHandle().let { (round, hands) ->
+            roundRepository.save(round).also {
+                handRepository.saveAll(hands.toList())
+            }
         }
     }
 

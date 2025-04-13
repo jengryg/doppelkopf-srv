@@ -26,8 +26,8 @@ abstract class GameModelAbstract(
         entity.players.add(player.entity)
     }
 
-    fun getCurrentDealer(): PlayerModel {
-        return players.single { it.dealer }
+    fun getCurrentDealerOrNull(): PlayerModel? {
+        return players.singleOrNull { it.dealer }
     }
 
     val rounds: List<RoundModel>

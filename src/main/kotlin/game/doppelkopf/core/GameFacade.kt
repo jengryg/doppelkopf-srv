@@ -1,7 +1,9 @@
 package game.doppelkopf.core
 
 import game.doppelkopf.api.game.dto.GameCreateDto
-import game.doppelkopf.core.game.model.GameModelFactory
+import game.doppelkopf.core.handler.game.GameStartHandler
+import game.doppelkopf.core.model.game.GameModel
+import game.doppelkopf.core.model.user.UserModel
 import game.doppelkopf.persistence.errors.EntityNotFoundException
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.game.GameRepository
@@ -14,8 +16,7 @@ import java.util.*
 
 @Service
 class GameFacade(
-    private val gameRepository: GameRepository,
-    private val gameModelFactory: GameModelFactory,
+    private val gameRepository: GameRepository
 ) {
     /**
      * @return a list of all [GameEntity] in the database.
@@ -66,8 +67,9 @@ class GameFacade(
      */
     @Transactional
     fun start(id: UUID, user: UserEntity): GameEntity {
-        val game = load(id)
-
-        return gameModelFactory.create(game).start(user)
+        return GameStartHandler(
+            game = GameModel(load(id)),
+            user = UserModel(user)
+        ).doHandle()
     }
 }

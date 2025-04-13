@@ -5,36 +5,35 @@ import game.doppelkopf.api.game.dto.PlayerCreateDto
 import game.doppelkopf.api.game.dto.PlayerInfoDto
 import game.doppelkopf.core.common.errors.ForbiddenActionException
 import game.doppelkopf.core.common.errors.InvalidActionException
-import game.doppelkopf.core.game.model.GameModelFactory
+import game.doppelkopf.core.handler.game.GameJoinHandler
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.game.GameRepository
 import game.doppelkopf.persistence.model.player.PlayerEntity
 import game.doppelkopf.persistence.model.user.UserEntity
+import io.mockk.clearAllMocks
 import io.mockk.every
-import io.mockk.mockk
+import io.mockk.mockkConstructor
+import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.bean.override.convention.TestBean
 import java.util.*
 
 class PlayerControllerTest : BaseRestAssuredTest() {
     @Autowired
     private lateinit var gameRepository: GameRepository
 
-    @TestBean
-    private lateinit var gameModelFactory: GameModelFactory
-
-    companion object {
-        @Suppress("unused")
-        @JvmStatic
-        fun gameModelFactory(): GameModelFactory {
-            return mockk<GameModelFactory>()
-        }
+    @BeforeEach
+    @AfterEach
+    fun `unmock all`() {
+        clearAllMocks()
+        unmockkAll()
     }
 
     @Nested
@@ -68,7 +67,7 @@ class PlayerControllerTest : BaseRestAssuredTest() {
         }
 
         @Test
-        fun `get speicifc by its id returns 200 and dto`() {
+        fun `get specific by its id returns 200 and dto`() {
             val entity = createGameOfUser(testUser).let {
                 gameRepository.save(it)
             }
@@ -91,16 +90,15 @@ class PlayerControllerTest : BaseRestAssuredTest() {
     inner class Join {
         @Test
         fun `join returns 400 when invalid action exception`() {
-            every { gameModelFactory.create(any()) } returns mockk {
-                every { join(testUser, 3) } throws InvalidActionException(
-                    "Game:Join",
-                    "Mocked Model Exception."
-                )
-            }
-
             val game = createGameOfUser(testAdmin).let {
                 gameRepository.save(it)
             }
+
+            mockkConstructor(GameJoinHandler::class)
+            every { anyConstructed<GameJoinHandler>().doHandle(any()) } throws InvalidActionException(
+                "Game:Join",
+                "Mocked Model Exception."
+            )
 
             val (response, location) = execJoinGame<ProblemDetailResponse>(game.id, 3, 400)
 
@@ -113,16 +111,15 @@ class PlayerControllerTest : BaseRestAssuredTest() {
 
         @Test
         fun `join returns 403 when forbidden action exception`() {
-            every { gameModelFactory.create(any()) } returns mockk {
-                every { join(testUser, 3) } throws ForbiddenActionException(
-                    "Game:Join",
-                    "Mocked Model Exception."
-                )
-            }
-
             val game = createGameOfUser(testAdmin).let {
                 gameRepository.save(it)
             }
+
+            mockkConstructor(GameJoinHandler::class)
+            every { anyConstructed<GameJoinHandler>().doHandle(any()) } throws ForbiddenActionException(
+                "Game:Join",
+                "Mocked Model Exception."
+            )
 
             val (response, location) = execJoinGame<ProblemDetailResponse>(game.id, 3, 403)
 
@@ -139,9 +136,8 @@ class PlayerControllerTest : BaseRestAssuredTest() {
             val game = gameRepository.save(createGameOfUser(testAdmin))
             val player = PlayerEntity(user = testUser, game = game, seat = seat)
 
-            every { gameModelFactory.create(any()) } returns mockk {
-                every { join(testUser, seat) } returns player
-            }
+            mockkConstructor(GameJoinHandler::class)
+            every { anyConstructed<GameJoinHandler>().doHandle(any()) } returns player
 
             val (response, location) = execJoinGame<PlayerInfoDto>(game.id, seat, 201)
 

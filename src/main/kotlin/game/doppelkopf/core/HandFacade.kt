@@ -1,9 +1,11 @@
 package game.doppelkopf.core
 
-import game.doppelkopf.core.common.errors.ForbiddenActionException
 import game.doppelkopf.core.common.enums.BiddingOption
 import game.doppelkopf.core.common.enums.DeclarationOption
-import game.doppelkopf.core.play.model.HandModelFactory
+import game.doppelkopf.core.common.errors.ForbiddenActionException
+import game.doppelkopf.core.handler.hand.HandBiddingHandler
+import game.doppelkopf.core.handler.hand.HandDeclareHandler
+import game.doppelkopf.core.model.hand.HandModel
 import game.doppelkopf.core.play.processor.BiddingProcessor
 import game.doppelkopf.core.play.processor.DeclarationProcessor
 import game.doppelkopf.persistence.errors.EntityNotFoundException
@@ -18,8 +20,7 @@ import java.util.*
 @Service
 class HandFacade(
     private val roundFacade: RoundFacade,
-    private val handRepository: HandRepository,
-    private val handModelFactory: HandModelFactory,
+    private val handRepository: HandRepository
 ) {
     fun list(roundId: UUID): List<HandEntity> {
         return roundFacade.load(roundId).hands.toList()
@@ -41,31 +42,25 @@ class HandFacade(
 
     @Transactional
     fun declare(handId: UUID, declarationOption: DeclarationOption, user: UserEntity): HandEntity {
-        val entity = load(handId, user)
-        val hand = handModelFactory.create(entity)
-
-        hand.declare(declarationOption)
-
-        // Try to run the processor, ignore if not ready.
-        DeclarationProcessor.createWhenReady(entity.round).onSuccess {
-            it.process()
+        return HandDeclareHandler(
+            hand = HandModel(load(handId, user))
+        ).doHandle(declarationOption).also {
+            // Try to run the processor, ignore if not ready.
+            DeclarationProcessor.createWhenReady(it.round).onSuccess { processor ->
+                processor.process()
+            }
         }
-
-        return entity
     }
 
     @Transactional
     fun bid(handId: UUID, biddingOption: BiddingOption, user: UserEntity): HandEntity {
-        val entity = load(handId, user)
-        val hand = handModelFactory.create(entity)
-
-        hand.bid(biddingOption)
-
-        // Try to run the processor, ignore if not ready.
-        BiddingProcessor.createWhenReady(entity.round).onSuccess {
-            it.process()
+        return HandBiddingHandler(
+            hand = HandModel(load(handId, user))
+        ).doHandle(biddingOption).also {
+            // Try to run the processor, ignore if not ready.
+            BiddingProcessor.createWhenReady(it.round).onSuccess { processor ->
+                processor.process()
+            }
         }
-
-        return entity
     }
 }

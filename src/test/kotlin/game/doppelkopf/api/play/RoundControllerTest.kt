@@ -3,33 +3,31 @@ package game.doppelkopf.api.play
 import game.doppelkopf.BaseRestAssuredTest
 import game.doppelkopf.api.play.dto.RoundInfoDto
 import game.doppelkopf.api.play.dto.RoundOperationDto
+import game.doppelkopf.core.common.enums.RoundOperation
+import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.common.errors.ForbiddenActionException
 import game.doppelkopf.core.common.errors.InvalidActionException
 import game.doppelkopf.core.common.errors.ofInvalidAction
-import game.doppelkopf.core.game.model.GameModelFactory
-import game.doppelkopf.core.common.enums.RoundOperation
-import game.doppelkopf.core.common.enums.RoundState
-import game.doppelkopf.core.play.model.RoundModelFactory
+import game.doppelkopf.core.handler.round.RoundDealHandler
 import game.doppelkopf.core.play.processor.BiddingProcessor
 import game.doppelkopf.core.play.processor.DeclarationProcessor
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.game.GameRepository
+import game.doppelkopf.persistence.model.hand.HandEntity
 import game.doppelkopf.persistence.model.player.PlayerEntity
 import game.doppelkopf.persistence.model.player.PlayerRepository
-import game.doppelkopf.persistence.model.hand.HandEntity
-import game.doppelkopf.persistence.model.hand.HandRepository
 import game.doppelkopf.persistence.model.round.RoundEntity
 import game.doppelkopf.persistence.model.round.RoundRepository
 import game.doppelkopf.persistence.model.user.UserEntity
 import game.doppelkopf.utils.Quadruple
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.bean.override.convention.TestBean
 import java.util.*
 
 class RoundControllerTest : BaseRestAssuredTest() {
@@ -42,27 +40,11 @@ class RoundControllerTest : BaseRestAssuredTest() {
     @Autowired
     private lateinit var roundRepository: RoundRepository
 
-    @Autowired
-    private lateinit var handRepository: HandRepository
-
-    @TestBean
-    private lateinit var gameModelFactory: GameModelFactory
-
-    @TestBean
-    private lateinit var roundModelFactory: RoundModelFactory
-
-    companion object {
-        @Suppress("unused")
-        @JvmStatic
-        fun gameModelFactory(): GameModelFactory {
-            return mockk<GameModelFactory>()
-        }
-
-        @Suppress("unused")
-        @JvmStatic
-        fun roundModelFactory(): RoundModelFactory {
-            return mockk<RoundModelFactory>()
-        }
+    @BeforeEach
+    @AfterEach
+    fun `unmock all`() {
+        clearAllMocks()
+        unmockkAll()
     }
 
     @Nested
@@ -170,13 +152,8 @@ class RoundControllerTest : BaseRestAssuredTest() {
                 )
             }
 
-            every { gameModelFactory.create(any()) } returns mockk {
-                every { dealNextRound(testUser) } returns round
-                every { getFourPlayersBehind(players.first) } returns players
-            }
-            every { roundModelFactory.create(round) } returns mockk {
-                every { createPlayerHands(players) } returns hands
-            }
+            mockkConstructor(RoundDealHandler::class)
+            every { anyConstructed<RoundDealHandler>().doHandle() } returns Pair(round, hands)
 
             val (response, location) = execDealCards<RoundInfoDto>(game.id, 201)
 
@@ -193,16 +170,15 @@ class RoundControllerTest : BaseRestAssuredTest() {
 
         @Test
         fun `create returns 400 when invalid action exception`() {
-            every { gameModelFactory.create(any()) } returns mockk {
-                every { dealNextRound(any()) } throws InvalidActionException(
-                    "Round:Create",
-                    "Mocked Model Exception."
-                )
-            }
-
             val game = createGameEntity(testUser).let {
                 gameRepository.save(it)
             }
+
+            mockkConstructor(RoundDealHandler::class)
+            every { anyConstructed<RoundDealHandler>().doHandle() } throws InvalidActionException(
+                "Round:Create",
+                "Mocked Model Exception."
+            )
 
             val (response, location) = execDealCards<ProblemDetailResponse>(game.id, 400)
 
@@ -215,12 +191,11 @@ class RoundControllerTest : BaseRestAssuredTest() {
 
         @Test
         fun `create returns 403 when forbidden action exception`() {
-            every { gameModelFactory.create(any()) } returns mockk {
-                every { dealNextRound(any()) } throws ForbiddenActionException(
-                    "Round:Create",
-                    "Mocked Model Exception."
-                )
-            }
+            mockkConstructor(RoundDealHandler::class)
+            every { anyConstructed<RoundDealHandler>().doHandle() } throws ForbiddenActionException(
+                "Round:Create",
+                "Mocked Model Exception."
+            )
 
             val game = createGameEntity(testUser).let {
                 gameRepository.save(it)
@@ -331,7 +306,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
     private fun createRoundEntity(gameEntity: GameEntity): RoundEntity {
         return RoundEntity(
             game = gameEntity,
-            dealer = gameEntity.getPlayerOfOrNull(gameEntity.creator)!!,
+            dealer = gameEntity.players.single { it.user.id == gameEntity.creator.id },
             number = 1
         )
     }
@@ -371,13 +346,5 @@ class RoundControllerTest : BaseRestAssuredTest() {
             ),
             expectedStatus = expectedStatus
         )
-    }
-
-    @AfterAll
-    fun `clear database`() {
-        handRepository.deleteAll()
-        roundRepository.deleteAll()
-        playerRepository.deleteAll()
-        gameRepository.deleteAll()
     }
 }
