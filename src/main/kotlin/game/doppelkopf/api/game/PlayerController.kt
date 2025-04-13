@@ -2,7 +2,7 @@ package game.doppelkopf.api.game
 
 import game.doppelkopf.api.game.dto.PlayerCreateDto
 import game.doppelkopf.api.game.dto.PlayerInfoDto
-import game.doppelkopf.core.handler.PlayerFacade
+import game.doppelkopf.core.PlayerFacade
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid

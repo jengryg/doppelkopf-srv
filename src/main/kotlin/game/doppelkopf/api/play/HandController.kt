@@ -4,7 +4,7 @@ import game.doppelkopf.api.play.dto.BidCreateDto
 import game.doppelkopf.api.play.dto.DeclarationCreateDto
 import game.doppelkopf.api.play.dto.HandForPlayerDto
 import game.doppelkopf.api.play.dto.HandPublicInfoDto
-import game.doppelkopf.core.handler.HandFacade
+import game.doppelkopf.core.HandFacade
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity

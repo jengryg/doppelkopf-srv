@@ -1,4 +1,4 @@
-package game.doppelkopf.core.handler
+package game.doppelkopf.core
 
 import game.doppelkopf.api.game.dto.GameCreateDto
 import game.doppelkopf.core.game.model.GameModelFactory
