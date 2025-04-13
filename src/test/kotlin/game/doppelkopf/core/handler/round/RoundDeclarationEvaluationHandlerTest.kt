@@ -4,7 +4,6 @@ import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.common.errors.InvalidActionException
 import game.doppelkopf.core.model.round.RoundModel
-import game.doppelkopf.core.play.processor.RoundConfigurator
 import game.doppelkopf.persistence.model.round.RoundEntity
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
@@ -23,69 +22,74 @@ class RoundDeclarationEvaluationHandlerTest {
         @ParameterizedTest
         @ValueSource(ints = [1, 2, 3, 4])
         fun `round with at least one reservation is advanced to auctioning phase`(numReservations: Int) {
-            val round =
-                createRoundWith(healthy = 4 - numReservations, silentMarriage = 0, reservation = numReservations)
+            val round = RoundModel(
+                createRoundWith(
+                    healthy = 4 - numReservations,
+                    silentMarriage = 0,
+                    reservation = numReservations
+                )
+            )
 
-            val handler = RoundDeclarationEvaluationHandler(RoundModel(round))
+            val handler = RoundDeclarationEvaluationHandler(round)
 
             val result = handler.doHandle()
 
-            assertThat(result).isSameAs(round)
-            assertThat(result.state).isEqualTo(RoundState.DECLARED)
+            assertThat(result).isSameAs(round.entity)
+            assertThat(result.state).isEqualTo(RoundState.WAITING_FOR_BIDS)
         }
 
         @ParameterizedTest
         @ValueSource(ints = [1, 2, 3])
         fun `round with silent marriage and at least one reservation is advanced to auctioning phase`(numReservations: Int) {
-            val round =
-                createRoundWith(healthy = 3 - numReservations, silentMarriage = 1, reservation = numReservations)
+            val round = RoundModel(
+                createRoundWith(
+                    healthy = 3 - numReservations,
+                    silentMarriage = 1,
+                    reservation = numReservations
+                )
+            )
 
-            val handler = RoundDeclarationEvaluationHandler(RoundModel(round))
+
+            val handler = RoundDeclarationEvaluationHandler(round)
 
             val result = handler.doHandle()
 
-            assertThat(result).isSameAs(round)
-            assertThat(result.state).isEqualTo(RoundState.DECLARED)
+            assertThat(result).isSameAs(round.entity)
+            assertThat(result.state).isEqualTo(RoundState.WAITING_FOR_BIDS)
         }
 
         @Test
         fun `detects normal round and delegates configuration`() {
-            // TODO: refactor round configurator
-            mockkObject(RoundConfigurator)
-            every { RoundConfigurator.configureNormalRound(any()) } just Runs
+            val round = spyk(RoundModel(createRoundWith(healthy = 4, silentMarriage = 0, reservation = 0)))
+            every { round.configureAsNormalRound() } just Runs
 
-            val round = createRoundWith(healthy = 4, silentMarriage = 0, reservation = 0)
-
-            val handler = RoundDeclarationEvaluationHandler(RoundModel(round))
+            val handler = RoundDeclarationEvaluationHandler(round)
 
             val result = handler.doHandle()
 
-            assertThat(result).isSameAs(round)
-            verify(exactly = 1) { RoundConfigurator.configureNormalRound(round) }
+            assertThat(result).isSameAs(round.entity)
+            verify(exactly = 1) { round.configureAsNormalRound() }
         }
 
         @Test
         fun `detects silent marriage round and delegates configuration`() {
-            // TODO: refactor round configurator
-            mockkObject(RoundConfigurator)
-            every { RoundConfigurator.configureSilentMarriageRound(any()) } just Runs
+            val round = spyk(RoundModel(createRoundWith(healthy = 3, silentMarriage = 1, reservation = 0)))
+            every { round.configureAsSilentMarriageRound() } just Runs
 
-            val round = createRoundWith(healthy = 3, silentMarriage = 1, reservation = 0)
-
-            val handler = RoundDeclarationEvaluationHandler(RoundModel(round))
+            val handler = RoundDeclarationEvaluationHandler(round)
 
             val result = handler.doHandle()
 
-            assertThat(result).isSameAs(round)
-            verify(exactly = 1) { RoundConfigurator.configureSilentMarriageRound(round) }
+            assertThat(result).isSameAs(round.entity)
+            verify(exactly = 1) { round.configureAsSilentMarriageRound() }
         }
     }
 
     @Nested
     inner class GuardBlockingCases {
         @ParameterizedTest
-        @EnumSource(RoundState::class, names = ["INITIALIZED"], mode = EnumSource.Mode.EXCLUDE)
-        fun `guard yields exception when round is not in initialized state`(roundState: RoundState) {
+        @EnumSource(RoundState::class, names = ["WAITING_FOR_DECLARATIONS"], mode = EnumSource.Mode.EXCLUDE)
+        fun `guard yields exception when round is not in correct state state`(roundState: RoundState) {
             val handler = RoundDeclarationEvaluationHandler(
                 round = RoundModel(mockk { every { state } returns roundState })
             )
@@ -104,11 +108,11 @@ class RoundDeclarationEvaluationHandlerTest {
         }
 
         @Test
-        fun `guard yields exception when round has a hand taht still needs to make a declaration`() {
+        fun `guard yields exception when round has a hand that still needs to make a declaration`() {
             val handler = RoundDeclarationEvaluationHandler(
                 round = RoundModel(
                     mockk {
-                        every { state } returns RoundState.INITIALIZED
+                        every { state } returns RoundState.WAITING_FOR_DECLARATIONS
                         every { hands } returns mutableSetOf(
                             mockk {
                                 every { declared } returns Declaration.NOTHING
@@ -138,7 +142,7 @@ class RoundDeclarationEvaluationHandlerTest {
             dealer = mockk(),
             number = 1
         ).apply {
-            state = RoundState.INITIALIZED
+            state = RoundState.WAITING_FOR_DECLARATIONS
 
             repeat(healthy) {
                 hands.add(mockk { every { declared } returns Declaration.HEALTHY })

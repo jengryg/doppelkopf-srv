@@ -36,7 +36,7 @@ class RoundEntity(
 
     @Column
     @Enumerated(EnumType.STRING)
-    override var state: RoundState = RoundState.INITIALIZED
+    override var state: RoundState = RoundState.WAITING_FOR_DECLARATIONS
 
     @Column
     @Enumerated(EnumType.STRING)

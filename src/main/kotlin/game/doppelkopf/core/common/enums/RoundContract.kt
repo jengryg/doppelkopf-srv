@@ -9,6 +9,8 @@ enum class RoundContract(
     UNDECIDED(RoundContractPublic.UNDECIDED),
 
     NORMAL(RoundContractPublic.NORMAL),
+
+    // SILENT_MARRIAGE must be indicated as NORMAL to hide it.
     SILENT_MARRIAGE(RoundContractPublic.NORMAL),
 
     WEDDING(RoundContractPublic.WEDDING),

@@ -20,10 +20,10 @@ interface IRoundProperties : IBaseProperties, IStartedEnded {
     /**
      * Current [RoundContract] of this round.
      */
-    val contract: RoundContract
+    var contract: RoundContract
 
     /**
      * Current [DeckMode] of this round.
      */
-    val deckMode: DeckMode
+    var deckMode: DeckMode
 }

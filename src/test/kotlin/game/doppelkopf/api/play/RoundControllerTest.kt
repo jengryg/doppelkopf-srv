@@ -163,7 +163,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
                 assertThat(it.gameId).isEqualTo(game.id)
                 assertThat(it.dealer.id).isEqualTo(players.first.id)
                 assertThat(it.dealer.user.id).isEqualTo(testUser.id)
-                assertThat(it.state).isEqualTo(RoundState.INITIALIZED)
+                assertThat(it.state).isEqualTo(RoundState.WAITING_FOR_DECLARATIONS)
                 assertThat(it.number).isEqualTo(17)
             }
 

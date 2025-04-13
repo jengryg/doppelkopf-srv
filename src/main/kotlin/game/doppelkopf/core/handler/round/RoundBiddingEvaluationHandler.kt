@@ -6,7 +6,6 @@ import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.common.errors.GameFailedException
 import game.doppelkopf.core.common.errors.ofInvalidAction
 import game.doppelkopf.core.model.round.RoundModel
-import game.doppelkopf.core.play.processor.RoundConfigurator
 import game.doppelkopf.persistence.model.round.RoundEntity
 import org.springframework.lang.CheckReturnValue
 
@@ -17,8 +16,7 @@ class RoundBiddingEvaluationHandler(
         canHandle().getOrThrow()
 
         when {
-            // TODO: refactor round configurator
-            onlyMarriageBid() -> RoundConfigurator.configureMarriageRound(round.entity)
+            onlyMarriageBid() -> round.configureAsMarriageRound()
 
             // TODO: SOLO SYSTEM IMPLEMENTATION
             else -> throw GameFailedException("Can not determine auction result.")
@@ -36,7 +34,7 @@ class RoundBiddingEvaluationHandler(
     @CheckReturnValue
     fun canHandle(): Result<Unit> {
         return when {
-            round.state != RoundState.DECLARED -> Result.ofInvalidAction(
+            round.state != RoundState.WAITING_FOR_BIDS -> Result.ofInvalidAction(
                 "Bidding:Process",
                 "The round must be in declared state to process the bids."
             )

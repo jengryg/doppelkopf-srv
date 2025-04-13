@@ -5,7 +5,6 @@ import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.common.errors.InvalidActionException
 import game.doppelkopf.core.model.round.RoundModel
-import game.doppelkopf.core.play.processor.RoundConfigurator
 import game.doppelkopf.persistence.model.round.RoundEntity
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
@@ -22,18 +21,16 @@ class RoundBiddingEvaluationHandlerTest {
     inner class DoHandle {
         @Test
         fun `detects marriage round and delegates configuration`() {
-            // TODO: refactor round configurator
-            mockkObject(RoundConfigurator)
-            every { RoundConfigurator.configureMarriageRound(any()) } just Runs
 
-            val round = createOnlyMarriageRound()
-            val handler = RoundBiddingEvaluationHandler(RoundModel(round))
+            val round = spyk(RoundModel(createOnlyMarriageRound()))
+            every { round.configureAsMarriageRound() } just Runs
+            val handler = RoundBiddingEvaluationHandler(round)
 
             val result = handler.doHandle()
 
-            assertThat(result).isEqualTo(round)
+            assertThat(result).isEqualTo(round.entity)
 
-            verify(exactly = 1) { RoundConfigurator.configureMarriageRound(round) }
+            verify(exactly = 1) { round.configureAsMarriageRound() }
         }
     }
 
@@ -42,8 +39,8 @@ class RoundBiddingEvaluationHandlerTest {
         @Nested
         inner class GuardBlockingCases {
             @ParameterizedTest
-            @EnumSource(RoundState::class, names = ["DECLARED"], mode = EnumSource.Mode.EXCLUDE)
-            fun `guard yields exception when round is not in DECLARED state`(roundState: RoundState) {
+            @EnumSource(RoundState::class, names = ["WAITING_FOR_BIDS"], mode = EnumSource.Mode.EXCLUDE)
+            fun `guard yields exception when round is not in correct state`(roundState: RoundState) {
                 val handler = RoundBiddingEvaluationHandler(
                     round = RoundModel(mockk { every { state } returns roundState })
                 )
@@ -66,7 +63,7 @@ class RoundBiddingEvaluationHandlerTest {
                 val handler = RoundBiddingEvaluationHandler(
                     round = RoundModel(
                         mockk {
-                            every { state } returns RoundState.DECLARED
+                            every { state } returns RoundState.WAITING_FOR_BIDS
                             every { hands } returns mutableSetOf(
                                 mockk {
                                     every { declared } returns Declaration.RESERVATION
@@ -98,7 +95,7 @@ class RoundBiddingEvaluationHandlerTest {
             dealer = mockk(),
             number = 1
         ).apply {
-            state = RoundState.DECLARED
+            state = RoundState.WAITING_FOR_BIDS
 
             hands.add(
                 mockk {
