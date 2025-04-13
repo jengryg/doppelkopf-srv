@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.actuate.metrics.data.DefaultRepositoryTagsProvider
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
@@ -33,6 +34,8 @@ import java.security.SecureRandom
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag(TestTags.SPRING_INTEGRATION)
 abstract class BaseSpringBootTest : Logging {
+    @Autowired
+    private lateinit var repositoryTagsProvider: DefaultRepositoryTagsProvider
     private val log = logger()
 
     @Autowired
@@ -111,7 +114,14 @@ abstract class BaseSpringBootTest : Logging {
     @AfterAll
     fun `delete all entities in all repositories to provide a clean testcontainers environment`() {
         // Delete all entities in all repositories.
-        repositories.forEach { it.deleteAll() }
+        repositories.forEach { repo ->
+            kotlin.runCatching { repo.deleteAll() }.onFailure {
+                log.atError()
+                    .setMessage("Failed to delete entities in repository after test completed.")
+                    .setCause(it)
+                    .log()
+            }
+        }
     }
 
     fun `setup test user accounts in database`() {
