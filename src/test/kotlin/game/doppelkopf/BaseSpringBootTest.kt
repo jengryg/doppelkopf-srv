@@ -3,6 +3,8 @@ package game.doppelkopf
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
 import game.doppelkopf.persistence.BaseEntityRepository
+import game.doppelkopf.persistence.getEntityKClass
+import game.doppelkopf.persistence.getRepositoryKClass
 import game.doppelkopf.persistence.model.user.UserEntity
 import game.doppelkopf.persistence.model.user.UserRepository
 import game.doppelkopf.security.Authority
@@ -118,7 +120,15 @@ abstract class BaseSpringBootTest : Logging {
             kotlin.runCatching { repo.deleteAll() }.onFailure {
                 log.atError()
                     .setMessage("Failed to delete entities in repository after test completed.")
+                    .addKeyValue("repository") { repo.getRepositoryKClass().simpleName }
+                    .addKeyValue("entity") { repo.getEntityKClass().simpleName }
                     .setCause(it)
+                    .log()
+            }.onSuccess {
+                log.atInfo()
+                    .setMessage("Successfully deleted entities in repository after test completed.")
+                    .addKeyValue("repository") { repo.getRepositoryKClass().simpleName }
+                    .addKeyValue("entity") { repo.getEntityKClass().simpleName }
                     .log()
             }
         }

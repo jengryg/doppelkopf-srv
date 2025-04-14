@@ -49,6 +49,7 @@ class RoundEntity(
     @OneToMany(
         fetch = FetchType.EAGER,
         mappedBy = "round",
+        cascade = [CascadeType.ALL],
     )
     val hands = mutableSetOf<HandEntity>()
 }

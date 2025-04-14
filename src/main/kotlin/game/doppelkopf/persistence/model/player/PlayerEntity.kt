@@ -3,6 +3,7 @@ package game.doppelkopf.persistence.model.player
 import game.doppelkopf.core.model.player.IPlayerProperties
 import game.doppelkopf.persistence.model.BaseEntity
 import game.doppelkopf.persistence.model.game.GameEntity
+import game.doppelkopf.persistence.model.hand.HandEntity
 import game.doppelkopf.persistence.model.round.RoundEntity
 import game.doppelkopf.persistence.model.user.UserEntity
 import jakarta.persistence.*
@@ -37,4 +38,11 @@ class PlayerEntity(
         cascade = [CascadeType.ALL],
     )
     val dealtRounds = mutableSetOf<RoundEntity>()
+
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "player",
+        cascade = [CascadeType.ALL],
+    )
+    val hands = mutableSetOf<HandEntity>()
 }
