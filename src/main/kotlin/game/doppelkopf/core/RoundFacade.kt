@@ -1,8 +1,5 @@
 package game.doppelkopf.core
 
-import game.doppelkopf.core.handler.round.RoundBiddingEvaluationHandler
-import game.doppelkopf.core.handler.round.RoundDealHandler
-import game.doppelkopf.core.handler.round.RoundDeclarationEvaluationHandler
 import game.doppelkopf.core.model.game.GameModel
 import game.doppelkopf.core.model.round.RoundModel
 import game.doppelkopf.core.model.user.UserModel
@@ -41,27 +38,32 @@ class RoundFacade(
      */
     @Transactional
     fun create(gameId: UUID, user: UserEntity): RoundEntity {
-        return RoundDealHandler(
-            game = GameModel(gameFacade.load(gameId)),
-            user = UserModel(user)
-        ).doHandle().let { (round, hands) ->
-            roundRepository.save(round).also {
-                handRepository.saveAll(hands.toList())
+        return GameModel.create(
+            entity = gameFacade.load(gameId)
+        ).deal(
+            user = UserModel.create(user)
+        ).let { (round, hands) ->
+            roundRepository.save(round.entity).also {
+                handRepository.saveAll(hands.toList().map { it.entity })
             }
         }
     }
 
     @Transactional
     fun evaluateDeclarations(roundId: UUID): RoundEntity {
-        return RoundDeclarationEvaluationHandler(
-            round = RoundModel(load(roundId))
-        ).doHandle()
+        val round = load(roundId)
+
+        RoundModel.create(entity = round).evaluateDeclarations()
+
+        return round
     }
 
     @Transactional
     fun evaluateBids(roundId: UUID): RoundEntity {
-        return RoundBiddingEvaluationHandler(
-            round = RoundModel(load(roundId))
-        ).doHandle()
+        val round = load(roundId)
+
+        RoundModel.create(entity = round).evaluateBidding()
+
+        return round
     }
 }

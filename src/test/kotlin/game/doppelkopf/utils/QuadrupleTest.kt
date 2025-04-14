@@ -35,4 +35,16 @@ class QuadrupleTest {
 
         assertThat(mapped.toList()).containsExactly(18, 19, 20, 21)
     }
+
+    @Test
+    fun `map with other applies block to each pair of elements in corred order`() {
+        val quad = Quadruple(1, 2, 3, 4)
+        val other = Quadruple(5, 6, 7, 8)
+
+        val mapped = quad.map(other) { x, y ->
+            y * y - x * x
+        }
+
+        assertThat(mapped.toList()).containsExactly(24, 32, 40, 48)
+    }
 }

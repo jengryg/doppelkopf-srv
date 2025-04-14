@@ -1,7 +1,6 @@
 package game.doppelkopf.core
 
 import game.doppelkopf.api.game.dto.GameCreateDto
-import game.doppelkopf.core.handler.game.GameStartHandler
 import game.doppelkopf.core.model.game.GameModel
 import game.doppelkopf.core.model.user.UserModel
 import game.doppelkopf.persistence.errors.EntityNotFoundException
@@ -67,9 +66,10 @@ class GameFacade(
      */
     @Transactional
     fun start(id: UUID, user: UserEntity): GameEntity {
-        return GameStartHandler(
-            game = GameModel(load(id)),
-            user = UserModel(user)
-        ).doHandle()
+        val game = load(id)
+
+        GameModel.create(entity = game).start(user = UserModel.create(user))
+
+        return game
     }
 }

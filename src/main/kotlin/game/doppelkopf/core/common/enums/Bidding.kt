@@ -12,7 +12,7 @@ enum class Bidding(
 ) {
     NOTHING(roundContract = RoundContract.UNDECIDED, deckMode = DeckMode.DIAMONDS, isSolo = false),
 
-    WEDDING(roundContract = RoundContract.WEDDING, deckMode = DeckMode.DIAMONDS, isSolo = false),
+    MARRIAGE(roundContract = RoundContract.WEDDING, deckMode = DeckMode.DIAMONDS, isSolo = false),
 
     SOLO_DIAMONDS(roundContract = RoundContract.SOLO, deckMode = DeckMode.DIAMONDS, isSolo = true),
     SOLO_HEARTS(roundContract = RoundContract.SOLO, deckMode = DeckMode.HEARTS, isSolo = true),
@@ -32,7 +32,7 @@ enum class Bidding(
 enum class BiddingOption(
     val internal: Bidding,
 ) {
-    WEDDING(Bidding.WEDDING),
+    MARRIAGE(Bidding.MARRIAGE),
 
 //    TODO: SOLO SYSTEM IMPLEMENTATION
 //    SOLO_DIAMONDS(Bidding.SOLO_DIAMONDS),

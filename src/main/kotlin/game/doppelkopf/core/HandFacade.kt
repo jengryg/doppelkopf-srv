@@ -3,12 +3,9 @@ package game.doppelkopf.core
 import game.doppelkopf.core.common.enums.BiddingOption
 import game.doppelkopf.core.common.enums.DeclarationOption
 import game.doppelkopf.core.common.errors.ForbiddenActionException
-import game.doppelkopf.core.handler.hand.HandBiddingHandler
-import game.doppelkopf.core.handler.hand.HandDeclareHandler
-import game.doppelkopf.core.handler.round.RoundBiddingEvaluationHandler
-import game.doppelkopf.core.handler.round.RoundDeclarationEvaluationHandler
 import game.doppelkopf.core.model.hand.HandModel
 import game.doppelkopf.core.model.round.RoundModel
+import game.doppelkopf.core.model.user.UserModel
 import game.doppelkopf.persistence.errors.EntityNotFoundException
 import game.doppelkopf.persistence.model.hand.HandEntity
 import game.doppelkopf.persistence.model.hand.HandRepository
@@ -27,9 +24,13 @@ class HandFacade(
         return roundFacade.load(roundId).hands.toList()
     }
 
-    fun load(handId: UUID, user: UserEntity): HandEntity {
-        val hand = handRepository.findByIdOrNull(handId)
+    private fun load(handId: UUID): HandEntity {
+        return handRepository.findByIdOrNull(handId)
             ?: throw EntityNotFoundException.forEntity<HandEntity>(handId)
+    }
+
+    fun show(handId: UUID, user: UserEntity): HandEntity {
+        val hand = load(handId)
 
         if (hand.player.user != user) {
             throw ForbiddenActionException(
@@ -41,31 +42,40 @@ class HandFacade(
         return hand
     }
 
+
     @Transactional
     fun declare(handId: UUID, declarationOption: DeclarationOption, user: UserEntity): HandEntity {
-        return HandDeclareHandler(
-            hand = HandModel(load(handId, user))
-        ).doHandle(declarationOption).also {
-            // Try to evaluate the declarations, ignore if not ready.
-            val evalHandler = RoundDeclarationEvaluationHandler(RoundModel(it.round))
+        val hand = load(handId)
 
-            evalHandler.canHandle().onSuccess {
-                evalHandler.doHandle()
+        HandModel.create(entity = hand).declare(
+            user = UserModel.create(entity = user),
+            declarationOption = declarationOption
+        ).also {
+            val round = RoundModel.create(entity = hand.round)
+            // Try to evaluate the declarations, ignore if not ready.
+            round.canEvaluateDeclarations().onSuccess {
+                round.evaluateDeclarations()
             }
         }
+
+        return hand
     }
 
     @Transactional
     fun bid(handId: UUID, biddingOption: BiddingOption, user: UserEntity): HandEntity {
-        return HandBiddingHandler(
-            hand = HandModel(load(handId, user))
-        ).doHandle(biddingOption).also {
-            // Try to evaluate the bids, ignore if not ready.
-            val evalHandler = RoundBiddingEvaluationHandler(RoundModel(it.round))
+        val hand = load(handId)
 
-            evalHandler.canHandle().onSuccess {
-                evalHandler.doHandle()
+        HandModel.create(entity = hand).bid(
+            user = UserModel.create(entity = user),
+            biddingOption = biddingOption
+        ).also {
+            val round = RoundModel.create(entity = hand.round)
+            // Try to evaluate the bids, ignore if not ready.
+            round.canEvaluateBidding().onSuccess {
+                round.evaluateBidding()
             }
         }
+
+        return hand
     }
 }

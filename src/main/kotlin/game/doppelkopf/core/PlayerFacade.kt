@@ -1,7 +1,6 @@
 package game.doppelkopf.core
 
 import game.doppelkopf.api.game.dto.PlayerCreateDto
-import game.doppelkopf.core.handler.game.GameJoinHandler
 import game.doppelkopf.core.model.game.GameModel
 import game.doppelkopf.core.model.user.UserModel
 import game.doppelkopf.persistence.errors.EntityNotFoundException
@@ -32,11 +31,13 @@ class PlayerFacade(
      */
     @Transactional
     fun create(gameId: UUID, playerCreateDto: PlayerCreateDto, user: UserEntity): PlayerEntity {
-        return GameJoinHandler(
-            game = GameModel(gameFacade.load(gameId)),
-            user = UserModel(user)
-        ).doHandle(playerCreateDto.seat).let {
-            playerRepository.save(it)
+        return GameModel.create(
+            entity = gameFacade.load(gameId)
+        ).join(
+            user = UserModel.create(entity = user),
+            seat = playerCreateDto.seat
+        ).let {
+            playerRepository.save(it.entity)
         }
     }
 }

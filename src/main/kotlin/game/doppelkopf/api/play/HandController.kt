@@ -42,7 +42,7 @@ class HandController(
         @AuthenticationPrincipal userDetails: UserDetails,
     ): ResponseEntity<HandForPlayerDto> {
         return ResponseEntity.ok(
-            HandForPlayerDto(handFacade.load(handId, userDetails.entity))
+            HandForPlayerDto(handFacade.show(handId, userDetails.entity))
         )
     }
 

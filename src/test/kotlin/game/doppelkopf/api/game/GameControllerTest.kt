@@ -7,16 +7,13 @@ import game.doppelkopf.api.game.dto.GameOperationDto
 import game.doppelkopf.core.common.enums.GameOperation
 import game.doppelkopf.core.common.errors.ForbiddenActionException
 import game.doppelkopf.core.common.errors.InvalidActionException
-import game.doppelkopf.core.handler.game.GameStartHandler
+import game.doppelkopf.core.model.game.GameModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.game.GameRepository
 import game.doppelkopf.persistence.model.player.PlayerEntity
 import game.doppelkopf.persistence.model.user.UserEntity
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockkConstructor
-import io.mockk.unmockkAll
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -157,8 +154,12 @@ class GameControllerTest : BaseRestAssuredTest() {
                 gameRepository.save(it)
             }
 
-            mockkConstructor(GameStartHandler::class)
-            every { anyConstructed<GameStartHandler>().doHandle() } returns game
+            mockkObject(GameModel)
+            every { GameModel.create(game) } returns mockk {
+                every { start(any()) } returns mockk {
+                    every { entity } returns game
+                }
+            }
 
             val response = execPatchGame<GameInfoDto>(game.id, GameOperation.START, 200)
 
@@ -174,11 +175,13 @@ class GameControllerTest : BaseRestAssuredTest() {
                 gameRepository.save(it)
             }
 
-            mockkConstructor(GameStartHandler::class)
-            every { anyConstructed<GameStartHandler>().doHandle() } throws InvalidActionException(
-                "Game:Start",
-                "Mocked Model Exception."
-            )
+            mockkObject(GameModel)
+            every { GameModel.create(game) } returns mockk {
+                every { start(any()) } throws InvalidActionException(
+                    "Game:Start",
+                    "Mocked Model Exception."
+                )
+            }
 
 
             val response = execPatchGame<ProblemDetailResponse>(game.id, GameOperation.START, 400)
@@ -196,11 +199,13 @@ class GameControllerTest : BaseRestAssuredTest() {
                 gameRepository.save(it)
             }
 
-            mockkConstructor(GameStartHandler::class)
-            every { anyConstructed<GameStartHandler>().doHandle() } throws ForbiddenActionException(
-                "Game:Start",
-                "Mocked Model Exception."
-            )
+            mockkObject(GameModel)
+            every { GameModel.create(game) } returns mockk {
+                every { start(any()) } throws ForbiddenActionException(
+                    "Game:Start",
+                    "Mocked Model Exception."
+                )
+            }
 
             val response = execPatchGame<ProblemDetailResponse>(game.id, GameOperation.START, 403)
 

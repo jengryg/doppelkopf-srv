@@ -1,28 +1,20 @@
 package game.doppelkopf.core.model
 
 import game.doppelkopf.persistence.model.BaseEntity
+import game.doppelkopf.utils.Quadruple
 
 /**
- * For each [IBaseModel] and corresponding [BaseEntity], a factory implementing this interface should be introduced to
- * centralize all initial conversions from entity to model in the application.
+ * For each [IBaseModel] and corresponding [BaseEntity], a companion object extending this interface can be implemented
+ * to provide standard methods for the creation of model instances.
  *
- * Only the simple [create] consuming a single [T] and producing a single [M] must be implemented.
- * Overloads to map [List] and [Set] are automatically provided through this interface.
- * The [create] from [IBaseModel] entity un-wrapper is also provided automatically.
+ * Only the [create] method must be implemented. Other methods are provided with a corresponding default implementation
+ * in this interface.
  */
-interface IModelFactory<T : BaseEntity, out M : IBaseModel<T>> {
+interface IModelFactory<T : BaseEntity, M : IBaseModel<T>> {
     /**
-     * Use the given [entity] to initialize a new instance of model [M].
+     * Use the given [entity] to get an instance of model [M] from the
      */
     fun create(entity: T): M
-
-    /**
-     * Use the given [model] to initialize a new instance of model [M].
-     * The [IBaseModel.entity] is injected into the [create] method.
-     */
-    fun create(model: IBaseModel<T>): M {
-        return create(model.entity)
-    }
 
     /**
      * Overload to apply [create] to each element of the list via [map].
@@ -36,5 +28,12 @@ interface IModelFactory<T : BaseEntity, out M : IBaseModel<T>> {
      */
     fun create(entitySet: Set<T>): Set<M> {
         return entitySet.map { create(it) }.toSet()
+    }
+
+    /**
+     * Overload to apply [create] to each element of the [Quadruple] via [Quadruple.map].
+     */
+    fun create(entityQuadruple: Quadruple<T>): Quadruple<M> {
+        return entityQuadruple.map { create(it) }
     }
 }

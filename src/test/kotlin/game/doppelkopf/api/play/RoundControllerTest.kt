@@ -7,9 +7,9 @@ import game.doppelkopf.core.common.enums.RoundOperation
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.common.errors.ForbiddenActionException
 import game.doppelkopf.core.common.errors.InvalidActionException
-import game.doppelkopf.core.handler.round.RoundBiddingEvaluationHandler
-import game.doppelkopf.core.handler.round.RoundDealHandler
-import game.doppelkopf.core.handler.round.RoundDeclarationEvaluationHandler
+import game.doppelkopf.core.model.game.GameModel
+import game.doppelkopf.core.model.hand.HandModel
+import game.doppelkopf.core.model.round.RoundModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.game.GameRepository
@@ -20,10 +20,7 @@ import game.doppelkopf.persistence.model.round.RoundEntity
 import game.doppelkopf.persistence.model.round.RoundRepository
 import game.doppelkopf.persistence.model.user.UserEntity
 import game.doppelkopf.utils.Quadruple
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockkConstructor
-import io.mockk.unmockkAll
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -154,8 +151,13 @@ class RoundControllerTest : BaseRestAssuredTest() {
                 )
             }
 
-            mockkConstructor(RoundDealHandler::class)
-            every { anyConstructed<RoundDealHandler>().doHandle() } returns Pair(round, hands)
+            mockkObject(GameModel)
+            every { GameModel.create(game) } returns mockk {
+                every { deal(any()) } returns Pair(
+                    RoundModel.create(round),
+                    HandModel.create(hands)
+                )
+            }
 
             val (response, location) = execDealCards<RoundInfoDto>(game.id, 201)
 
@@ -176,11 +178,13 @@ class RoundControllerTest : BaseRestAssuredTest() {
                 gameRepository.save(it)
             }
 
-            mockkConstructor(RoundDealHandler::class)
-            every { anyConstructed<RoundDealHandler>().doHandle() } throws InvalidActionException(
-                "Round:Create",
-                "Mocked Model Exception."
-            )
+            mockkObject(GameModel)
+            every { GameModel.create(game) } returns mockk {
+                every { deal(any()) } throws InvalidActionException(
+                    "Round:Create",
+                    "Mocked Model Exception."
+                )
+            }
 
             val (response, location) = execDealCards<ProblemDetailResponse>(game.id, 400)
 
@@ -193,14 +197,16 @@ class RoundControllerTest : BaseRestAssuredTest() {
 
         @Test
         fun `create returns 403 when forbidden action exception`() {
-            mockkConstructor(RoundDealHandler::class)
-            every { anyConstructed<RoundDealHandler>().doHandle() } throws ForbiddenActionException(
-                "Round:Create",
-                "Mocked Model Exception."
-            )
-
             val game = createGameEntity(testUser).let {
                 gameRepository.save(it)
+            }
+
+            mockkObject(GameModel)
+            every { GameModel.create(game) } returns mockk {
+                every { deal(any()) } throws ForbiddenActionException(
+                    "Round:Create",
+                    "Mocked Model Exception."
+                )
             }
 
             val (response, location) = execDealCards<ProblemDetailResponse>(game.id, 403)
@@ -220,8 +226,10 @@ class RoundControllerTest : BaseRestAssuredTest() {
             val game = createGameEntity(testUser).let { gameRepository.save(it) }
             val round = createRoundEntity(game).let { roundRepository.save(it) }
 
-            mockkConstructor(RoundDeclarationEvaluationHandler::class)
-            every { anyConstructed<RoundDeclarationEvaluationHandler>().doHandle() } returns round
+            mockkObject(RoundModel)
+            every { RoundModel.create(round) } returns mockk {
+                every { evaluateDeclarations() } just Runs
+            }
 
             val response = execPatchRound<RoundInfoDto>(round.id, RoundOperation.DECLARE_EVALUATION, 200)
 
@@ -233,11 +241,13 @@ class RoundControllerTest : BaseRestAssuredTest() {
             val game = createGameEntity(testUser).let { gameRepository.save(it) }
             val round = createRoundEntity(game).let { roundRepository.save(it) }
 
-            mockkConstructor(RoundDeclarationEvaluationHandler::class)
-            every { anyConstructed<RoundDeclarationEvaluationHandler>().doHandle() } throws InvalidActionException(
-                "Declaration:Process",
-                "Mocked Model Exception."
-            )
+            mockkObject(RoundModel)
+            every { RoundModel.create(round) } returns mockk {
+                every { evaluateDeclarations() } throws InvalidActionException(
+                    "Declaration:Process",
+                    "Mocked Model Exception."
+                )
+            }
 
             val response = execPatchRound<ProblemDetailResponse>(round.id, RoundOperation.DECLARE_EVALUATION, 400)
 
@@ -256,8 +266,10 @@ class RoundControllerTest : BaseRestAssuredTest() {
             val game = createGameEntity(testUser).let { gameRepository.save(it) }
             val round = createRoundEntity(game).let { roundRepository.save(it) }
 
-            mockkConstructor(RoundBiddingEvaluationHandler::class)
-            every { anyConstructed<RoundBiddingEvaluationHandler>().doHandle() } returns round
+            mockkObject(RoundModel)
+            every { RoundModel.create(round) } returns mockk {
+                every { evaluateBidding() } just Runs
+            }
 
             val response = execPatchRound<RoundInfoDto>(round.id, RoundOperation.BID_EVALUATION, 200)
 
@@ -269,11 +281,14 @@ class RoundControllerTest : BaseRestAssuredTest() {
             val game = createGameEntity(testUser).let { gameRepository.save(it) }
             val round = createRoundEntity(game).let { roundRepository.save(it) }
 
-            mockkConstructor(RoundBiddingEvaluationHandler::class)
-            every { anyConstructed<RoundBiddingEvaluationHandler>().doHandle() } throws InvalidActionException(
-                "Bidding:Process",
-                "Mocked Model Exception."
-            )
+            mockkObject(RoundModel)
+            every { RoundModel.create(round) } returns mockk {
+                every { evaluateBidding() } throws InvalidActionException(
+                    "Bidding:Process",
+                    "Mocked Model Exception."
+                )
+            }
+
 
             val response = execPatchRound<ProblemDetailResponse>(round.id, RoundOperation.BID_EVALUATION, 400)
 

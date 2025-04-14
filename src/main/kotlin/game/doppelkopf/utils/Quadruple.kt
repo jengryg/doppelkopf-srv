@@ -20,4 +20,17 @@ data class Quadruple<T>(
     fun <S> map(block: (T) -> S): Quadruple<S> {
         return Quadruple(block(first), block(second), block(third), block(fourth))
     }
+
+    /**
+     * @return a [Quadruple] containing the result of [block] applied to each of the four pairs of components in order,
+     * where the first argument supplied to block is from this [Quadruple] and the second argument is from [other].
+     */
+    fun <S, U> map(other: Quadruple<U>, block: (T, U) -> S): Quadruple<S> {
+        return Quadruple(
+            block(first, other.first),
+            block(second, other.second),
+            block(third, other.third),
+            block(fourth, other.fourth)
+        )
+    }
 }

@@ -3,8 +3,8 @@ package game.doppelkopf.api.game
 import game.doppelkopf.api.game.dto.GameCreateDto
 import game.doppelkopf.api.game.dto.GameInfoDto
 import game.doppelkopf.api.game.dto.GameOperationDto
-import game.doppelkopf.core.common.enums.GameOperation
 import game.doppelkopf.core.GameFacade
+import game.doppelkopf.core.common.enums.GameOperation
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid

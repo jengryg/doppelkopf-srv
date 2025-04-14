@@ -27,15 +27,15 @@ class AuthController : Logging {
             .addKeyValue("userDetails") { userDetails?.entity }
             .log()
 
-        if (userDetails != null) {
-            return ResponseEntity.ok(
+        return if (userDetails != null) {
+            ResponseEntity.ok(
                 PublicUserInfoDto(
                     id = userDetails.entity.id,
                     name = userDetails.entity.username
                 )
             )
         } else {
-            return ResponseEntity.noContent().build()
+            ResponseEntity.noContent().build()
         }
     }
 }
