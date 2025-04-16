@@ -23,11 +23,14 @@ class HandEntity(
     )
     val player: PlayerEntity,
 
+    @Column
+    override val index : Int,
+
     @ElementCollection
     val cardsRemaining: MutableList<String>,
 
     @Column
-    override val hasMarriage: Boolean,
+    override val hasMarriage: Boolean
 ) : BaseEntity(), IHandProperties {
     @ElementCollection
     var cardsPlayed: MutableList<String> = mutableListOf()
@@ -44,14 +47,11 @@ class HandEntity(
     @Column
     override var playsSolo: Boolean = false
 
-
     @Column
     override var internalTeam: Team = Team.NA
 
-
     @Column
     override var playerTeam: Team = Team.NA
-
 
     @Column
     override var publicTeam: Team = Team.NA

@@ -124,11 +124,12 @@ class GameModel private constructor(
         // Use the standard DeckMode for the initial card dealings.
         val handCards = Deck.create(DeckMode.DIAMONDS).dealHandCards()
 
-        val hands = activePlayers.map(handCards) { player, cards ->
+        val hands = activePlayers.mapIndexed(handCards) { index, player, cards ->
             HandModel.create(
                 HandEntity(
                     round = round.entity,
                     player = player.entity,
+                    index = index,
                     cardsRemaining = cards.map { it.encoded }.toMutableList(),
                     hasMarriage = cards.count { it.isQueenOfClubs } == 2
                 ).apply {

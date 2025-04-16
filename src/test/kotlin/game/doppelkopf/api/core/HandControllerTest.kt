@@ -352,9 +352,15 @@ class HandControllerTest : BaseRestAssuredTest() {
             playerRepository.saveAll(game.players)
         }
         val round = RoundEntity(game = game, dealer = game.players.first(), number = 1).apply {
-            game.players.forEach {
+            game.players.forEachIndexed { index, it ->
                 hands.add(
-                    HandEntity(round = this, player = it, cardsRemaining = mutableListOf(), hasMarriage = false)
+                    HandEntity(
+                        round = this,
+                        player = it,
+                        index = index,
+                        cardsRemaining = mutableListOf(),
+                        hasMarriage = false
+                    )
                 )
             }
         }.let { roundRepository.save(it) }

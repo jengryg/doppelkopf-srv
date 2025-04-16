@@ -164,6 +164,7 @@ class RoundModelTest {
                         HandEntity(
                             round = this,
                             player = PlayerEntity(user = mockk(), game = mockk(), seat = it),
+                            index = it,
                             cardsRemaining = mockk(),
                             hasMarriage = false
                         ).apply {
@@ -176,6 +177,7 @@ class RoundModelTest {
                         HandEntity(
                             round = this,
                             player = PlayerEntity(user = mockk(), game = mockk(), seat = it),
+                            index = it + healthy,
                             cardsRemaining = mockk(),
                             hasMarriage = false
                         ).apply {
@@ -188,6 +190,7 @@ class RoundModelTest {
                         HandEntity(
                             round = this,
                             player = PlayerEntity(user = mockk(), game = mockk(), seat = it),
+                            index = it + healthy + silentMarriage,
                             cardsRemaining = mockk(),
                             hasMarriage = false
                         ).apply {
@@ -200,6 +203,7 @@ class RoundModelTest {
                         HandEntity(
                             round = this,
                             player = PlayerEntity(user = mockk(), game = mockk(), seat = it),
+                            index = it + healthy + silentMarriage + reservation,
                             cardsRemaining = mockk(),
                             hasMarriage = false
                         ).apply {
@@ -296,6 +300,7 @@ class RoundModelTest {
                         HandEntity(
                             round = this,
                             player = PlayerEntity(user = mockk(), game = mockk(), seat = it),
+                            index = it,
                             cardsRemaining = mockk(),
                             hasMarriage = false
                         ).apply {
@@ -310,6 +315,7 @@ class RoundModelTest {
                         HandEntity(
                             round = this,
                             player = PlayerEntity(user = mockk(), game = mockk(), seat = it + healthy),
+                            index = it + healthy,
                             cardsRemaining = mockk(),
                             hasMarriage = true
                         ).apply {
@@ -324,6 +330,7 @@ class RoundModelTest {
                         HandEntity(
                             round = this,
                             player = PlayerEntity(user = mockk(), game = mockk(), seat = it + healthy + marriage),
+                            index = it + healthy + marriage,
                             cardsRemaining = mockk(),
                             hasMarriage = false
                         ).apply {

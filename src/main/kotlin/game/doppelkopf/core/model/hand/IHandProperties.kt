@@ -7,6 +7,11 @@ import game.doppelkopf.core.common.enums.Team
 
 interface IHandProperties : IBaseProperties {
     /**
+     * The index of the hand determines the order of play.
+     */
+    val index: Int
+
+    /**
      * Flag to indicate if this hand has a marriage, i.e. both queens of clubs.
      */
     val hasMarriage: Boolean

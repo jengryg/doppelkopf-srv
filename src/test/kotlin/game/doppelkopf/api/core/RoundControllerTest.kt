@@ -142,10 +142,11 @@ class RoundControllerTest : BaseRestAssuredTest() {
                 PlayerEntity(game = game, user = testPlayers[2], seat = 4)
             ).also { playerRepository.saveAll(it.toList()) }
             val round = RoundEntity(game = game, dealer = players.first, number = 17)
-            val hands = players.map {
+            val hands = players.mapIndexed { index, it ->
                 HandEntity(
                     round = round,
                     player = it,
+                    index = index,
                     cardsRemaining = mutableListOf(),
                     hasMarriage = false
                 )

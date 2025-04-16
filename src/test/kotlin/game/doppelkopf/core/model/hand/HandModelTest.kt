@@ -145,6 +145,7 @@ class HandModelTest {
                     game = mockk(),
                     seat = 0
                 ),
+                index = 0,
                 cardsRemaining = mutableListOf(),
                 hasMarriage = marriage
             ).apply {
@@ -287,6 +288,7 @@ class HandModelTest {
                     game = mockk(),
                     seat = 0
                 ),
+                index = 0,
                 cardsRemaining = mutableListOf(),
                 hasMarriage = marriage
             ).apply {
@@ -303,6 +305,7 @@ class HandModelTest {
             val entity = HandEntity(
                 round = mockk(),
                 player = mockk(),
+                index = 0,
                 cardsRemaining = mutableListOf(),
                 hasMarriage = false
             )
