@@ -37,7 +37,18 @@ class QuadrupleTest {
     }
 
     @Test
-    fun `map with other applies block to each pair of elements in corred order`() {
+    fun `map indexed applied block to each element in correct order with correct index`() {
+        val quad = Quadruple("a", "b", "c", "d")
+
+        val mapped = quad.mapIndexed { index, it ->
+            "$index : $it"
+        }
+
+        assertThat(mapped.toList()).containsExactly("0 : a", "1 : b", "2 : c", "3 : d")
+    }
+
+    @Test
+    fun `map with other applies block to each pair of elements in correct order`() {
         val quad = Quadruple(1, 2, 3, 4)
         val other = Quadruple(5, 6, 7, 8)
 
@@ -46,5 +57,17 @@ class QuadrupleTest {
         }
 
         assertThat(mapped.toList()).containsExactly(24, 32, 40, 48)
+    }
+
+    @Test
+    fun `map indexed with other applied block to each pair of elements in correct order with correct index`() {
+        val quad = Quadruple("a", "b", "c", "d")
+        val other = Quadruple("w", "x", "y", "z")
+
+        val mapped = quad.mapIndexed(other) { index, x, y ->
+            "$index : ( $x , $y )"
+        }
+
+        assertThat(mapped.toList()).containsExactly("0 : ( a , w )", "1 : ( b , x )", "2 : ( c , y )", "3 : ( d , z )")
     }
 }
