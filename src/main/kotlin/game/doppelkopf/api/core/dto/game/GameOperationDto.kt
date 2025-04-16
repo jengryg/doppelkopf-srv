@@ -1,4 +1,4 @@
-package game.doppelkopf.api.game.dto
+package game.doppelkopf.api.core.dto.game
 
 import game.doppelkopf.core.common.enums.GameOperation
 import io.swagger.v3.oas.annotations.media.Schema

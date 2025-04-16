@@ -1,6 +1,5 @@
 package game.doppelkopf.core
 
-import game.doppelkopf.api.game.dto.PlayerCreateDto
 import game.doppelkopf.core.model.game.GameModel
 import game.doppelkopf.core.model.user.UserModel
 import game.doppelkopf.persistence.errors.EntityNotFoundException
@@ -27,15 +26,15 @@ class PlayerFacade(
     }
 
     /**
-     * A player is crated when [user] joins the game specified by [playerCreateDto] at the given seat position.
+     * A player is crated when [user] joins the game at the given [seat] position.
      */
     @Transactional
-    fun create(gameId: UUID, playerCreateDto: PlayerCreateDto, user: UserEntity): PlayerEntity {
+    fun create(gameId: UUID, seat: Int, user: UserEntity): PlayerEntity {
         return GameModel.create(
             entity = gameFacade.load(gameId)
         ).join(
             user = UserModel.create(entity = user),
-            seat = playerCreateDto.seat
+            seat = seat
         ).let {
             playerRepository.save(it.entity)
         }

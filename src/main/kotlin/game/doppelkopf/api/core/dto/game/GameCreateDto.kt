@@ -1,4 +1,4 @@
-package game.doppelkopf.api.game.dto
+package game.doppelkopf.api.core.dto.game
 
 import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.validator.constraints.Range

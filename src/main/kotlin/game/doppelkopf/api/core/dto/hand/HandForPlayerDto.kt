@@ -1,4 +1,4 @@
-package game.doppelkopf.api.play.dto
+package game.doppelkopf.api.core.dto.hand
 
 import game.doppelkopf.core.common.enums.Team
 import game.doppelkopf.persistence.model.hand.HandEntity

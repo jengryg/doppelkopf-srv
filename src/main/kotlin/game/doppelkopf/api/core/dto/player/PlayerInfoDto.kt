@@ -1,4 +1,4 @@
-package game.doppelkopf.api.game.dto
+package game.doppelkopf.api.core.dto.player
 
 import game.doppelkopf.api.user.dto.PublicUserInfoDto
 import game.doppelkopf.persistence.model.player.PlayerEntity

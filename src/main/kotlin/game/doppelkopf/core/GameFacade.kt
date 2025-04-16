@@ -1,6 +1,5 @@
 package game.doppelkopf.core
 
-import game.doppelkopf.api.game.dto.GameCreateDto
 import game.doppelkopf.core.model.game.GameModel
 import game.doppelkopf.core.model.user.UserModel
 import game.doppelkopf.persistence.errors.EntityNotFoundException
@@ -36,18 +35,18 @@ class GameFacade(
     }
 
     /**
-     * Create a new game from the given [gameCreateDto] that is owned by [user].
+     * Create a new game that is owned by [user].
      *
-     * @param gameCreateDto the information to use for the new game
+     * @param playerLimit the maximum number of players allowed for the created game
      * @param user the user that should be the creator of the game
      * @return the [GameEntity] of the newly created game
      */
     @Transactional
-    fun create(gameCreateDto: GameCreateDto, user: UserEntity): GameEntity {
+    fun create(playerLimit: Int, user: UserEntity): GameEntity {
         return gameRepository.save(
             GameEntity(
                 creator = user,
-                maxNumberOfPlayers = gameCreateDto.playerLimit
+                maxNumberOfPlayers = playerLimit
             ).apply {
                 // add the creator as player to the game
                 players.add(

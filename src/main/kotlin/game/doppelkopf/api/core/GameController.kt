@@ -1,8 +1,8 @@
-package game.doppelkopf.api.game
+package game.doppelkopf.api.core
 
-import game.doppelkopf.api.game.dto.GameCreateDto
-import game.doppelkopf.api.game.dto.GameInfoDto
-import game.doppelkopf.api.game.dto.GameOperationDto
+import game.doppelkopf.api.core.dto.game.GameCreateDto
+import game.doppelkopf.api.core.dto.game.GameInfoDto
+import game.doppelkopf.api.core.dto.game.GameOperationDto
 import game.doppelkopf.core.GameFacade
 import game.doppelkopf.core.common.enums.GameOperation
 import game.doppelkopf.security.UserDetails
@@ -42,7 +42,12 @@ class GameController(
         @RequestBody @Valid gameCreateDto: GameCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<GameInfoDto> {
-        return GameInfoDto(gameFacade.create(gameCreateDto, userDetails.entity)).let {
+        val game = gameFacade.create(
+            playerLimit = gameCreateDto.playerLimit,
+            user = userDetails.entity
+        )
+
+        return GameInfoDto(game).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/games/{id}").build(it.id)
             ).body(it)

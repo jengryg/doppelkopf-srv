@@ -1,10 +1,10 @@
-package game.doppelkopf.api.play
+package game.doppelkopf.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.api.play.dto.BidCreateDto
-import game.doppelkopf.api.play.dto.DeclarationCreateDto
-import game.doppelkopf.api.play.dto.HandForPlayerDto
-import game.doppelkopf.api.play.dto.HandPublicInfoDto
+import game.doppelkopf.api.core.dto.hand.BidCreateDto
+import game.doppelkopf.api.core.dto.hand.DeclarationCreateDto
+import game.doppelkopf.api.core.dto.hand.HandForPlayerDto
+import game.doppelkopf.api.core.dto.hand.HandPublicInfoDto
 import game.doppelkopf.core.common.enums.*
 import game.doppelkopf.core.common.errors.ForbiddenActionException
 import game.doppelkopf.core.common.errors.InvalidActionException

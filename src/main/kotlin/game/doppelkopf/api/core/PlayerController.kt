@@ -1,7 +1,7 @@
-package game.doppelkopf.api.game
+package game.doppelkopf.api.core
 
-import game.doppelkopf.api.game.dto.PlayerCreateDto
-import game.doppelkopf.api.game.dto.PlayerInfoDto
+import game.doppelkopf.api.core.dto.player.PlayerCreateDto
+import game.doppelkopf.api.core.dto.player.PlayerInfoDto
 import game.doppelkopf.core.PlayerFacade
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
@@ -43,7 +43,11 @@ class PlayerController(
         @RequestBody @Valid playerCreateDto: PlayerCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<PlayerInfoDto> {
-        val player = playerFacade.create(gameId, playerCreateDto, userDetails.entity)
+        val player = playerFacade.create(
+            gameId = gameId,
+            seat = playerCreateDto.seat,
+            user = userDetails.entity
+        )
 
         return PlayerInfoDto(player).let {
             ResponseEntity.created(

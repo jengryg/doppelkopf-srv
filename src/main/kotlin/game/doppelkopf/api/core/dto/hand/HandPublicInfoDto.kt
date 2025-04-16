@@ -1,4 +1,4 @@
-package game.doppelkopf.api.play.dto
+package game.doppelkopf.api.core.dto.hand
 
 import game.doppelkopf.core.common.enums.Bidding
 import game.doppelkopf.core.common.enums.DeclarationPublic

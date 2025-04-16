@@ -1,7 +1,7 @@
-package game.doppelkopf.api.play
+package game.doppelkopf.api.core
 
-import game.doppelkopf.api.play.dto.RoundInfoDto
-import game.doppelkopf.api.play.dto.RoundOperationDto
+import game.doppelkopf.api.core.dto.round.RoundInfoDto
+import game.doppelkopf.api.core.dto.round.RoundOperationDto
 import game.doppelkopf.core.RoundFacade
 import game.doppelkopf.core.common.enums.RoundOperation
 import game.doppelkopf.security.UserDetails
