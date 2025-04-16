@@ -41,14 +41,19 @@ class Deck private constructor(
             }
     }
 
-    fun getCards(encodings: List<String>): List<Card> {
-        return encodings.map {
-            cards[it] ?: throw IllegalArgumentException("Can not identify $it as a card.")
+    fun getCards(encodings: List<String>): Result<List<Card>> {
+        val cards = mutableListOf<Card>()
+
+        encodings.forEach {
+            // first failure should return method and cancel further decoding
+            getCard(it).onFailure { e -> return Result.failure(e) }.onSuccess { c -> cards.add(c) }
         }
+
+        return Result.success(cards)
     }
 
-    fun getCard(encoding: String): Card {
-        return cards[encoding] ?: throw IllegalArgumentException("Can not identify  $encoding as a card.")
+    fun getCard(encoding: String): Result<Card> {
+        return cards[encoding]?.let { Result.success(it) } ?: Result.ofInvalidCardException(encoding)
     }
 
     companion object {

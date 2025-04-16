@@ -1,7 +1,6 @@
 package game.doppelkopf.core.cards
 
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
@@ -30,9 +29,11 @@ class DeckTest {
     fun `getting a card with invalid encoding should throw exception`(enc: String) {
         val deck = Deck.create(DeckMode.DIAMONDS)
 
-        assertThatThrownBy {
-            deck.getCard(enc)
-        }.isInstanceOf(IllegalArgumentException::class.java)
+        val result = deck.getCard(enc)
+
+        assertThat(result.isFailure).isTrue
+        assertThat(result.exceptionOrNull())
+            .isInstanceOf(InvalidCardException::class.java)
     }
 
     @ParameterizedTest
@@ -40,9 +41,11 @@ class DeckTest {
     fun `getting list of cards with invalid encoding should throw exception`(enc: String) {
         val deck = Deck.create(DeckMode.DIAMONDS)
 
-        assertThatThrownBy {
-            deck.getCards(listOf("AS1", "TH0", enc, "QC1"))
-        }.isInstanceOf(IllegalArgumentException::class.java)
+        val result = deck.getCards(listOf("AS1", "TH0", enc, "QC1"))
+
+        assertThat(result.isFailure).isTrue
+        assertThat(result.exceptionOrNull())
+            .isInstanceOf(InvalidCardException::class.java)
     }
 
 
@@ -51,6 +54,9 @@ class DeckTest {
     fun `get card from deck with valid encoding returns from map`(enc: String) {
         val deck = Deck.create(DeckMode.DIAMONDS)
 
-        assertThat(deck.getCard(enc)).isSameAs(deck.cards[enc])
+        val result = deck.getCard(enc)
+
+        assertThat(result.isSuccess).isTrue
+        assertThat(result.getOrNull()).isSameAs(deck.cards[enc])
     }
 }

@@ -41,4 +41,8 @@ class Card(
             CardSuit.SPADES -> CardDemand.SPADES
         }
     }
+
+    override fun toString(): String {
+        return "$kind of $suit"
+    }
 }
