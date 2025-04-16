@@ -66,7 +66,7 @@ class RoundController(
         description = "Performs operations on the round with specified id."
     )
     @PatchMapping("/rounds/{id}")
-    fun path(
+    fun patch(
         @PathVariable id: UUID,
         @RequestBody @Valid operation: RoundOperationDto,
         @AuthenticationPrincipal userDetails: UserDetails
