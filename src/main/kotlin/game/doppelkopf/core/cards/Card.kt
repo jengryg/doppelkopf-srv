@@ -32,7 +32,7 @@ class Card(
     val isFox = kind == CardKind.ACE && suit == CardSuit.DIAMOND
     val isNonColoredHearts = !isColored && suit == CardSuit.HEARTS
 
-    val satisfiesDemand = when {
+    val demand = when {
         isColored -> CardDemand.COLORED
         else -> when (suit) {
             CardSuit.DIAMOND -> CardDemand.DIAMOND

@@ -4,6 +4,7 @@ import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.game.GameModel
 import game.doppelkopf.core.model.hand.HandModel
 import game.doppelkopf.core.model.player.PlayerModel
+import game.doppelkopf.core.model.user.UserModel
 import game.doppelkopf.persistence.model.round.RoundEntity
 
 /**
@@ -19,10 +20,21 @@ abstract class RoundModelAbstract(
 
     val hands
         get() = entity.hands.associate {
-            PlayerModel.create(it.player) to HandModel.create(it)
+            UserModel.create(it.player.user) to HandModel.create(it)
         }
 
     fun addHand(h: HandModel) {
         entity.hands.add(h.entity)
+    }
+
+    /**
+     * Determines the hand of the player that sits behind the player of the given [h].
+     *
+     * @return the hand directly behind [h].
+     */
+    fun getHandBehind(h: HandModel): HandModel {
+        val index = h.index % 4
+        return hands.values.singleOrNull { it.index == index }
+            ?: throw GameFailedException("could not determine the hand behind $h.")
     }
 }

@@ -46,7 +46,7 @@ class CardTest {
             assertThat(it.isCharly).isEqualTo(isCharly)
             assertThat(it.isFox).isEqualTo(isFox)
             assertThat(it.isNonColoredHearts).isEqualTo(isNonColoredHearts)
-            assertThat(it.satisfiesDemand).isEqualTo(satisfiesDemand)
+            assertThat(it.demand).isEqualTo(satisfiesDemand)
         }
     }
 
