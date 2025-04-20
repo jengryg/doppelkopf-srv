@@ -73,7 +73,7 @@ class RoundModel private constructor(
             onlyMarriageBid() -> {
                 deckMode = DeckMode.DIAMONDS
                 state = RoundState.PLAYING_TRICKS
-                contract = RoundContract.WEDDING
+                contract = RoundContract.MARRIAGE_UNRESOLVED
 
                 hands.values.forEach {
                     if (it.hasMarriage) {

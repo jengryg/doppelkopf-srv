@@ -12,7 +12,7 @@ enum class Bidding(
 ) {
     NOTHING(roundContract = RoundContract.UNDECIDED, deckMode = DeckMode.DIAMONDS, isSolo = false),
 
-    MARRIAGE(roundContract = RoundContract.WEDDING, deckMode = DeckMode.DIAMONDS, isSolo = false),
+    MARRIAGE(roundContract = RoundContract.MARRIAGE_UNRESOLVED, deckMode = DeckMode.DIAMONDS, isSolo = false),
 
     SOLO_DIAMONDS(roundContract = RoundContract.SOLO, deckMode = DeckMode.DIAMONDS, isSolo = true),
     SOLO_HEARTS(roundContract = RoundContract.SOLO, deckMode = DeckMode.HEARTS, isSolo = true),

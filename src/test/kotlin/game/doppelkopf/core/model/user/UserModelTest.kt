@@ -1,7 +1,6 @@
 package game.doppelkopf.core.model.user
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.persistence.model.user.UserEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

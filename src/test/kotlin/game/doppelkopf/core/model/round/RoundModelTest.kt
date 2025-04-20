@@ -228,7 +228,7 @@ class RoundModelTest : BaseUnitTest() {
 
             assertThat(round.state).isEqualTo(RoundState.PLAYING_TRICKS)
             assertThat(round.deckMode).isEqualTo(DeckMode.DIAMONDS)
-            assertThat(round.contract).isEqualTo(RoundContract.WEDDING)
+            assertThat(round.contract).isEqualTo(RoundContract.MARRIAGE_UNRESOLVED)
 
             round.hands.values.single { it.hasMarriage }.also {
                 assertThat(it.internalTeam).isEqualTo(Team.RE)
