@@ -1,14 +1,13 @@
 package game.doppelkopf.core.cards
 
+import game.doppelkopf.BaseUnitTest
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CardRankingFactoryTest {
+class CardRankingFactoryTest : BaseUnitTest() {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("provideRankingArguments")
@@ -48,6 +47,7 @@ class CardRankingFactoryTest {
         return rankedCards.entries.sortedBy { it.value }.joinToString(" ") { it.key }
     }
 
+    @Suppress("unused")
     private fun provideRankingArguments(): Stream<Arguments> {
         return Stream.of(
             Arguments.of(

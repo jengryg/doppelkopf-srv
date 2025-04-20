@@ -1,13 +1,12 @@
 package game.doppelkopf.core.cards
 
+import game.doppelkopf.BaseUnitTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DeckTest {
+class DeckTest : BaseUnitTest() {
     @ParameterizedTest
     @EnumSource(value = DeckMode::class)
     fun `instantiate deck for each mode`(deckMode: DeckMode) {

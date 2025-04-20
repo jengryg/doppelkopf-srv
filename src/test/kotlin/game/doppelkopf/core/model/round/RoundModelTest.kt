@@ -1,23 +1,21 @@
 package game.doppelkopf.core.model.round
 
+import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.core.cards.DeckMode
 import game.doppelkopf.core.common.enums.*
 import game.doppelkopf.core.common.errors.InvalidActionException
 import game.doppelkopf.persistence.model.hand.HandEntity
-import game.doppelkopf.persistence.model.player.PlayerEntity
 import game.doppelkopf.persistence.model.round.RoundEntity
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class RoundModelTest {
+class RoundModelTest : BaseUnitTest() {
     @Nested
     inner class EvaluateDeclarations {
         @ParameterizedTest
@@ -163,9 +161,9 @@ class RoundModelTest {
                     hands.add(
                         HandEntity(
                             round = this,
-                            player = PlayerEntity(user = mockk(), game = mockk(), seat = it),
+                            player = createPlayerEntity(seat = it),
                             index = it,
-                            cardsRemaining = mockk(),
+                            cardsRemaining = mutableListOf(),
                             hasMarriage = false
                         ).apply {
                             declared = Declaration.HEALTHY
@@ -176,9 +174,9 @@ class RoundModelTest {
                     hands.add(
                         HandEntity(
                             round = this,
-                            player = PlayerEntity(user = mockk(), game = mockk(), seat = it),
+                            player = createPlayerEntity(seat = it + healthy),
                             index = it + healthy,
-                            cardsRemaining = mockk(),
+                            cardsRemaining = mutableListOf(),
                             hasMarriage = false
                         ).apply {
                             declared = Declaration.SILENT_MARRIAGE
@@ -189,9 +187,9 @@ class RoundModelTest {
                     hands.add(
                         HandEntity(
                             round = this,
-                            player = PlayerEntity(user = mockk(), game = mockk(), seat = it),
+                            player = createPlayerEntity(seat = it + healthy + silentMarriage),
                             index = it + healthy + silentMarriage,
-                            cardsRemaining = mockk(),
+                            cardsRemaining = mutableListOf(),
                             hasMarriage = false
                         ).apply {
                             declared = Declaration.RESERVATION
@@ -202,9 +200,9 @@ class RoundModelTest {
                     hands.add(
                         HandEntity(
                             round = this,
-                            player = PlayerEntity(user = mockk(), game = mockk(), seat = it),
+                            player = createPlayerEntity(seat = it + healthy + silentMarriage + reservation),
                             index = it + healthy + silentMarriage + reservation,
-                            cardsRemaining = mockk(),
+                            cardsRemaining = mutableListOf(),
                             hasMarriage = false
                         ).apply {
                             declared = Declaration.NOTHING
@@ -299,9 +297,9 @@ class RoundModelTest {
                     hands.add(
                         HandEntity(
                             round = this,
-                            player = PlayerEntity(user = mockk(), game = mockk(), seat = it),
+                            player = createPlayerEntity(seat = it),
                             index = it,
-                            cardsRemaining = mockk(),
+                            cardsRemaining = mutableListOf(),
                             hasMarriage = false
                         ).apply {
                             bidding = Bidding.NOTHING
@@ -314,9 +312,9 @@ class RoundModelTest {
                     hands.add(
                         HandEntity(
                             round = this,
-                            player = PlayerEntity(user = mockk(), game = mockk(), seat = it + healthy),
+                            player = createPlayerEntity(seat = it + healthy),
                             index = it + healthy,
-                            cardsRemaining = mockk(),
+                            cardsRemaining = mutableListOf(),
                             hasMarriage = true
                         ).apply {
                             bidding = Bidding.MARRIAGE
@@ -329,9 +327,9 @@ class RoundModelTest {
                     hands.add(
                         HandEntity(
                             round = this,
-                            player = PlayerEntity(user = mockk(), game = mockk(), seat = it + healthy + marriage),
+                            player = createPlayerEntity(seat = it + healthy + marriage),
                             index = it + healthy + marriage,
-                            cardsRemaining = mockk(),
+                            cardsRemaining = mutableListOf(),
                             hasMarriage = false
                         ).apply {
                             bidding = Bidding.NOTHING
@@ -347,11 +345,7 @@ class RoundModelTest {
     inner class Create {
         @Test
         fun `create uses one model per entity`() {
-            val entity = RoundEntity(
-                game = mockk(),
-                dealer = mockk(),
-                number = 1
-            )
+            val entity = createRoundEntity()
 
             val model = RoundModel.create(entity)
             val other = RoundModel.create(entity)

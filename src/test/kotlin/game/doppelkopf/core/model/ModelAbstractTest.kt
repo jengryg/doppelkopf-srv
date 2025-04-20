@@ -1,12 +1,11 @@
 package game.doppelkopf.core.model
 
+import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.persistence.model.BaseEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ModelAbstractTest {
+class ModelAbstractTest : BaseUnitTest() {
 
     /**
      * The simplest derivative of [BaseEntity] for the test.

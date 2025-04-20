@@ -1,15 +1,14 @@
 package game.doppelkopf.core.cards
 
+import game.doppelkopf.BaseUnitTest
 import org.assertj.core.api.Assertions.*
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
 import java.util.stream.Stream
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CardTest {
+class CardTest : BaseUnitTest() {
 
     @ParameterizedTest
     @ValueSource(ints = [-1, 2, 3, 17, -42])
@@ -50,6 +49,7 @@ class CardTest {
         }
     }
 
+    @Suppress("unused")
     private fun provideCardsForPropertyCheck(): Stream<Arguments> {
         return Stream.of(
             Arguments.of(CardKind.ACE, CardSuit.SPADES, 399, true, false, false, false, false, CardDemand.COLORED),
@@ -75,6 +75,7 @@ class CardTest {
         assertThat(Card(kind, suit, 1, 0).encoded).isEqualTo("${ksEnc}1")
     }
 
+    @Suppress("unused")
     private fun provideCardsForEncoding(): Stream<Arguments> {
         return Stream.of(
             Arguments.of(CardKind.ACE, CardSuit.SPADES, "AS"),

@@ -1,5 +1,6 @@
 package game.doppelkopf.core.model.round
 
+import game.doppelkopf.core.common.errors.GameFailedException
 import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.game.GameModel
 import game.doppelkopf.core.model.hand.HandModel

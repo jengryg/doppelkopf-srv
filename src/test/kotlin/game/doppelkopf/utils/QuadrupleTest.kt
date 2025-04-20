@@ -1,11 +1,10 @@
 package game.doppelkopf.utils
 
+import game.doppelkopf.BaseUnitTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class QuadrupleTest {
+class QuadrupleTest : BaseUnitTest() {
     @Test
     fun `toList returns correct order of elements`() {
         val quad = Quadruple(1, 2, 3, 4)

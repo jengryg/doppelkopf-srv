@@ -1,23 +1,16 @@
 package game.doppelkopf.core.model.player
 
-import game.doppelkopf.persistence.model.player.PlayerEntity
-import io.mockk.mockk
+import game.doppelkopf.BaseUnitTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class PlayerModelTest {
+class PlayerModelTest : BaseUnitTest() {
     @Nested
     inner class Create {
         @Test
         fun `create uses one model per entity`() {
-            val entity = PlayerEntity(
-                user = mockk(),
-                game = mockk(),
-                seat = 0
-            )
+            val entity = createPlayerEntity()
 
             val model = PlayerModel.create(entity)
             val other = PlayerModel.create(entity)

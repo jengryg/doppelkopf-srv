@@ -1,5 +1,6 @@
 package game.doppelkopf.core.model.game
 
+import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.core.cards.Deck
 import game.doppelkopf.core.cards.DeckMode
 import game.doppelkopf.core.common.enums.GameState
@@ -11,24 +12,21 @@ import game.doppelkopf.core.model.player.PlayerModel
 import game.doppelkopf.core.model.user.UserModel
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.player.PlayerEntity
-import game.doppelkopf.persistence.model.user.UserEntity
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class GameModelTest {
+class GameModelTest : BaseUnitTest() {
     @Nested
     inner class Start {
         @Test
         fun `start the game sets dealer and advances state`() {
             val creator = UserModel.create(
-                entity = createTestUserEntity()
+                entity = createUserEntity()
             )
 
             val game = GameModel.create(
@@ -36,7 +34,7 @@ class GameModelTest {
                     creator = creator.entity,
                     maxNumberOfPlayers = 4
                 ).apply {
-                    repeat(4) { players.add(PlayerEntity(user = createTestUserEntity(), game = this, seat = it)) }
+                    repeat(4) { players.add(createPlayerEntity(seat = it, game = this)) }
                 }
             )
 
@@ -53,13 +51,10 @@ class GameModelTest {
         @Test
         fun `guard yields exception when user is not the creator`() {
             val notCreator = UserModel.create(
-                entity = createTestUserEntity()
+                entity = createUserEntity()
             )
             val game = GameModel.create(
-                entity = GameEntity(
-                    creator = createTestUserEntity(),
-                    maxNumberOfPlayers = 4
-                )
+                entity = createGameEntity()
             )
 
             val guard = game.canStart(notCreator)
@@ -79,7 +74,7 @@ class GameModelTest {
         @EnumSource(GameState::class, names = ["INITIALIZED"], mode = EnumSource.Mode.EXCLUDE)
         fun `guard yields exception when game is not in INITIALIZED state`(gameState: GameState) {
             val game = GameModel.create(
-                entity = createTestGameEntity().apply {
+                entity = createGameEntity().apply {
                     state = gameState
                 }
             )
@@ -101,9 +96,9 @@ class GameModelTest {
         @ValueSource(ints = [0, 1, 2, 3])
         fun `guard yields exception when game has less than 4 players`(playerCount: Int) {
             val game = GameModel.create(
-                entity = createTestGameEntity().apply {
+                entity = createGameEntity().apply {
                     repeat(playerCount) {
-                        players.add(PlayerEntity(user = createTestUserEntity(), game = this, seat = it))
+                        players.add(createPlayerEntity(seat = it, game = this))
                     }
                 }
             )
@@ -127,7 +122,7 @@ class GameModelTest {
         @Test
         fun `creates player and assigns it to the game`() {
             val game = GameModel.create(
-                entity = createTestGameEntity().apply {
+                entity = createGameEntity().apply {
                     state = GameState.INITIALIZED
                 }
             )
@@ -135,7 +130,7 @@ class GameModelTest {
             repeat(4) {
                 // Game allows for 4 players, so we join the game with 4 unique users at 4 different seats for this test.
                 val user = UserModel.create(
-                    entity = createTestUserEntity()
+                    entity = createUserEntity()
                 )
 
                 val result = game.join(
@@ -155,11 +150,11 @@ class GameModelTest {
         @EnumSource(GameState::class, names = ["INITIALIZED"], mode = EnumSource.Mode.EXCLUDE)
         fun `guard yields exception when game is not in INITIALIZED state`(gameState: GameState) {
             val user = UserModel.create(
-                entity = createTestUserEntity()
+                entity = createUserEntity()
             )
 
             val game = GameModel.create(
-                entity = createTestGameEntity().apply { state = gameState }
+                entity = createGameEntity().apply { state = gameState }
             )
 
             val guard = game.canJoin(user = user, seat = 1)
@@ -178,10 +173,10 @@ class GameModelTest {
         @Test
         fun `guard yields exception when user already joined the game`() {
             val user = UserModel.create(
-                entity = createTestUserEntity()
+                entity = createUserEntity()
             )
             val game = GameModel.create(
-                entity = createTestGameEntity()
+                entity = createGameEntity()
             ).apply {
                 addPlayer(PlayerModel.create(PlayerEntity(user = user.entity, game = this.entity, seat = 0)))
             }
@@ -202,19 +197,15 @@ class GameModelTest {
         @Test
         fun `guard yields exception when seat is already taken`() {
             val user = UserModel.create(
-                entity = createTestUserEntity()
+                entity = createUserEntity()
             )
             val game = GameModel.create(
-                entity = createTestGameEntity()
+                entity = createGameEntity()
             )
 
             game.addPlayer(
                 PlayerModel.create(
-                    entity = PlayerEntity(
-                        user = createTestUserEntity(),
-                        game = game.entity,
-                        seat = 0
-                    )
+                    entity = createPlayerEntity(seat = 0, game = game.entity)
                 )
             )
 
@@ -234,15 +225,15 @@ class GameModelTest {
         @Test
         fun `guard yields exception when game is already at max player limit`() {
             val user = UserModel.create(
-                entity = createTestUserEntity()
+                entity = createUserEntity()
             )
             val game = GameModel.create(
-                entity = createTestGameEntity()
+                entity = createGameEntity()
             ).apply {
                 repeat(4) {
                     addPlayer(
                         PlayerModel.create(
-                            entity = PlayerEntity(user = createTestUserEntity(), game = entity, seat = it)
+                            entity = createPlayerEntity(seat = it, game = entity)
                         )
                     )
                 }
@@ -267,12 +258,12 @@ class GameModelTest {
         @Test
         fun `creates round and assigns it to the game, creates hands and assigns them to the round and players`() {
             val game = GameModel.create(
-                entity = createTestGameEntity().apply {
+                entity = createGameEntity().apply {
                     state = GameState.WAITING_FOR_DEAL
                 }
             )
             val players = List(4) {
-                PlayerEntity(user = createTestUserEntity(), game = game.entity, seat = it).apply { dealer = false }
+                createPlayerEntity(seat = it, game = game.entity).apply { dealer = false }
             }.let { pList -> PlayerModel.create(pList) }.onEach { game.addPlayer(it) }
 
             val dealer = players[2].also {
@@ -321,11 +312,11 @@ class GameModelTest {
         @EnumSource(value = GameState::class, names = ["WAITING_FOR_DEAL"], mode = EnumSource.Mode.EXCLUDE)
         fun `guard yields exception when game is not in WAITING_FOR_DEAL state`(gameState: GameState) {
             val game = GameModel.create(
-                entity = createTestGameEntity().apply {
+                entity = createGameEntity().apply {
                     state = gameState
                 }
             )
-            val user = UserModel.create(entity = createTestUserEntity())
+            val user = UserModel.create(entity = createUserEntity())
 
             val guard = game.canDeal(user = user)
             assertThat(guard.isFailure).isTrue
@@ -343,12 +334,12 @@ class GameModelTest {
         @Test
         fun `guard yields exception when user is not the dealer`() {
             val game = GameModel.create(
-                entity = createTestGameEntity().apply {
+                entity = createGameEntity().apply {
                     state = GameState.WAITING_FOR_DEAL
                 }
             )
             val player = PlayerModel.create(
-                entity = PlayerEntity(game = game.entity, user = createTestUserEntity(), seat = 0)
+                entity = createPlayerEntity(seat = 0, game = game.entity)
             ).apply { dealer = false }
 
             val guard = game.canDeal(user = player.user)
@@ -363,19 +354,6 @@ class GameModelTest {
             }.isInstanceOf(ForbiddenActionException::class.java)
                 .hasMessageContaining("You are not allowed to perform the action 'Round:Create': Only the current dealer of the game can deal this round.")
         }
-
-        private fun createTestGameEntity(): GameEntity {
-            return GameEntity(
-                creator = createTestUserEntity(),
-                maxNumberOfPlayers = 4
-            ).apply {
-                state = GameState.INITIALIZED
-            }
-        }
-
-        private fun createTestUserEntity(): UserEntity {
-            return UserEntity(username = "username", password = "password")
-        }
     }
 
     @Nested
@@ -384,12 +362,12 @@ class GameModelTest {
         @ValueSource(ints = [0, 1, 2, 3])
         fun `get four players behind returns in circular increasing seat position order for 4 players`(given: Int) {
             val game = GameModel.create(
-                entity = createTestGameEntity()
+                entity = createGameEntity()
             )
             // Players are not assumed to be in correct order in the game entity, thus (6 - it).
             // Player at index 3 is the one with the lowest seat number here.
             val players =
-                List(4) { PlayerEntity(user = createTestUserEntity(), game = game.entity, seat = 6 - it) }
+                List(4) { createPlayerEntity(seat = 6 - it, game = game.entity) }
                     .map { PlayerModel.create(it) }.onEach { game.addPlayer(it) }
 
             val quad = game.getFourPlayersBehind(players[given])
@@ -413,10 +391,10 @@ class GameModelTest {
         @ValueSource(ints = [0, 1, 2, 3, 4])
         fun `get four players behind returns in circular increasing seat position order for 5 players`(given: Int) {
             val game = GameModel.create(
-                entity = createTestGameEntity()
+                entity = createGameEntity()
             )
             // Simplify test by assume players are already in correct order here.
-            val players = List(5) { PlayerEntity(user = createTestUserEntity(), game = game.entity, seat = it) }
+            val players = List(5) { createPlayerEntity(seat = it, game = game.entity) }
                 .map { PlayerModel.create(it) }.onEach { game.addPlayer(it) }
 
             val quad = game.getFourPlayersBehind(players[given])
@@ -438,10 +416,10 @@ class GameModelTest {
         @ValueSource(ints = [0, 1, 2, 3, 4, 5])
         fun `get four players behind returns in circular increasing seat position order for 6 players`(given: Int) {
             val game = GameModel.create(
-                entity = createTestGameEntity()
+                entity = createGameEntity()
             )
             // Simplify test by assume players are already in correct order here.
-            val players = List(6) { PlayerEntity(user = createTestUserEntity(), game = game.entity, seat = it) }
+            val players = List(6) { createPlayerEntity(seat = it, game = game.entity) }
                 .map { PlayerModel.create(it) }.onEach { game.addPlayer(it) }
 
             val quad = game.getFourPlayersBehind(players[given])
@@ -463,10 +441,10 @@ class GameModelTest {
         @ValueSource(ints = [0, 1, 2, 3, 4, 5, 6])
         fun `get four players behind returns in circular increasing seat position order for 7 players`(given: Int) {
             val game = GameModel.create(
-                entity = createTestGameEntity()
+                entity = createGameEntity()
             )
             // Simplify test by assume players are already in correct order here.
-            val players = List(7) { PlayerEntity(user = createTestUserEntity(), game = game.entity, seat = it) }
+            val players = List(7) { createPlayerEntity(seat = it, game = game.entity) }
                 .map { PlayerModel.create(it) }.onEach { game.addPlayer(it) }
 
             val quad = game.getFourPlayersBehind(players[given])
@@ -488,10 +466,10 @@ class GameModelTest {
         @ValueSource(ints = [0, 1, 2, 3, 4, 5, 6, 7])
         fun `get four players behind returns in circular increasing seat position order for 8 players`(given: Int) {
             val game = GameModel.create(
-                entity = createTestGameEntity()
+                entity = createGameEntity()
             )
             // Simplify test by assume players are already in correct order here.
-            val players = List(8) { PlayerEntity(user = createTestUserEntity(), game = game.entity, seat = it) }
+            val players = List(8) { createPlayerEntity(seat = it, game = game.entity) }
                 .map { PlayerModel.create(it) }.onEach { game.addPlayer(it) }
 
             val quad = game.getFourPlayersBehind(players[given])
@@ -512,13 +490,13 @@ class GameModelTest {
         @Test
         fun `get four players throws exception when given player is not at the game`() {
             val game = GameModel.create(
-                entity = createTestGameEntity()
+                entity = createGameEntity()
             )
-            List(4) { PlayerEntity(user = createTestUserEntity(), game = game.entity, seat = it) }
+            List(4) { createPlayerEntity(seat = it, game = game.entity) }
                 .map { PlayerModel.create(it) }.onEach { game.addPlayer(it) }
 
             val notGamePlayer = PlayerModel.create(
-                entity = PlayerEntity(user = createTestUserEntity(), game = game.entity, seat = 17)
+                entity = createPlayerEntity(seat = 17, game = game.entity)
             )
 
             assertThatThrownBy {
@@ -531,12 +509,12 @@ class GameModelTest {
         @ValueSource(ints = [0, 1, 2, 3])
         fun `get four players behind fails when game has not at least 4 players`(playerCount: Int) {
             val game = GameModel.create(
-                entity = createTestGameEntity()
+                entity = createGameEntity()
             )
 
             repeat(playerCount) {
                 PlayerModel.create(
-                    PlayerEntity(user = createTestUserEntity(), game = game.entity, seat = it),
+                    entity = createPlayerEntity(seat = it, game = game.entity)
                 ).also { p -> game.addPlayer(p) }
             }
 
@@ -551,31 +529,12 @@ class GameModelTest {
     inner class Create {
         @Test
         fun `create uses one model per entity`() {
-            val entity = GameEntity(
-                creator = mockk(),
-                maxNumberOfPlayers = 4
-            )
+            val entity = createGameEntity()
 
             val model = GameModel.create(entity)
             val other = GameModel.create(entity)
 
             assertThat(model).isSameAs(other)
-        }
-    }
-
-    private fun createTestUserEntity(): UserEntity {
-        return UserEntity(username = "username", password = "password")
-    }
-
-    private fun createTestGameEntity(): GameEntity {
-        return GameEntity(
-            creator = UserEntity(
-                username = "username",
-                password = "password"
-            ),
-            maxNumberOfPlayers = 4
-        ).apply {
-            state = GameState.INITIALIZED
         }
     }
 }
