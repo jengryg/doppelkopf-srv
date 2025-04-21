@@ -3,9 +3,11 @@ package game.doppelkopf.core
 import game.doppelkopf.core.common.enums.BiddingOption
 import game.doppelkopf.core.common.enums.DeclarationOption
 import game.doppelkopf.core.common.errors.ForbiddenActionException
-import game.doppelkopf.core.model.hand.HandModel
-import game.doppelkopf.core.model.round.RoundModel
-import game.doppelkopf.core.model.user.UserModel
+import game.doppelkopf.core.model.ModelFactoryProvider
+import game.doppelkopf.core.model.hand.handler.HandBiddingModel
+import game.doppelkopf.core.model.hand.handler.HandDeclareModel
+import game.doppelkopf.core.model.round.handler.RoundBidsEvaluationModel
+import game.doppelkopf.core.model.round.handler.RoundDeclarationEvaluationModel
 import game.doppelkopf.persistence.errors.EntityNotFoundException
 import game.doppelkopf.persistence.model.hand.HandEntity
 import game.doppelkopf.persistence.model.hand.HandRepository
@@ -47,14 +49,16 @@ class HandFacade(
     fun declare(handId: UUID, declarationOption: DeclarationOption, user: UserEntity): HandEntity {
         val hand = load(handId)
 
-        HandModel.create(entity = hand).declare(
-            user = UserModel.create(entity = user),
-            declarationOption = declarationOption
+        val mfp = ModelFactoryProvider()
+
+        HandDeclareModel(hand, mfp).declare(
+            mfp.user.create(user), declarationOption
         ).also {
-            val round = RoundModel.create(entity = hand.round)
+            val evaluator = RoundDeclarationEvaluationModel(hand.round, mfp)
+
             // Try to evaluate the declarations, ignore if not ready.
-            round.canEvaluateDeclarations().onSuccess {
-                round.evaluateDeclarations()
+            evaluator.canEvaluateDeclarations().onSuccess {
+                evaluator.evaluateDeclarations()
             }
         }
 
@@ -65,14 +69,16 @@ class HandFacade(
     fun bid(handId: UUID, biddingOption: BiddingOption, user: UserEntity): HandEntity {
         val hand = load(handId)
 
-        HandModel.create(entity = hand).bid(
-            user = UserModel.create(entity = user),
-            biddingOption = biddingOption
+        val mfp = ModelFactoryProvider()
+
+        HandBiddingModel(hand, mfp).bid(
+            mfp.user.create(user), biddingOption
         ).also {
-            val round = RoundModel.create(entity = hand.round)
+            val evaluator = RoundBidsEvaluationModel(hand.round, mfp)
+
             // Try to evaluate the bids, ignore if not ready.
-            round.canEvaluateBidding().onSuccess {
-                round.evaluateBidding()
+            evaluator.canEvaluateBids().onSuccess {
+                evaluator.evaluateBids()
             }
         }
 

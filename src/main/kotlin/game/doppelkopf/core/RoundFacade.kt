@@ -1,8 +1,9 @@
 package game.doppelkopf.core
 
-import game.doppelkopf.core.model.game.GameModel
-import game.doppelkopf.core.model.round.RoundModel
-import game.doppelkopf.core.model.user.UserModel
+import game.doppelkopf.core.model.ModelFactoryProvider
+import game.doppelkopf.core.model.game.handler.GameDealModel
+import game.doppelkopf.core.model.round.handler.RoundBidsEvaluationModel
+import game.doppelkopf.core.model.round.handler.RoundDeclarationEvaluationModel
 import game.doppelkopf.persistence.errors.EntityNotFoundException
 import game.doppelkopf.persistence.model.hand.HandRepository
 import game.doppelkopf.persistence.model.round.RoundEntity
@@ -38,10 +39,12 @@ class RoundFacade(
      */
     @Transactional
     fun create(gameId: UUID, user: UserEntity): RoundEntity {
-        return GameModel.create(
-            entity = gameFacade.load(gameId)
-        ).deal(
-            user = UserModel.create(user)
+        val game = gameFacade.load(gameId)
+
+        val mfp = ModelFactoryProvider()
+
+        return GameDealModel(game, mfp).deal(
+            mfp.user.create(user)
         ).let { (round, hands) ->
             roundRepository.save(round.entity).also {
                 handRepository.saveAll(hands.toList().map { it.entity })
@@ -53,7 +56,9 @@ class RoundFacade(
     fun evaluateDeclarations(roundId: UUID): RoundEntity {
         val round = load(roundId)
 
-        RoundModel.create(entity = round).evaluateDeclarations()
+        val mfp = ModelFactoryProvider()
+
+        RoundDeclarationEvaluationModel(round, mfp).evaluateDeclarations()
 
         return round
     }
@@ -62,7 +67,9 @@ class RoundFacade(
     fun evaluateBids(roundId: UUID): RoundEntity {
         val round = load(roundId)
 
-        RoundModel.create(entity = round).evaluateBidding()
+        val mfp = ModelFactoryProvider()
+
+        RoundBidsEvaluationModel(round, mfp).evaluateBids()
 
         return round
     }

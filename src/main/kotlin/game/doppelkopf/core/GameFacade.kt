@@ -1,7 +1,7 @@
 package game.doppelkopf.core
 
-import game.doppelkopf.core.model.game.GameModel
-import game.doppelkopf.core.model.user.UserModel
+import game.doppelkopf.core.model.ModelFactoryProvider
+import game.doppelkopf.core.model.game.handler.GameStartModel
 import game.doppelkopf.persistence.errors.EntityNotFoundException
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.game.GameRepository
@@ -67,7 +67,11 @@ class GameFacade(
     fun start(id: UUID, user: UserEntity): GameEntity {
         val game = load(id)
 
-        GameModel.create(entity = game).start(user = UserModel.create(user))
+        val mfp = ModelFactoryProvider()
+
+        GameStartModel(game, mfp).start(
+            mfp.user.create(user)
+        )
 
         return game
     }

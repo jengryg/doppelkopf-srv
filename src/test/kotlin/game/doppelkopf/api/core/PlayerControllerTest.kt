@@ -5,7 +5,7 @@ import game.doppelkopf.api.core.dto.player.PlayerCreateDto
 import game.doppelkopf.api.core.dto.player.PlayerInfoDto
 import game.doppelkopf.core.common.errors.ForbiddenActionException
 import game.doppelkopf.core.common.errors.InvalidActionException
-import game.doppelkopf.core.model.game.GameModel
+import game.doppelkopf.core.model.game.handler.GameJoinModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.game.GameRepository
@@ -91,13 +91,11 @@ class PlayerControllerTest : BaseRestAssuredTest() {
                 gameRepository.save(it)
             }
 
-            mockkObject(GameModel)
-            every { GameModel.create(game) } returns mockk {
-                every { join(any(), 3) } throws InvalidActionException(
-                    "Game:Join",
-                    "Mocked Model Exception."
-                )
-            }
+            mockkConstructor(GameJoinModel::class)
+            every { anyConstructed<GameJoinModel>().join(any(), 3) } throws InvalidActionException(
+                "Game:Join",
+                "Mocked Model Exception."
+            )
 
             val (response, location) = execJoinGame<ProblemDetailResponse>(game.id, 3, 400)
 
@@ -114,13 +112,11 @@ class PlayerControllerTest : BaseRestAssuredTest() {
                 gameRepository.save(it)
             }
 
-            mockkObject(GameModel)
-            every { GameModel.create(game) } returns mockk {
-                every { join(any(), 3) } throws ForbiddenActionException(
-                    "Game:Join",
-                    "Mocked Model Exception."
-                )
-            }
+            mockkConstructor(GameJoinModel::class)
+            every { anyConstructed<GameJoinModel>().join(any(), 3) } throws ForbiddenActionException(
+                "Game:Join",
+                "Mocked Model Exception."
+            )
 
             val (response, location) = execJoinGame<ProblemDetailResponse>(game.id, 3, 403)
 
@@ -137,11 +133,9 @@ class PlayerControllerTest : BaseRestAssuredTest() {
             val game = gameRepository.save(createGameOfUser(testAdmin))
             val player = PlayerEntity(user = testUser, game = game, seat = seat)
 
-            mockkObject(GameModel)
-            every { GameModel.create(game) } returns mockk {
-                every { join(any(), seat) } returns mockk {
-                    every { entity } returns player
-                }
+            mockkConstructor(GameJoinModel::class)
+            every { anyConstructed<GameJoinModel>().join(any(), seat) } returns mockk {
+                every { entity } returns player
             }
 
             val (response, location) = execJoinGame<PlayerInfoDto>(game.id, seat, 201)

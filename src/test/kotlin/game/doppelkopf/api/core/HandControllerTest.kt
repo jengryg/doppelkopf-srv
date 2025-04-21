@@ -8,8 +8,10 @@ import game.doppelkopf.api.core.dto.hand.HandPublicInfoDto
 import game.doppelkopf.core.common.enums.*
 import game.doppelkopf.core.common.errors.ForbiddenActionException
 import game.doppelkopf.core.common.errors.InvalidActionException
-import game.doppelkopf.core.model.hand.HandModel
-import game.doppelkopf.core.model.round.RoundModel
+import game.doppelkopf.core.model.hand.handler.HandBiddingModel
+import game.doppelkopf.core.model.hand.handler.HandDeclareModel
+import game.doppelkopf.core.model.round.handler.RoundBidsEvaluationModel
+import game.doppelkopf.core.model.round.handler.RoundDeclarationEvaluationModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.game.GameRepository
@@ -155,13 +157,16 @@ class HandControllerTest : BaseRestAssuredTest() {
             val round = createPersistedRoundEntity()
             val hand = round.hands.single { it.player.user == testAdmin }
 
-            mockkObject(HandModel)
-            every { HandModel.create(hand) } returns mockk {
-                every { declare(any(), DeclarationOption.HEALTHY) } throws ForbiddenActionException(
-                    "Declaration:Create",
-                    "Mocked Model Exception."
+            mockkConstructor(HandDeclareModel::class)
+            every {
+                anyConstructed<HandDeclareModel>().declare(
+                    any(),
+                    DeclarationOption.HEALTHY
                 )
-            }
+            } throws ForbiddenActionException(
+                "Declaration:Create",
+                "Mocked Model Exception."
+            )
 
             val (response, location) = execDeclaration<ProblemDetailResponse>(
                 handId = hand.id,
@@ -181,13 +186,17 @@ class HandControllerTest : BaseRestAssuredTest() {
             val round = createPersistedRoundEntity()
             val hand = round.hands.single { it.player.user == testUser }
 
-            mockkObject(HandModel)
-            every { HandModel.create(hand) } returns mockk {
-                every { declare(any(), DeclarationOption.HEALTHY) } throws InvalidActionException(
-                    "Declaration:Create",
-                    "Mocked Model Exception."
+            mockkConstructor(HandDeclareModel::class)
+            every {
+                anyConstructed<HandDeclareModel>().declare(
+                    any(),
+                    DeclarationOption.HEALTHY
                 )
-            }
+            } throws InvalidActionException(
+                "Declaration:Create",
+                "Mocked Model Exception."
+            )
+
 
             val (response, location) = execDeclaration<ProblemDetailResponse>(
                 handId = hand.id,
@@ -207,16 +216,17 @@ class HandControllerTest : BaseRestAssuredTest() {
             val round = createPersistedRoundEntity()
             val hand = round.hands.single { it.player.user == testUser }
 
-            mockkObject(HandModel)
-            every { HandModel.create(hand) } returns mockk {
-                every { declare(any(), DeclarationOption.HEALTHY) } returns mockk {
-                    every { entity } returns hand
-                }
-            }
-            mockkObject(RoundModel)
-            every { RoundModel.create(round) } returns mockk {
-                every { canEvaluateDeclarations() } returns Result.failure(mockk())
-            }
+            mockkConstructor(HandDeclareModel::class)
+            every {
+                anyConstructed<HandDeclareModel>().declare(
+                    any(),
+                    DeclarationOption.HEALTHY
+                )
+            } just Runs
+            mockkConstructor(RoundDeclarationEvaluationModel::class)
+            every {
+                anyConstructed<RoundDeclarationEvaluationModel>().canEvaluateDeclarations()
+            } returns Result.failure(mockk())
 
             val (response, location) = execDeclaration<HandForPlayerDto>(
                 handId = hand.id,
@@ -257,13 +267,16 @@ class HandControllerTest : BaseRestAssuredTest() {
             val round = createPersistedRoundEntity()
             val hand = round.hands.single { it.player.user == testUser }
 
-            mockkObject(HandModel)
-            every { HandModel.create(hand) } returns mockk {
-                every { bid(any(), BiddingOption.MARRIAGE) } throws ForbiddenActionException(
-                    "Bid:Create",
-                    "Mocked Model Exception."
+            mockkConstructor(HandBiddingModel::class)
+            every {
+                anyConstructed<HandBiddingModel>().bid(
+                    any(),
+                    BiddingOption.MARRIAGE
                 )
-            }
+            } throws ForbiddenActionException(
+                "Bid:Create",
+                "Mocked Model Exception."
+            )
 
             val (response, location) = execBid<ProblemDetailResponse>(
                 handId = hand.id,
@@ -283,13 +296,17 @@ class HandControllerTest : BaseRestAssuredTest() {
             val round = createPersistedRoundEntity()
             val hand = round.hands.single { it.player.user == testUser }
 
-            mockkObject(HandModel)
-            every { HandModel.create(hand) } returns mockk {
-                every { bid(any(), BiddingOption.MARRIAGE) } throws InvalidActionException(
-                    "Bid:Create",
-                    "Mocked Model Exception."
+            mockkConstructor(HandBiddingModel::class)
+            every {
+                anyConstructed<HandBiddingModel>().bid(
+                    any(),
+                    BiddingOption.MARRIAGE
                 )
-            }
+            } throws InvalidActionException(
+                "Bid:Create",
+                "Mocked Model Exception."
+            )
+
 
             val (response, location) = execBid<ProblemDetailResponse>(
                 handId = hand.id,
@@ -309,16 +326,17 @@ class HandControllerTest : BaseRestAssuredTest() {
             val round = createPersistedRoundEntity()
             val hand = round.hands.single { it.player.user == testUser }
 
-            mockkObject(HandModel)
-            every { HandModel.create(hand) } returns mockk {
-                every { bid(any(), BiddingOption.MARRIAGE) } returns mockk {
-                    every { entity } returns hand
-                }
-            }
-            mockkObject(RoundModel)
-            every { RoundModel.create(round) } returns mockk {
-                every { canEvaluateBidding() } returns Result.failure(mockk())
-            }
+            mockkConstructor(HandBiddingModel::class)
+            every {
+                anyConstructed<HandBiddingModel>().bid(
+                    any(),
+                    BiddingOption.MARRIAGE
+                )
+            } just Runs
+            mockkConstructor(RoundBidsEvaluationModel::class)
+            every {
+                anyConstructed<RoundBidsEvaluationModel>().canEvaluateBids()
+            } returns Result.failure(mockk())
 
             val (response, location) = execBid<HandForPlayerDto>(
                 handId = hand.id,

@@ -7,7 +7,8 @@ import game.doppelkopf.persistence.model.IBaseEntity
  * [entity].
  */
 abstract class ModelAbstract<T : IBaseEntity>(
-    override val entity: T
+    override val entity: T,
+    protected val factoryProvider: ModelFactoryProvider
 ) : IBaseModel<T> {
     /**
      * Delegated to the underlying [entity] if [other] is also [ModelAbstract].
