@@ -55,10 +55,11 @@ abstract class BaseUnitTest {
      */
     fun createPlayerEntity(
         seat: Int = 0,
-        game: GameEntity = createGameEntity()
+        game: GameEntity = createGameEntity(),
+        user: UserEntity = createUserEntity()
     ): PlayerEntity {
         return PlayerEntity(
-            user = createUserEntity(),
+            user = user,
             game = game,
             seat = seat
         )

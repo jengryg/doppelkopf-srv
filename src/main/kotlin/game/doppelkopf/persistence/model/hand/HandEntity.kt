@@ -24,7 +24,7 @@ class HandEntity(
     val player: PlayerEntity,
 
     @Column
-    override val index : Int,
+    override val index: Int,
 
     @ElementCollection
     val cardsRemaining: MutableList<String>,

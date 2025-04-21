@@ -3,7 +3,7 @@ package game.doppelkopf.utils
 /**
  * [Quadruple] represents 4 of the given type [T]. All 4 must be the same type.
  */
-data class Quadruple<T>(
+data class Quadruple<out T>(
     val first: T,
     val second: T,
     val third: T,
