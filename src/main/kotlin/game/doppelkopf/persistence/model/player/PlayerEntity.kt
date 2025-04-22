@@ -15,13 +15,13 @@ import jakarta.persistence.*
 @Entity
 class PlayerEntity(
     @ManyToOne(
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
         optional = false,
     )
     val user: UserEntity,
 
     @ManyToOne(
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
         optional = false
     )
     val game: GameEntity,

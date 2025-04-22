@@ -14,19 +14,19 @@ import jakarta.persistence.ManyToOne
 class TurnEntity(
     @ManyToOne(
         optional = false,
-        fetch = FetchType.EAGER
+        fetch = FetchType.LAZY
     )
     val round: RoundEntity,
 
     @ManyToOne(
         optional = false,
-        fetch = FetchType.EAGER
+        fetch = FetchType.LAZY
     )
     val hand: HandEntity,
 
     @ManyToOne(
         optional = false,
-        fetch = FetchType.EAGER
+        fetch = FetchType.LAZY
     )
     val trick: TrickEntity,
 

@@ -17,7 +17,7 @@ import java.time.Instant
 class GameEntity(
     @ManyToOne(
         optional = false,
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
     )
     val creator: UserEntity,
 
@@ -35,14 +35,14 @@ class GameEntity(
     override var state: GameState = GameState.INITIALIZED
 
     @OneToMany(
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
         mappedBy = "game",
         cascade = [CascadeType.ALL],
     )
     val players = mutableSetOf<PlayerEntity>()
 
     @OneToMany(
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
         mappedBy = "game",
         cascade = [CascadeType.ALL],
     )

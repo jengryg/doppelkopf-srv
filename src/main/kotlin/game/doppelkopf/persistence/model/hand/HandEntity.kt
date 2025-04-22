@@ -14,13 +14,13 @@ import jakarta.persistence.*
 @Entity
 class HandEntity(
     @ManyToOne(
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
         optional = false
     )
     val round: RoundEntity,
 
     @ManyToOne(
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
         optional = false
     )
     val player: PlayerEntity,

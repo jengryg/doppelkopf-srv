@@ -14,7 +14,7 @@ import java.time.Instant
 class TrickEntity(
     @ManyToOne(
         optional = false,
-        fetch = FetchType.EAGER
+        fetch = FetchType.LAZY
     )
     val round: RoundEntity,
 
@@ -46,7 +46,7 @@ class TrickEntity(
     val cards: MutableList<String> = mutableListOf()
 
     @ManyToOne(
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
         optional = true
     )
     var winner: HandEntity? = null

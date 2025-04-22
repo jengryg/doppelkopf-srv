@@ -17,13 +17,13 @@ import java.time.Instant
 class RoundEntity(
     @ManyToOne(
         optional = false,
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
     )
     val game: GameEntity,
 
     @ManyToOne(
         optional = false,
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
     )
     val dealer: PlayerEntity,
 
@@ -49,14 +49,14 @@ class RoundEntity(
     override var deckMode: DeckMode = DeckMode.DIAMONDS
 
     @OneToMany(
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
         mappedBy = "round",
         cascade = [CascadeType.ALL],
     )
     val hands = mutableSetOf<HandEntity>()
 
     @OneToMany(
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
         mappedBy = "round",
         cascade = [CascadeType.ALL],
     )
