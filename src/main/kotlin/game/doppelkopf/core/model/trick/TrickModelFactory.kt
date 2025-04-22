@@ -1,0 +1,16 @@
+package game.doppelkopf.core.model.trick
+
+import game.doppelkopf.core.model.IModelFactory
+import game.doppelkopf.core.model.ModelFactoryCache
+import game.doppelkopf.core.model.ModelFactoryProvider
+import game.doppelkopf.persistence.model.trick.TrickEntity
+
+class TrickModelFactory(
+    private val factoryProvider: ModelFactoryProvider
+) : IModelFactory<TrickEntity, TrickModel> {
+    private val cache = ModelFactoryCache<TrickEntity, TrickModel>()
+
+    override fun create(entity: TrickEntity): TrickModel {
+        return cache.getOrPut(entity) { TrickModel(entity, factoryProvider) }
+    }
+}

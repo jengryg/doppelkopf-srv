@@ -4,6 +4,8 @@ import game.doppelkopf.core.model.game.GameModelFactory
 import game.doppelkopf.core.model.hand.HandModelFactory
 import game.doppelkopf.core.model.player.PlayerModelFactory
 import game.doppelkopf.core.model.round.RoundModelFactory
+import game.doppelkopf.core.model.trick.TrickModelFactory
+import game.doppelkopf.core.model.turn.TurnModelFactory
 import game.doppelkopf.core.model.user.UserModelFactory
 
 /**
@@ -16,4 +18,6 @@ class ModelFactoryProvider {
     val player = PlayerModelFactory(this)
     val round = RoundModelFactory(this)
     val hand = HandModelFactory(this)
+    val trick = TrickModelFactory(this)
+    val turn = TurnModelFactory(this)
 }

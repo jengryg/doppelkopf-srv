@@ -8,6 +8,8 @@ import game.doppelkopf.persistence.model.BaseEntity
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.hand.HandEntity
 import game.doppelkopf.persistence.model.player.PlayerEntity
+import game.doppelkopf.persistence.model.trick.TrickEntity
+import game.doppelkopf.persistence.model.turn.TurnEntity
 import jakarta.persistence.*
 import java.time.Instant
 
@@ -52,4 +54,18 @@ class RoundEntity(
         cascade = [CascadeType.ALL],
     )
     val hands = mutableSetOf<HandEntity>()
+
+    @OneToMany(
+        fetch = FetchType.EAGER,
+        mappedBy = "round",
+        cascade = [CascadeType.ALL],
+    )
+    val tricks = mutableSetOf<TrickEntity>()
+
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "round",
+        cascade = [CascadeType.ALL],
+    )
+    val turns = mutableSetOf<TurnEntity>()
 }

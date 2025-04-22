@@ -7,6 +7,8 @@ import game.doppelkopf.core.model.hand.IHandProperties
 import game.doppelkopf.persistence.model.BaseEntity
 import game.doppelkopf.persistence.model.player.PlayerEntity
 import game.doppelkopf.persistence.model.round.RoundEntity
+import game.doppelkopf.persistence.model.trick.TrickEntity
+import game.doppelkopf.persistence.model.turn.TurnEntity
 import jakarta.persistence.*
 
 @Entity
@@ -55,4 +57,18 @@ class HandEntity(
 
     @Column
     override var publicTeam: Team = Team.NA
+
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "winner",
+        cascade = [CascadeType.ALL],
+    )
+    val wonTricks = mutableSetOf<TrickEntity>()
+
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "hand",
+        cascade = [CascadeType.ALL],
+    )
+    val turns = mutableSetOf<TurnEntity>()
 }
