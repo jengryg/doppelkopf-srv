@@ -11,7 +11,7 @@ import java.util.*
  */
 class GameFailedException(
     reason: String,
-    val gameId: UUID,
+    val uuid: UUID,
     cause: Throwable? = null,
 ) : ApplicationRuntimeException(
     HttpStatus.INTERNAL_SERVER_ERROR,
@@ -28,15 +28,15 @@ class GameFailedException(
  *
  * @param T the type of the wrapped value in [Result]
  * @param reason see [GameFailedException]
- * @param gameId see [GameFailedException]
+ * @param uuid see [GameFailedException]
  * @param cause see [GameFailedException]
  *
  * @return a [Result] wrapping type [T] in [Result.failure] state with an [ForbiddenActionException]
  */
 fun <T> Result.Companion.ofGameFailed(
     reason: String,
-    gameId: UUID,
+    uuid: UUID,
     cause: Throwable? = null
 ): Result<T> {
-    return failure(GameFailedException(reason, gameId, cause))
+    return failure(GameFailedException(reason, uuid, cause))
 }

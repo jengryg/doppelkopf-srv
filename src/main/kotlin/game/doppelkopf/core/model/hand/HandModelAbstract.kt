@@ -1,5 +1,7 @@
 package game.doppelkopf.core.model.hand
 
+import game.doppelkopf.core.cards.Card
+import game.doppelkopf.core.common.errors.GameFailedException
 import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.player.IPlayerModel
@@ -15,4 +17,9 @@ abstract class HandModelAbstract(
 
     override val player: IPlayerModel
         get() = factoryProvider.player.create(entity.player)
+
+    override val cards: List<Card>
+        get() = round.deck.getCards(entity.cardsRemaining).getOrElse {
+            throw GameFailedException("Can not decode the cards of hand $this.", entity.id, it)
+        }
 }
