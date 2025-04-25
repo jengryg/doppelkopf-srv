@@ -4,6 +4,8 @@ import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
 import io.restassured.RestAssured
 import io.restassured.authentication.FormAuthConfig
+import io.restassured.filter.log.RequestLoggingFilter
+import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
@@ -38,6 +40,11 @@ class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
          */
         RestAssured.authentication =
             RestAssured.form(testUserName, testUserPassword, formAuthConfig)
+
+        if (log.isDebugEnabled) {
+            // print request and responses contents to console when debug log level is enabled
+            RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
+        }
 
         log.atDebug()
             .setMessage("RestAssured configured.")

@@ -10,6 +10,7 @@ import kotlin.reflect.full.allSupertypes
  * This package is considered to be the root package of all [BaseEntity] and [BaseEntityRepository] definitions of this
  * application.
  */
+@Suppress("unused")
 val persistenceRootPackageName: String by lazy {
     BaseEntityRepository::class.qualifiedName
         ?.split(".")
@@ -66,6 +67,7 @@ fun <T : BaseEntity> BaseEntityRepository<T>.getRepositoryKType(): KType {
  * @return the [KClass] of this repository defined in package [persistenceRootPackageName] that inherits from
  * the [BaseEntityRepository] interface
  */
+@Suppress("unused")
 fun <T : BaseEntity> BaseEntityRepository<T>.getRepositoryKClass(): KClass<*> {
     return getRepositoryKType().classifier as? KClass<*>
         ?: throw IllegalStateException("Could not determine the repository KClass.")
