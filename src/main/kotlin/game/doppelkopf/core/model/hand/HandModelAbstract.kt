@@ -1,6 +1,7 @@
 package game.doppelkopf.core.model.hand
 
 import game.doppelkopf.core.cards.Card
+import game.doppelkopf.core.common.enums.Team
 import game.doppelkopf.core.common.errors.GameFailedException
 import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.ModelFactoryProvider
@@ -22,4 +23,18 @@ abstract class HandModelAbstract(
         get() = round.deck.getCards(entity.cardsRemaining).getOrElse {
             throw GameFailedException("Can not decode the cards of hand $this.", entity.id, it)
         }
+
+    override val size: Int
+        get() = entity.cardsRemaining.size
+
+    override fun assignPrivateTeam(team: Team) {
+        internalTeam = team
+        playerTeam = team
+    }
+
+    override fun assignPublicTeam(team: Team) {
+        internalTeam = team
+        playerTeam = team
+        publicTeam = team
+    }
 }

@@ -114,7 +114,7 @@ class RoundDeclarationEvaluationModelTest : BaseUnitTest() {
 
     @ParameterizedTest
     @EnumSource(RoundState::class, names = ["WAITING_FOR_DECLARATIONS"], mode = EnumSource.Mode.EXCLUDE)
-    fun `guard yields exception when round is not in correct state state`(roundState: RoundState) {
+    fun `guard yields exception when round is not in correct state`(roundState: RoundState) {
         val mfp = ModelFactoryProvider()
 
         val round = RoundDeclarationEvaluationModel(

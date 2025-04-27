@@ -25,6 +25,11 @@ abstract class RoundModelAbstract(
             factoryProvider.user.create(it.player.user) to factoryProvider.hand.create(it)
         }
 
+    override val tricks: Map<Int, ITrickModel>
+        get() = entity.tricks.associate {
+            it.number to factoryProvider.trick.create(it)
+        }
+
     override val deck: Deck
         get() = Deck.create(deckMode)
 
