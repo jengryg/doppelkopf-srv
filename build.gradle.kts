@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.spring)
@@ -121,6 +123,9 @@ tasks.withType<ProcessResources> {
 }
 
 tasks.withType<Test> {
+    // enable dynamic agent loading during tests to hide warning
+    // agents are loaded during tests for IDE integration and analysis
+    jvmArgs = listOf("-XX:+EnableDynamicAgentLoading")
     // Use system properties to set the active spring profile to "test", when tests are executed.
     systemProperty("spring.profiles.active", "test")
 
