@@ -2,8 +2,8 @@ package game.doppelkopf.core.model.game.handler
 
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.core.common.enums.GameState
-import game.doppelkopf.core.common.errors.ForbiddenActionException
-import game.doppelkopf.core.common.errors.InvalidActionException
+import game.doppelkopf.core.errors.ForbiddenActionException
+import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.ModelFactoryProvider
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test

@@ -5,7 +5,7 @@ import game.doppelkopf.core.cards.DeckMode
 import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.core.common.enums.RoundContract
 import game.doppelkopf.core.common.enums.RoundState
-import game.doppelkopf.core.common.errors.InvalidActionException
+import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.persistence.model.hand.HandEntity
 import game.doppelkopf.persistence.model.round.RoundEntity

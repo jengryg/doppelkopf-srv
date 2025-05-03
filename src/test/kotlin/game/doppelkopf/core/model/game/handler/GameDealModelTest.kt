@@ -5,8 +5,8 @@ import game.doppelkopf.core.cards.Deck
 import game.doppelkopf.core.cards.DeckMode
 import game.doppelkopf.core.common.enums.GameState
 import game.doppelkopf.core.common.enums.Team
-import game.doppelkopf.core.common.errors.ForbiddenActionException
-import game.doppelkopf.core.common.errors.InvalidActionException
+import game.doppelkopf.core.errors.ForbiddenActionException
+import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.ModelFactoryProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

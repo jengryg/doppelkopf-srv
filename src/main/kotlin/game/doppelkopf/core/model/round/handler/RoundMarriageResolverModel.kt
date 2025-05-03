@@ -2,8 +2,8 @@ package game.doppelkopf.core.model.round.handler
 
 import game.doppelkopf.core.common.enums.RoundContract
 import game.doppelkopf.core.common.enums.Team
-import game.doppelkopf.core.common.errors.GameFailedException
-import game.doppelkopf.core.common.errors.ofInvalidAction
+import game.doppelkopf.core.errors.GameFailedException
+import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.IHandModel
 import game.doppelkopf.core.model.round.RoundModelAbstract

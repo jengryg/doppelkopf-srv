@@ -1,7 +1,7 @@
 package game.doppelkopf.core.model.game.handler
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.core.common.errors.GameFailedException
+import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.model.ModelFactoryProvider
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat

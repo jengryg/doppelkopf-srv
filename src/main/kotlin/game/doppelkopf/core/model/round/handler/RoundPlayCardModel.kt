@@ -2,9 +2,9 @@ package game.doppelkopf.core.model.round.handler
 
 import game.doppelkopf.core.cards.Card
 import game.doppelkopf.core.common.enums.RoundState
-import game.doppelkopf.core.common.errors.GameFailedException
-import game.doppelkopf.core.common.errors.ofForbiddenAction
-import game.doppelkopf.core.common.errors.ofInvalidAction
+import game.doppelkopf.core.errors.GameFailedException
+import game.doppelkopf.core.errors.ofForbiddenAction
+import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.IHandModel
 import game.doppelkopf.core.model.hand.handler.HandCardPlayModel

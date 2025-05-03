@@ -2,7 +2,7 @@ package game.doppelkopf.core.model.trick.handler
 
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.core.common.enums.TrickState
-import game.doppelkopf.core.common.errors.InvalidActionException
+import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.ModelFactoryProvider
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test

@@ -2,7 +2,7 @@ package game.doppelkopf.core.model.hand.handler
 
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.core.cards.CardDemand
-import game.doppelkopf.core.common.errors.InvalidActionException
+import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.ModelFactoryProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest

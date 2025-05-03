@@ -2,7 +2,7 @@ package game.doppelkopf.core
 
 import game.doppelkopf.core.common.enums.BiddingOption
 import game.doppelkopf.core.common.enums.DeclarationOption
-import game.doppelkopf.core.common.errors.ForbiddenActionException
+import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.handler.HandBiddingModel
 import game.doppelkopf.core.model.hand.handler.HandDeclareModel

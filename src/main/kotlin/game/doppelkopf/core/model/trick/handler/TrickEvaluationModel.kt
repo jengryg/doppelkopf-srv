@@ -1,8 +1,8 @@
 package game.doppelkopf.core.model.trick.handler
 
 import game.doppelkopf.core.common.enums.TrickState
-import game.doppelkopf.core.common.errors.GameFailedException
-import game.doppelkopf.core.common.errors.ofInvalidAction
+import game.doppelkopf.core.errors.GameFailedException
+import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.trick.TrickModelAbstract
 import game.doppelkopf.persistence.model.trick.TrickEntity

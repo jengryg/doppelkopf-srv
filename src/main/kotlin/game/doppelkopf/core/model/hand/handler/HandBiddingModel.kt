@@ -3,8 +3,8 @@ package game.doppelkopf.core.model.hand.handler
 import game.doppelkopf.core.common.enums.Bidding
 import game.doppelkopf.core.common.enums.BiddingOption
 import game.doppelkopf.core.common.enums.Declaration
-import game.doppelkopf.core.common.errors.ofForbiddenAction
-import game.doppelkopf.core.common.errors.ofInvalidAction
+import game.doppelkopf.core.errors.ofForbiddenAction
+import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.HandModelAbstract
 import game.doppelkopf.core.model.user.IUserModel

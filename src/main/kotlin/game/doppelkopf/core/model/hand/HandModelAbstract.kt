@@ -2,7 +2,7 @@ package game.doppelkopf.core.model.hand
 
 import game.doppelkopf.core.cards.Card
 import game.doppelkopf.core.common.enums.Team
-import game.doppelkopf.core.common.errors.GameFailedException
+import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.player.IPlayerModel

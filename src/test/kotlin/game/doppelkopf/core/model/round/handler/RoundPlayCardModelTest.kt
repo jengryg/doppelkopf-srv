@@ -4,8 +4,8 @@ import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.core.cards.CardDemand
 import game.doppelkopf.core.cards.InvalidCardException
 import game.doppelkopf.core.common.enums.RoundState
-import game.doppelkopf.core.common.errors.ForbiddenActionException
-import game.doppelkopf.core.common.errors.InvalidActionException
+import game.doppelkopf.core.errors.ForbiddenActionException
+import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.handler.HandCardPlayModel
 import game.doppelkopf.core.model.trick.handler.TrickCardPlayModel

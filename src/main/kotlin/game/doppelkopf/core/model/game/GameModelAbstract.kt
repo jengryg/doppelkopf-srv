@@ -1,6 +1,6 @@
 package game.doppelkopf.core.model.game
 
-import game.doppelkopf.core.common.errors.ofGameFailed
+import game.doppelkopf.core.errors.ofGameFailed
 import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.player.IPlayerModel

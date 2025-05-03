@@ -1,8 +1,8 @@
 package game.doppelkopf.core.model.game.handler
 
 import game.doppelkopf.core.common.enums.GameState
-import game.doppelkopf.core.common.errors.ofForbiddenAction
-import game.doppelkopf.core.common.errors.ofInvalidAction
+import game.doppelkopf.core.errors.ofForbiddenAction
+import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.game.GameModelAbstract
 import game.doppelkopf.core.model.user.IUserModel

@@ -5,8 +5,8 @@ import game.doppelkopf.core.cards.Deck
 import game.doppelkopf.core.cards.DeckMode
 import game.doppelkopf.core.common.enums.GameState
 import game.doppelkopf.core.common.enums.Team
-import game.doppelkopf.core.common.errors.ofForbiddenAction
-import game.doppelkopf.core.common.errors.ofInvalidAction
+import game.doppelkopf.core.errors.ofForbiddenAction
+import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.game.GameModelAbstract
 import game.doppelkopf.core.model.hand.IHandModel

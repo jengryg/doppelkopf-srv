@@ -6,8 +6,8 @@ import game.doppelkopf.api.core.dto.hand.DeclarationCreateDto
 import game.doppelkopf.api.core.dto.hand.HandForPlayerDto
 import game.doppelkopf.api.core.dto.hand.HandPublicInfoDto
 import game.doppelkopf.core.common.enums.*
-import game.doppelkopf.core.common.errors.ForbiddenActionException
-import game.doppelkopf.core.common.errors.InvalidActionException
+import game.doppelkopf.core.errors.ForbiddenActionException
+import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.hand.handler.HandBiddingModel
 import game.doppelkopf.core.model.hand.handler.HandDeclareModel
 import game.doppelkopf.core.model.round.handler.RoundBidsEvaluationModel

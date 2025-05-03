@@ -5,8 +5,8 @@ import game.doppelkopf.api.core.dto.round.RoundInfoDto
 import game.doppelkopf.api.core.dto.round.RoundOperationDto
 import game.doppelkopf.core.common.enums.RoundOperation
 import game.doppelkopf.core.common.enums.RoundState
-import game.doppelkopf.core.common.errors.ForbiddenActionException
-import game.doppelkopf.core.common.errors.InvalidActionException
+import game.doppelkopf.core.errors.ForbiddenActionException
+import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.game.handler.GameDealModel
 import game.doppelkopf.core.model.round.handler.RoundBidsEvaluationModel
 import game.doppelkopf.core.model.round.handler.RoundDeclarationEvaluationModel

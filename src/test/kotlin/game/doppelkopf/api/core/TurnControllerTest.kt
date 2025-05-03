@@ -4,9 +4,9 @@ import game.doppelkopf.BaseRestAssuredTest
 import game.doppelkopf.api.core.dto.turn.CreateTurnDto
 import game.doppelkopf.api.core.dto.turn.TurnInfoDto
 import game.doppelkopf.core.cards.CardDemand
-import game.doppelkopf.core.common.errors.ForbiddenActionException
-import game.doppelkopf.core.common.errors.GameFailedException
-import game.doppelkopf.core.common.errors.InvalidActionException
+import game.doppelkopf.core.errors.ForbiddenActionException
+import game.doppelkopf.core.errors.GameFailedException
+import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.round.handler.RoundPlayCardModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.model.game.GameEntity

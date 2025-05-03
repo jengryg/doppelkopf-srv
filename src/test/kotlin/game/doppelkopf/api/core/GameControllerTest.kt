@@ -5,8 +5,8 @@ import game.doppelkopf.api.core.dto.game.GameCreateDto
 import game.doppelkopf.api.core.dto.game.GameInfoDto
 import game.doppelkopf.api.core.dto.game.GameOperationDto
 import game.doppelkopf.core.common.enums.GameOperation
-import game.doppelkopf.core.common.errors.ForbiddenActionException
-import game.doppelkopf.core.common.errors.InvalidActionException
+import game.doppelkopf.core.errors.ForbiddenActionException
+import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.game.handler.GameStartModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.model.game.GameEntity
