@@ -65,8 +65,8 @@ class HttpControllerAdvisor : ResponseEntityExceptionHandler(), Logging {
     ): ResponseEntity<Any>? {
         ex.body.setProperty("errors", ex.bindingResult.allErrors)
         // Include the binding result errors in the ProblemDetail response that will be created by the super method.
-        // Note: For real production usage, you should implement a custom converter to filter what information is
-        // exposed here.
+        // TODO: For real production usage, you should implement a custom converter to filter what information is
+        //  exposed here.
         return super.handleMethodArgumentNotValid(ex, headers, status, request)
     }
 }
