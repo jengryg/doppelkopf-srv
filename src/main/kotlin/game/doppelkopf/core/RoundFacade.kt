@@ -4,6 +4,7 @@ import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.game.handler.GameDealModel
 import game.doppelkopf.core.model.round.handler.RoundBidsEvaluationModel
 import game.doppelkopf.core.model.round.handler.RoundDeclarationEvaluationModel
+import game.doppelkopf.core.model.round.handler.RoundMarriageResolverModel
 import game.doppelkopf.persistence.errors.EntityNotFoundException
 import game.doppelkopf.persistence.model.hand.HandRepository
 import game.doppelkopf.persistence.model.round.RoundEntity
@@ -70,6 +71,17 @@ class RoundFacade(
         val mfp = ModelFactoryProvider()
 
         RoundBidsEvaluationModel(round, mfp).evaluateBids()
+
+        return round
+    }
+
+    @Transactional
+    fun resolveMarriage(roundId: UUID): RoundEntity {
+        val round = load(roundId)
+
+        val mfp = ModelFactoryProvider()
+
+        RoundMarriageResolverModel(round, mfp).resolveMarriage()
 
         return round
     }

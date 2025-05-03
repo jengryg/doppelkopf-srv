@@ -9,5 +9,10 @@ enum class RoundOperation {
     /**
      * This operation can be used to trigger the evaluation of the biddings.
      */
-    BID_EVALUATION
+    BID_EVALUATION,
+
+    /**
+     * This operation can be used to trigger the marriage resolver.
+     */
+    MARRIAGE_RESOLVER
 }

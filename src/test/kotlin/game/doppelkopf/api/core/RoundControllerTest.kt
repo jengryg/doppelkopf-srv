@@ -10,6 +10,7 @@ import game.doppelkopf.core.common.errors.InvalidActionException
 import game.doppelkopf.core.model.game.handler.GameDealModel
 import game.doppelkopf.core.model.round.handler.RoundBidsEvaluationModel
 import game.doppelkopf.core.model.round.handler.RoundDeclarationEvaluationModel
+import game.doppelkopf.core.model.round.handler.RoundMarriageResolverModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.game.GameRepository
@@ -282,6 +283,42 @@ class RoundControllerTest : BaseRestAssuredTest() {
                 assertThat(response.instance.toString()).isEqualTo("/v1/rounds/${round.id}")
                 assertThat(response.title).isEqualTo("Invalid action")
                 assertThat(response.detail).isEqualTo("The action 'Bidding:Process' can not be performed: Mocked Model Exception.")
+            }
+        }
+    }
+
+    @Nested
+    inner class ResolveMarriage {
+        @Test
+        fun `resolve marriage returns 200 when processor successful`() {
+            val game = createGameEntity(testUser).let { gameRepository.save(it) }
+            val round = createRoundEntity(game).let { roundRepository.save(it) }
+
+            mockkConstructor(RoundMarriageResolverModel::class)
+            every { anyConstructed<RoundMarriageResolverModel>().resolveMarriage() } just Runs
+
+            val response = execPatchRound<RoundInfoDto>(round.id, RoundOperation.MARRIAGE_RESOLVER, 200)
+
+            assertThat(response.id).isEqualTo(round.id)
+        }
+
+        @Test
+        fun `resolve marriage returns 400 when invalid action exception`() {
+            val game = createGameEntity(testUser).let { gameRepository.save(it) }
+            val round = createRoundEntity(game).let { roundRepository.save(it) }
+
+            mockkConstructor(RoundMarriageResolverModel::class)
+            every { anyConstructed<RoundMarriageResolverModel>().resolveMarriage() } throws InvalidActionException(
+                "Marriage:Resolve",
+                "Mocked Model Exception."
+            )
+
+            val response = execPatchRound<ProblemDetailResponse>(round.id, RoundOperation.MARRIAGE_RESOLVER, 400)
+
+            response.also {
+                assertThat(response.instance.toString()).isEqualTo("/v1/rounds/${round.id}")
+                assertThat(response.title).isEqualTo("Invalid action")
+                assertThat(response.detail).isEqualTo("The action 'Marriage:Resolve' can not be performed: Mocked Model Exception.")
             }
         }
     }

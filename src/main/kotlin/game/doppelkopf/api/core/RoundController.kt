@@ -69,11 +69,11 @@ class RoundController(
     fun patch(
         @PathVariable id: UUID,
         @RequestBody @Valid operation: RoundOperationDto,
-        @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<RoundInfoDto> {
         return when (operation.op) {
             RoundOperation.DECLARE_EVALUATION -> ResponseEntity.ok(RoundInfoDto(roundFacade.evaluateDeclarations(id)))
             RoundOperation.BID_EVALUATION -> ResponseEntity.ok(RoundInfoDto(roundFacade.evaluateBids(id)))
+            RoundOperation.MARRIAGE_RESOLVER -> ResponseEntity.ok(RoundInfoDto(roundFacade.resolveMarriage(id)))
         }
     }
 }

@@ -1,13 +1,13 @@
 package game.doppelkopf.api.core
 
 import game.doppelkopf.api.core.dto.trick.TrickInfoDto
+import game.doppelkopf.api.core.dto.trick.TrickOperationDto
 import game.doppelkopf.core.TrickFacade
+import game.doppelkopf.core.common.enums.TrickOperation
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
@@ -37,5 +37,19 @@ class TrickController(
         return ResponseEntity.ok(
             TrickInfoDto(trickFacade.load(trickId))
         )
+    }
+
+    @Operation(
+        summary = "Perform operation on the trick.",
+        description = "Performs operations on the trick with specified id."
+    )
+    @PatchMapping("/tricks/{id}")
+    fun patch(
+        @PathVariable id: UUID,
+        @RequestBody @Valid operation: TrickOperationDto
+    ): ResponseEntity<TrickInfoDto> {
+        return when (operation.op) {
+            TrickOperation.TRICK_EVALUATION -> ResponseEntity.ok(TrickInfoDto(trickFacade.evaluateTrick(id)))
+        }
     }
 }

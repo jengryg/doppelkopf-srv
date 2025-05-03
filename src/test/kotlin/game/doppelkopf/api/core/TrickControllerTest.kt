@@ -2,7 +2,11 @@ package game.doppelkopf.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
 import game.doppelkopf.api.core.dto.trick.TrickInfoDto
+import game.doppelkopf.api.core.dto.trick.TrickOperationDto
 import game.doppelkopf.core.cards.CardDemand
+import game.doppelkopf.core.common.enums.TrickOperation
+import game.doppelkopf.core.common.errors.InvalidActionException
+import game.doppelkopf.core.model.trick.handler.TrickEvaluationModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.game.GameRepository
@@ -14,15 +18,14 @@ import game.doppelkopf.persistence.model.round.RoundEntity
 import game.doppelkopf.persistence.model.round.RoundRepository
 import game.doppelkopf.persistence.model.trick.TrickEntity
 import game.doppelkopf.persistence.model.trick.TrickRepository
-import game.doppelkopf.persistence.model.turn.TurnRepository
-import io.mockk.clearAllMocks
-import io.mockk.unmockkAll
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import java.util.*
 
 class TrickControllerTest : BaseRestAssuredTest() {
     @Autowired
@@ -39,9 +42,6 @@ class TrickControllerTest : BaseRestAssuredTest() {
 
     @Autowired
     private lateinit var handRepository: HandRepository
-
-    @Autowired
-    private lateinit var turnRepository: TurnRepository
 
     @BeforeEach
     @AfterEach
@@ -163,39 +163,105 @@ class TrickControllerTest : BaseRestAssuredTest() {
             assertThat(response.leadingCardIndex).isEqualTo(trick.leadingCardIndex)
             assertThat(response.winner).isEqualTo(null)
         }
+    }
 
-        private fun createPersistedRoundEntity(): RoundEntity {
-            val game = GameEntity(
-                creator = testAdmin,
-                maxNumberOfPlayers = 4
-            ).also { game ->
-                game.players.add(PlayerEntity(user = testAdmin, game = game, seat = 0))
-                game.players.add(PlayerEntity(user = testUser, game = game, seat = 1))
+    @Nested
+    inner class EvalTrick {
+        @Test
+        fun `eval trick returns 200 when processor successful`() {
+            val round = createPersistedRoundEntity()
 
-                testPlayers.filter { it != testAdmin && it != testUser }.take(2).mapIndexed { index, userEntity ->
-                    game.players.add(PlayerEntity(user = userEntity, game = game, seat = index + 2))
-                }
-                gameRepository.save(game)
-                playerRepository.saveAll(game.players)
+            val trick = TrickEntity(
+                round = round,
+                number = 1,
+                openIndex = 1,
+                demand = CardDemand.CLUBS
+            ).let { trickRepository.save(it) }.also {
+                round.tricks.add(it)
             }
-            val round = RoundEntity(game = game, dealer = game.players.first(), number = 1).apply {
-                game.players.forEachIndexed { index, it ->
-                    hands.add(
-                        HandEntity(
-                            round = this,
-                            player = it,
-                            index = index,
-                            cardsRemaining = mutableListOf(),
-                            hasMarriage = false
-                        )
-                    )
-                }
-            }.let { roundRepository.save(it) }
 
-            handRepository.saveAll(round.hands)
-            trickRepository.saveAll(round.tricks)
+            mockkConstructor(TrickEvaluationModel::class)
+            every { anyConstructed<TrickEvaluationModel>().evaluateTrick() } just Runs
 
-            return round
+            val response = execPatchTrick<TrickInfoDto>(trick.id, TrickOperation.TRICK_EVALUATION, 200)
+
+            assertThat(response.id).isEqualTo(trick.id)
         }
+
+        @Test
+        fun `eval trick returns 400 when invalid action exception`() {
+            val round = createPersistedRoundEntity()
+
+            val trick = TrickEntity(
+                round = round,
+                number = 1,
+                openIndex = 1,
+                demand = CardDemand.CLUBS
+            ).let { trickRepository.save(it) }.also {
+                round.tricks.add(it)
+            }
+
+            mockkConstructor(TrickEvaluationModel::class)
+            every { anyConstructed<TrickEvaluationModel>().evaluateTrick() } throws InvalidActionException(
+                "Trick:Evaluate",
+                "Mocked Model Exception."
+            )
+
+            val response = execPatchTrick<ProblemDetailResponse>(trick.id, TrickOperation.TRICK_EVALUATION, 400)
+
+            response.also {
+                assertThat(response.instance.toString()).isEqualTo("/v1/tricks/${trick.id}")
+                assertThat(response.title).isEqualTo("Invalid action")
+                assertThat(response.detail).isEqualTo("The action 'Trick:Evaluate' can not be performed: Mocked Model Exception.")
+            }
+        }
+    }
+
+    private fun createPersistedRoundEntity(): RoundEntity {
+        val game = GameEntity(
+            creator = testAdmin,
+            maxNumberOfPlayers = 4
+        ).also { game ->
+            game.players.add(PlayerEntity(user = testAdmin, game = game, seat = 0))
+            game.players.add(PlayerEntity(user = testUser, game = game, seat = 1))
+
+            testPlayers.filter { it != testAdmin && it != testUser }.take(2).mapIndexed { index, userEntity ->
+                game.players.add(PlayerEntity(user = userEntity, game = game, seat = index + 2))
+            }
+            gameRepository.save(game)
+            playerRepository.saveAll(game.players)
+        }
+        val round = RoundEntity(game = game, dealer = game.players.first(), number = 1).apply {
+            game.players.forEachIndexed { index, it ->
+                hands.add(
+                    HandEntity(
+                        round = this,
+                        player = it,
+                        index = index,
+                        cardsRemaining = mutableListOf(),
+                        hasMarriage = false
+                    )
+                )
+            }
+        }.let { roundRepository.save(it) }
+
+        handRepository.saveAll(round.hands)
+        trickRepository.saveAll(round.tricks)
+
+        return round
+    }
+
+    private final inline fun <reified T> execPatchTrick(
+        trickId: UUID,
+        operation: TrickOperation,
+        expectedStatus: Int
+    ): T {
+        return patchResource<TrickOperationDto, T>(
+            path = "/v1/tricks/$trickId",
+            body = TrickOperationDto(
+                op = operation,
+            ),
+            expectedStatus = expectedStatus
+        )
     }
 }

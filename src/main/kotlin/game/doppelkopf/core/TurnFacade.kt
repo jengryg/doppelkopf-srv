@@ -1,7 +1,9 @@
 package game.doppelkopf.core
 
 import game.doppelkopf.core.model.ModelFactoryProvider
+import game.doppelkopf.core.model.round.handler.RoundMarriageResolverModel
 import game.doppelkopf.core.model.round.handler.RoundPlayCardModel
+import game.doppelkopf.core.model.trick.handler.TrickEvaluationModel
 import game.doppelkopf.persistence.errors.EntityNotFoundException
 import game.doppelkopf.persistence.model.trick.TrickRepository
 import game.doppelkopf.persistence.model.turn.TurnEntity
@@ -41,8 +43,21 @@ class TurnFacade(
             )
         }
 
-        // TODO: Determine winner of trick when full, trigger marriage resolving.
-        // TODO: Determine result of round when last trick played.
+        TrickEvaluationModel(entity = trickEntity, factoryProvider = mfp).also { trickEval ->
+            trickEval.canEvaluateTrick().onSuccess {
+                // Evaluate the trick if we can.
+                trickEval.evaluateTrick()
+
+                // A finished trick may trigger the marriage resolver:
+                RoundMarriageResolverModel(entity = round, factoryProvider = mfp).also { marriageResolver ->
+                    marriageResolver.canResolveMarriage().onSuccess {
+                        // Resolve the marriage if possible.
+                        marriageResolver.resolveMarriage()
+                    }
+                }
+            }
+        }
+
         trickRepository.save(trickEntity)
 
         return turnRepository.save(turnEntity)
