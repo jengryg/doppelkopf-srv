@@ -2,7 +2,7 @@ package game.doppelkopf.core.model.user
 
 import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.ModelFactoryProvider
-import game.doppelkopf.persistence.model.user.UserEntity
+import game.doppelkopf.adapter.persistence.model.user.UserEntity
 
 abstract class UserModelAbstract(
     entity: UserEntity,

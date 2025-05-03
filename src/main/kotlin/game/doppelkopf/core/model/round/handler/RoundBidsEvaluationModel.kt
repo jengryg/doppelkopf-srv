@@ -7,7 +7,7 @@ import game.doppelkopf.core.errors.ofForbiddenAction
 import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.round.RoundModelAbstract
-import game.doppelkopf.persistence.model.round.RoundEntity
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import org.springframework.lang.CheckReturnValue
 
 class RoundBidsEvaluationModel(

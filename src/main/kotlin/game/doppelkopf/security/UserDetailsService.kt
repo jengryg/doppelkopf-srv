@@ -2,7 +2,7 @@ package game.doppelkopf.security
 
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
-import game.doppelkopf.persistence.model.user.UserRepository
+import game.doppelkopf.adapter.persistence.model.user.UserRepository
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.security.core.userdetails.UserDetails as IUserDetails

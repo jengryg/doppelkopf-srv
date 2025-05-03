@@ -5,7 +5,7 @@ import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.trick.TrickModelAbstract
-import game.doppelkopf.persistence.model.trick.TrickEntity
+import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import org.slf4j.helpers.CheckReturnValue
 
 class TrickEvaluationModel(

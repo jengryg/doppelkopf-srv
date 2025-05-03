@@ -1,12 +1,12 @@
 package game.doppelkopf
 
+import game.doppelkopf.adapter.persistence.IBaseEntityRepository
+import game.doppelkopf.adapter.persistence.getEntityKClass
+import game.doppelkopf.adapter.persistence.getRepositoryKClass
+import game.doppelkopf.adapter.persistence.model.user.UserEntity
+import game.doppelkopf.adapter.persistence.model.user.UserRepository
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
-import game.doppelkopf.persistence.IBaseEntityRepository
-import game.doppelkopf.persistence.getEntityKClass
-import game.doppelkopf.persistence.getRepositoryKClass
-import game.doppelkopf.persistence.model.user.UserEntity
-import game.doppelkopf.persistence.model.user.UserRepository
 import game.doppelkopf.security.Authority
 import io.mockk.clearAllMocks
 import io.mockk.unmockkAll

@@ -7,8 +7,8 @@ import game.doppelkopf.core.common.enums.RoundContract
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.ModelFactoryProvider
-import game.doppelkopf.persistence.model.hand.HandEntity
-import game.doppelkopf.persistence.model.round.RoundEntity
+import game.doppelkopf.adapter.persistence.model.hand.HandEntity
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

@@ -8,10 +8,10 @@ import game.doppelkopf.core.model.hand.handler.HandBiddingModel
 import game.doppelkopf.core.model.hand.handler.HandDeclareModel
 import game.doppelkopf.core.model.round.handler.RoundBidsEvaluationModel
 import game.doppelkopf.core.model.round.handler.RoundDeclarationEvaluationModel
-import game.doppelkopf.persistence.errors.EntityNotFoundException
-import game.doppelkopf.persistence.model.hand.HandEntity
-import game.doppelkopf.persistence.model.hand.HandRepository
-import game.doppelkopf.persistence.model.user.UserEntity
+import game.doppelkopf.adapter.persistence.errors.EntityNotFoundException
+import game.doppelkopf.adapter.persistence.model.hand.HandEntity
+import game.doppelkopf.adapter.persistence.model.hand.HandRepository
+import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service

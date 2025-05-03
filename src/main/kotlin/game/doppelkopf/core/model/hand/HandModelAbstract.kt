@@ -7,7 +7,7 @@ import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.player.IPlayerModel
 import game.doppelkopf.core.model.round.IRoundModel
-import game.doppelkopf.persistence.model.hand.HandEntity
+import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 
 abstract class HandModelAbstract(
     entity: HandEntity,

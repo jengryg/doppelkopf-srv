@@ -1,6 +1,6 @@
 package game.doppelkopf.security
 
-import game.doppelkopf.persistence.model.user.UserEntity
+import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails as IUserDetails

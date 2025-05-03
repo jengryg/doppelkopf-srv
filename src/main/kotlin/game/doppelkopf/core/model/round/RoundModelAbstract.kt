@@ -8,7 +8,7 @@ import game.doppelkopf.core.model.hand.IHandModel
 import game.doppelkopf.core.model.player.IPlayerModel
 import game.doppelkopf.core.model.trick.ITrickModel
 import game.doppelkopf.core.model.user.IUserModel
-import game.doppelkopf.persistence.model.round.RoundEntity
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 
 abstract class RoundModelAbstract(
     entity: RoundEntity,

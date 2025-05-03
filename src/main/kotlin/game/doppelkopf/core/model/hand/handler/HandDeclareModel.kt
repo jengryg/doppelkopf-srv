@@ -7,7 +7,7 @@ import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.HandModelAbstract
 import game.doppelkopf.core.model.user.IUserModel
-import game.doppelkopf.persistence.model.hand.HandEntity
+import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import org.springframework.lang.CheckReturnValue
 
 class HandDeclareModel(

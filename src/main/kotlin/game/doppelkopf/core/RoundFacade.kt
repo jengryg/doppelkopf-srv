@@ -5,11 +5,11 @@ import game.doppelkopf.core.model.game.handler.GameDealModel
 import game.doppelkopf.core.model.round.handler.RoundBidsEvaluationModel
 import game.doppelkopf.core.model.round.handler.RoundDeclarationEvaluationModel
 import game.doppelkopf.core.model.round.handler.RoundMarriageResolverModel
-import game.doppelkopf.persistence.errors.EntityNotFoundException
-import game.doppelkopf.persistence.model.hand.HandRepository
-import game.doppelkopf.persistence.model.round.RoundEntity
-import game.doppelkopf.persistence.model.round.RoundRepository
-import game.doppelkopf.persistence.model.user.UserEntity
+import game.doppelkopf.adapter.persistence.errors.EntityNotFoundException
+import game.doppelkopf.adapter.persistence.model.hand.HandRepository
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
+import game.doppelkopf.adapter.persistence.model.round.RoundRepository
+import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service

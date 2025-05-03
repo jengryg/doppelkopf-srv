@@ -2,9 +2,9 @@ package game.doppelkopf.core
 
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.trick.handler.TrickEvaluationModel
-import game.doppelkopf.persistence.errors.EntityNotFoundException
-import game.doppelkopf.persistence.model.trick.TrickEntity
-import game.doppelkopf.persistence.model.trick.TrickRepository
+import game.doppelkopf.adapter.persistence.errors.EntityNotFoundException
+import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
+import game.doppelkopf.adapter.persistence.model.trick.TrickRepository
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service

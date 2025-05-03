@@ -4,7 +4,7 @@ import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.game.GameModelAbstract
 import game.doppelkopf.core.model.player.IPlayerModel
-import game.doppelkopf.persistence.model.game.GameEntity
+import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.utils.Quadruple
 
 class SeatingOrderResolver(

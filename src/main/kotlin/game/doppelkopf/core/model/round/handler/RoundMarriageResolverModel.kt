@@ -8,7 +8,7 @@ import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.IHandModel
 import game.doppelkopf.core.model.round.RoundModelAbstract
 import game.doppelkopf.core.model.trick.ITrickModel
-import game.doppelkopf.persistence.model.round.RoundEntity
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import org.slf4j.helpers.CheckReturnValue
 
 class RoundMarriageResolverModel(

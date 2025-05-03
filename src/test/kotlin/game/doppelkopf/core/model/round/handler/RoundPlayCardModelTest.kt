@@ -9,7 +9,7 @@ import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.handler.HandCardPlayModel
 import game.doppelkopf.core.model.trick.handler.TrickCardPlayModel
-import game.doppelkopf.persistence.model.round.RoundEntity
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

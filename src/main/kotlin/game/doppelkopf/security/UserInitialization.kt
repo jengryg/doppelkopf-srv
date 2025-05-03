@@ -3,8 +3,8 @@ package game.doppelkopf.security
 import game.doppelkopf.CommonConfig
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
-import game.doppelkopf.persistence.model.user.UserEntity
-import game.doppelkopf.persistence.model.user.UserRepository
+import game.doppelkopf.adapter.persistence.model.user.UserEntity
+import game.doppelkopf.adapter.persistence.model.user.UserRepository
 import jakarta.transaction.Transactional
 import org.bouncycastle.util.encoders.Base64
 import org.springframework.boot.context.event.ApplicationReadyEvent

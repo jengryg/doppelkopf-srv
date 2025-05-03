@@ -7,7 +7,7 @@ import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.IHandModel
 import game.doppelkopf.core.model.round.IRoundModel
-import game.doppelkopf.persistence.model.trick.TrickEntity
+import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 
 abstract class TrickModelAbstract(
     entity: TrickEntity,

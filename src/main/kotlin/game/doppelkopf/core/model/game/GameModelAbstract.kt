@@ -6,7 +6,7 @@ import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.player.IPlayerModel
 import game.doppelkopf.core.model.round.IRoundModel
 import game.doppelkopf.core.model.user.IUserModel
-import game.doppelkopf.persistence.model.game.GameEntity
+import game.doppelkopf.adapter.persistence.model.game.GameEntity
 
 abstract class GameModelAbstract(
     entity: GameEntity,

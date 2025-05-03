@@ -6,7 +6,7 @@ import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.game.GameModelAbstract
 import game.doppelkopf.core.model.user.IUserModel
-import game.doppelkopf.persistence.model.game.GameEntity
+import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import org.springframework.lang.CheckReturnValue
 import java.time.Instant
 

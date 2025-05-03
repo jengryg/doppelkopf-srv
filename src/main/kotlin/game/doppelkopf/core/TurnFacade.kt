@@ -4,11 +4,11 @@ import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.round.handler.RoundMarriageResolverModel
 import game.doppelkopf.core.model.round.handler.RoundPlayCardModel
 import game.doppelkopf.core.model.trick.handler.TrickEvaluationModel
-import game.doppelkopf.persistence.errors.EntityNotFoundException
-import game.doppelkopf.persistence.model.trick.TrickRepository
-import game.doppelkopf.persistence.model.turn.TurnEntity
-import game.doppelkopf.persistence.model.turn.TurnRepository
-import game.doppelkopf.persistence.model.user.UserEntity
+import game.doppelkopf.adapter.persistence.errors.EntityNotFoundException
+import game.doppelkopf.adapter.persistence.model.trick.TrickRepository
+import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
+import game.doppelkopf.adapter.persistence.model.turn.TurnRepository
+import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.*

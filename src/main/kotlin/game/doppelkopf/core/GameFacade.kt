@@ -2,11 +2,11 @@ package game.doppelkopf.core
 
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.game.handler.GameStartModel
-import game.doppelkopf.persistence.errors.EntityNotFoundException
-import game.doppelkopf.persistence.model.game.GameEntity
-import game.doppelkopf.persistence.model.game.GameRepository
-import game.doppelkopf.persistence.model.player.PlayerEntity
-import game.doppelkopf.persistence.model.user.UserEntity
+import game.doppelkopf.adapter.persistence.errors.EntityNotFoundException
+import game.doppelkopf.adapter.persistence.model.game.GameEntity
+import game.doppelkopf.adapter.persistence.model.game.GameRepository
+import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
+import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
