@@ -22,14 +22,17 @@ import java.util.*
  *
  * Provides [RestAssured] with basic auth config using the [testUser] by default.
  */
-class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
+abstract class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
     private val log = logger()
 
     /**
      * The [FormAuthConfig] for the login api at `/v1/auth/login`.
      */
-    protected val formAuthConfig = FormAuthConfig("/v1/auth/login", "username", "password")
-        .withLoggingEnabled()!!
+    protected val formAuthConfig = FormAuthConfig(
+        "/v1/auth/login",
+        "username",
+        "password"
+    ).withLoggingEnabled()!!
 
     @BeforeAll
     fun `setup containerized rest assured test`() {
