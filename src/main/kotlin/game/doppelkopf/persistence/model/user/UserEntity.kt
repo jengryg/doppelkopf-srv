@@ -2,7 +2,7 @@ package game.doppelkopf.persistence.model.user
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import game.doppelkopf.core.model.user.IUserProperties
-import game.doppelkopf.persistence.model.BaseEntity
+import game.doppelkopf.persistence.BaseEntity
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.player.PlayerEntity
 import game.doppelkopf.security.Authority

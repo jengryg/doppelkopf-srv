@@ -1,7 +1,7 @@
 package game.doppelkopf.core.model
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.persistence.model.BaseEntity
+import game.doppelkopf.persistence.BaseEntity
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

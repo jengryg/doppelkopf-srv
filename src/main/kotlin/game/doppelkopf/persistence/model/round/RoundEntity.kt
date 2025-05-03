@@ -4,7 +4,7 @@ import game.doppelkopf.core.cards.DeckMode
 import game.doppelkopf.core.common.enums.RoundContract
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.model.round.IRoundProperties
-import game.doppelkopf.persistence.model.BaseEntity
+import game.doppelkopf.persistence.BaseEntity
 import game.doppelkopf.persistence.model.game.GameEntity
 import game.doppelkopf.persistence.model.hand.HandEntity
 import game.doppelkopf.persistence.model.player.PlayerEntity

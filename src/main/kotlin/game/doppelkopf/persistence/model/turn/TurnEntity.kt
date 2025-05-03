@@ -1,7 +1,7 @@
 package game.doppelkopf.persistence.model.turn
 
 import game.doppelkopf.core.model.turn.ITurnProperties
-import game.doppelkopf.persistence.model.BaseEntity
+import game.doppelkopf.persistence.BaseEntity
 import game.doppelkopf.persistence.model.hand.HandEntity
 import game.doppelkopf.persistence.model.round.RoundEntity
 import game.doppelkopf.persistence.model.trick.TrickEntity

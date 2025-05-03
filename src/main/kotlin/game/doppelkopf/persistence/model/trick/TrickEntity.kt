@@ -3,7 +3,7 @@ package game.doppelkopf.persistence.model.trick
 import game.doppelkopf.core.cards.CardDemand
 import game.doppelkopf.core.common.enums.TrickState
 import game.doppelkopf.core.model.trick.ITrickProperties
-import game.doppelkopf.persistence.model.BaseEntity
+import game.doppelkopf.persistence.BaseEntity
 import game.doppelkopf.persistence.model.hand.HandEntity
 import game.doppelkopf.persistence.model.round.RoundEntity
 import game.doppelkopf.persistence.model.turn.TurnEntity

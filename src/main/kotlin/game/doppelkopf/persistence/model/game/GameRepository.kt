@@ -1,7 +1,7 @@
 package game.doppelkopf.persistence.model.game
 
-import game.doppelkopf.persistence.BaseEntityRepository
+import game.doppelkopf.persistence.IBaseEntityRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface GameRepository : BaseEntityRepository<GameEntity>
+interface GameRepository : IBaseEntityRepository<GameEntity>

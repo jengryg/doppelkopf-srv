@@ -1,7 +1,7 @@
 package game.doppelkopf.persistence.model.turn
 
-import game.doppelkopf.persistence.BaseEntityRepository
+import game.doppelkopf.persistence.IBaseEntityRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface TurnRepository : BaseEntityRepository<TurnEntity>
+interface TurnRepository : IBaseEntityRepository<TurnEntity>

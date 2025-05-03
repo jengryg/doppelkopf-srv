@@ -1,7 +1,7 @@
 package game.doppelkopf.persistence.model.hand
 
-import game.doppelkopf.persistence.BaseEntityRepository
+import game.doppelkopf.persistence.IBaseEntityRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface HandRepository : BaseEntityRepository<HandEntity>
+interface HandRepository : IBaseEntityRepository<HandEntity>

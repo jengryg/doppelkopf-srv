@@ -1,7 +1,7 @@
 package game.doppelkopf.persistence.model.trick
 
-import game.doppelkopf.persistence.BaseEntityRepository
+import game.doppelkopf.persistence.IBaseEntityRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface TrickRepository : BaseEntityRepository<TrickEntity>
+interface TrickRepository : IBaseEntityRepository<TrickEntity>

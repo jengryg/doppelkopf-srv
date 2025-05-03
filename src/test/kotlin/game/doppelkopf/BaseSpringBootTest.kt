@@ -2,7 +2,7 @@ package game.doppelkopf
 
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
-import game.doppelkopf.persistence.BaseEntityRepository
+import game.doppelkopf.persistence.IBaseEntityRepository
 import game.doppelkopf.persistence.getEntityKClass
 import game.doppelkopf.persistence.getRepositoryKClass
 import game.doppelkopf.persistence.model.user.UserEntity
@@ -44,12 +44,12 @@ abstract class BaseSpringBootTest : Logging {
     protected lateinit var userRepository: UserRepository
 
     /**
-     * Inject all [BaseEntityRepository] of the current spring context.
+     * Inject all [IBaseEntityRepository] of the current spring context.
      * We call [JpaRepository.deleteAll] on all entries in this list [AfterAll] tests are done to ensure an empty
      * test-container based database.
      */
     @Autowired
-    protected lateinit var repositories: List<BaseEntityRepository<*>>
+    protected lateinit var repositories: List<IBaseEntityRepository<*>>
 
     /**
      * Test user username.

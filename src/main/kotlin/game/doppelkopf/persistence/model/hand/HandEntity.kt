@@ -4,7 +4,7 @@ import game.doppelkopf.core.common.enums.Bidding
 import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.core.common.enums.Team
 import game.doppelkopf.core.model.hand.IHandProperties
-import game.doppelkopf.persistence.model.BaseEntity
+import game.doppelkopf.persistence.BaseEntity
 import game.doppelkopf.persistence.model.player.PlayerEntity
 import game.doppelkopf.persistence.model.round.RoundEntity
 import game.doppelkopf.persistence.model.trick.TrickEntity
