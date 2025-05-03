@@ -1,13 +1,14 @@
 package game.doppelkopf.core.model
 
-import game.doppelkopf.persistence.model.BaseEntity
+import game.doppelkopf.common.IBaseModel
+import game.doppelkopf.common.IBaseProperties
 import java.util.*
 
 /**
- * [MutableMap] based cache for the [IModelFactory] implementations that identifies each instance by the
- * [BaseEntity.id].
+ * [MutableMap] based cache for the [game.doppelkopf.common.IModelFactory] implementations that identifies each
+ * instance by the [IBaseProperties.id].
  */
-class ModelFactoryCache<T : BaseEntity, M : IBaseModel<T>> {
+class ModelFactoryCache<T : IBaseProperties, M : IBaseModel<T>> {
     private val instances = mutableMapOf<UUID, M>()
 
     /**

@@ -1,16 +1,15 @@
-package game.doppelkopf.core.model
+package game.doppelkopf.common
 
-import game.doppelkopf.persistence.model.BaseEntity
 import game.doppelkopf.utils.Quadruple
 
 /**
- * For each [IBaseModel] and corresponding [BaseEntity], a companion object extending this interface can be implemented
- * to provide standard methods for the creation of model instances.
+ * For each [IBaseModel] and corresponding [IBaseProperties] implementation in the persistence layer, a factory for the
+ * creation of model instances can be implemented using this interface.
  *
  * Only the [create] method must be implemented. Other methods are provided with a corresponding default implementation
  * in this interface.
  */
-interface IModelFactory<T : BaseEntity, M : IBaseModel<T>> {
+interface IModelFactory<T : IBaseProperties, M : IBaseModel<T>> {
     /**
      * Use the given [entity] to get an instance of model [M] from the
      */

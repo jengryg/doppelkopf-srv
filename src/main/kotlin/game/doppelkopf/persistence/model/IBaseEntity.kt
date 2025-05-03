@@ -1,6 +1,6 @@
 package game.doppelkopf.persistence.model
 
-import game.doppelkopf.core.common.IBaseProperties
+import game.doppelkopf.common.IBaseProperties
 
 /**
  * [IBaseEntity] defines the minimum properties we require for an entity that allows persistence of an [IBaseProperties]

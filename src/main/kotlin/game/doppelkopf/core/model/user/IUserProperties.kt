@@ -1,6 +1,6 @@
 package game.doppelkopf.core.model.user
 
-import game.doppelkopf.core.common.IBaseProperties
+import game.doppelkopf.common.IBaseProperties
 
 interface IUserProperties : IBaseProperties {
     val username: String

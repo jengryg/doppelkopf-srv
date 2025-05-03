@@ -1,6 +1,6 @@
 package game.doppelkopf.core.model.game
 
-import game.doppelkopf.core.model.IBaseModel
+import game.doppelkopf.common.IBaseModel
 import game.doppelkopf.core.model.player.IPlayerModel
 import game.doppelkopf.core.model.round.IRoundModel
 import game.doppelkopf.core.model.user.IUserModel

@@ -2,7 +2,7 @@ package game.doppelkopf.core.model.trick
 
 import game.doppelkopf.core.cards.Card
 import game.doppelkopf.core.common.enums.TrickState
-import game.doppelkopf.core.common.errors.GameFailedException
+import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.IHandModel
@@ -19,11 +19,11 @@ abstract class TrickModelAbstract(
     override val winner: IHandModel?
         get() = entity.winner?.let { factoryProvider.hand.create(it) }
 
-    override fun setWinner(hand: IHandModel) {
+    override fun setWinner(winner: IHandModel) {
         if (entity.winner != null) {
             throw GameFailedException("Winner of trick $this is already set.", entity.id)
         }
-        entity.winner = hand.entity
+        entity.winner = winner.entity
     }
 
     override val size: Int

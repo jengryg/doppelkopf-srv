@@ -1,7 +1,7 @@
 package game.doppelkopf.core.model.game
 
-import game.doppelkopf.core.common.IBaseProperties
-import game.doppelkopf.core.common.IStartedEnded
+import game.doppelkopf.common.IBaseProperties
+import game.doppelkopf.common.IStartedEnded
 import game.doppelkopf.core.common.enums.GameState
 
 interface IGameProperties : IBaseProperties, IStartedEnded {

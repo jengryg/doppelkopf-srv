@@ -1,7 +1,7 @@
 package game.doppelkopf.core.model.round
 
 import game.doppelkopf.core.cards.Deck
-import game.doppelkopf.core.model.IBaseModel
+import game.doppelkopf.common.IBaseModel
 import game.doppelkopf.core.model.game.IGameModel
 import game.doppelkopf.core.model.hand.IHandModel
 import game.doppelkopf.core.model.player.IPlayerModel

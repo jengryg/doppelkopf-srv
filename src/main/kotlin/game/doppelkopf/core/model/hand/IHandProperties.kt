@@ -1,6 +1,6 @@
 package game.doppelkopf.core.model.hand
 
-import game.doppelkopf.core.common.IBaseProperties
+import game.doppelkopf.common.IBaseProperties
 import game.doppelkopf.core.common.enums.Bidding
 import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.core.common.enums.Team

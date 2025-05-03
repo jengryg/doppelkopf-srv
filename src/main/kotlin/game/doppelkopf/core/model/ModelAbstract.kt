@@ -1,19 +1,18 @@
 package game.doppelkopf.core.model
 
-import game.doppelkopf.persistence.model.IBaseEntity
+import game.doppelkopf.common.IBaseModel
+import game.doppelkopf.common.IBaseProperties
 
 /**
  * [ModelAbstract] provides a basic delegation implementation for [equals], [hashCode] and [toString] to the underlying
  * [entity].
  */
-abstract class ModelAbstract<T : IBaseEntity>(
+abstract class ModelAbstract<T : IBaseProperties>(
     override val entity: T,
     protected val factoryProvider: ModelFactoryProvider
 ) : IBaseModel<T> {
     /**
      * Delegated to the underlying [entity] if [other] is also [ModelAbstract].
-     *
-     * @see IBaseEntity.equals
      */
     override fun equals(other: Any?): Boolean {
         return when {

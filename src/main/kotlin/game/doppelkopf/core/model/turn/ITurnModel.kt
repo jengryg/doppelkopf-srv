@@ -1,7 +1,7 @@
 package game.doppelkopf.core.model.turn
 
 import game.doppelkopf.core.cards.Card
-import game.doppelkopf.core.model.IBaseModel
+import game.doppelkopf.common.IBaseModel
 import game.doppelkopf.core.model.hand.IHandModel
 import game.doppelkopf.core.model.round.IRoundModel
 import game.doppelkopf.core.model.trick.ITrickModel
