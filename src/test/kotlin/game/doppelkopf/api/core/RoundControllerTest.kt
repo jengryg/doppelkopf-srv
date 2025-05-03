@@ -1,8 +1,8 @@
 package game.doppelkopf.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.api.core.dto.round.RoundInfoDto
-import game.doppelkopf.api.core.dto.round.RoundOperationDto
+import game.doppelkopf.api.core.round.dto.RoundInfoDto
+import game.doppelkopf.api.core.round.dto.RoundOperationDto
 import game.doppelkopf.core.common.enums.RoundOperation
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.errors.ForbiddenActionException

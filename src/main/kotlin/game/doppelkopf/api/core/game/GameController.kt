@@ -1,8 +1,8 @@
-package game.doppelkopf.api.core
+package game.doppelkopf.api.core.game
 
-import game.doppelkopf.api.core.dto.game.GameCreateDto
-import game.doppelkopf.api.core.dto.game.GameInfoDto
-import game.doppelkopf.api.core.dto.game.GameOperationDto
+import game.doppelkopf.api.core.game.dto.GameCreateDto
+import game.doppelkopf.api.core.game.dto.GameInfoDto
+import game.doppelkopf.api.core.game.dto.GameOperationDto
 import game.doppelkopf.core.GameFacade
 import game.doppelkopf.core.common.enums.GameOperation
 import game.doppelkopf.security.UserDetails
@@ -10,9 +10,15 @@ import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.util.UriComponentsBuilder
-import java.util.*
+import java.util.UUID
 
 /**
  * List, create, join and start the game.

@@ -1,6 +1,6 @@
-package game.doppelkopf.api.core.dto.game
+package game.doppelkopf.api.core.game.dto
 
-import game.doppelkopf.api.core.dto.player.PlayerInfoDto
+import game.doppelkopf.api.core.player.dto.PlayerInfoDto
 import game.doppelkopf.api.user.dto.PublicUserInfoDto
 import game.doppelkopf.persistence.model.game.GameEntity
 import io.swagger.v3.oas.annotations.media.Schema

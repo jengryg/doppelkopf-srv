@@ -1,8 +1,8 @@
 package game.doppelkopf.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.api.core.dto.player.PlayerCreateDto
-import game.doppelkopf.api.core.dto.player.PlayerInfoDto
+import game.doppelkopf.api.core.player.dto.PlayerCreateDto
+import game.doppelkopf.api.core.player.dto.PlayerInfoDto
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.game.handler.GameJoinModel

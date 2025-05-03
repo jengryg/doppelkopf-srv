@@ -1,8 +1,8 @@
 package game.doppelkopf.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.api.core.dto.turn.CreateTurnDto
-import game.doppelkopf.api.core.dto.turn.TurnInfoDto
+import game.doppelkopf.api.core.turn.dto.CreateTurnDto
+import game.doppelkopf.api.core.turn.dto.TurnInfoDto
 import game.doppelkopf.core.cards.CardDemand
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.GameFailedException

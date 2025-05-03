@@ -1,6 +1,6 @@
-package game.doppelkopf.api.core.dto.round
+package game.doppelkopf.api.core.round.dto
 
-import game.doppelkopf.api.core.dto.player.PlayerInfoDto
+import game.doppelkopf.api.core.player.dto.PlayerInfoDto
 import game.doppelkopf.core.common.enums.RoundContractPublic
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.persistence.model.round.RoundEntity

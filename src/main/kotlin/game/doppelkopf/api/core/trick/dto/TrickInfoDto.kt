@@ -1,6 +1,6 @@
-package game.doppelkopf.api.core.dto.trick
+package game.doppelkopf.api.core.trick.dto
 
-import game.doppelkopf.api.core.dto.hand.HandPublicInfoDto
+import game.doppelkopf.api.core.hand.dto.HandPublicInfoDto
 import game.doppelkopf.core.cards.CardDemand
 import game.doppelkopf.persistence.model.trick.TrickEntity
 import io.swagger.v3.oas.annotations.media.Schema

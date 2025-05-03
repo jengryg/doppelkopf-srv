@@ -1,4 +1,4 @@
-package game.doppelkopf.api.core.dto.trick
+package game.doppelkopf.api.core.trick.dto
 
 import game.doppelkopf.core.common.enums.TrickOperation
 import io.swagger.v3.oas.annotations.media.Schema

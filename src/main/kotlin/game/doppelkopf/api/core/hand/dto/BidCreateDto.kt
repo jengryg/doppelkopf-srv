@@ -1,4 +1,4 @@
-package game.doppelkopf.api.core.dto.hand
+package game.doppelkopf.api.core.hand.dto
 
 import game.doppelkopf.core.common.enums.BiddingOption
 import io.swagger.v3.oas.annotations.media.Schema

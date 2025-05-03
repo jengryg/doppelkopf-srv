@@ -1,4 +1,4 @@
-package game.doppelkopf.api.core.dto.turn
+package game.doppelkopf.api.core.turn.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Pattern

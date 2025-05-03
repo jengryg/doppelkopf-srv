@@ -1,17 +1,22 @@
-package game.doppelkopf.api.core
+package game.doppelkopf.api.core.hand
 
-import game.doppelkopf.api.core.dto.hand.BidCreateDto
-import game.doppelkopf.api.core.dto.hand.DeclarationCreateDto
-import game.doppelkopf.api.core.dto.hand.HandForPlayerDto
-import game.doppelkopf.api.core.dto.hand.HandPublicInfoDto
+import game.doppelkopf.api.core.hand.dto.BidCreateDto
+import game.doppelkopf.api.core.hand.dto.DeclarationCreateDto
+import game.doppelkopf.api.core.hand.dto.HandForPlayerDto
+import game.doppelkopf.api.core.hand.dto.HandPublicInfoDto
 import game.doppelkopf.core.HandFacade
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.util.UriComponentsBuilder
-import java.util.*
+import java.util.UUID
 
 @RestController
 @RequestMapping("/v1")

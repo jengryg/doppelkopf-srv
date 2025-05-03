@@ -1,8 +1,8 @@
 package game.doppelkopf.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.api.core.dto.trick.TrickInfoDto
-import game.doppelkopf.api.core.dto.trick.TrickOperationDto
+import game.doppelkopf.api.core.trick.dto.TrickInfoDto
+import game.doppelkopf.api.core.trick.dto.TrickOperationDto
 import game.doppelkopf.core.cards.CardDemand
 import game.doppelkopf.core.common.enums.TrickOperation
 import game.doppelkopf.core.errors.InvalidActionException

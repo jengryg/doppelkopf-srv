@@ -1,15 +1,20 @@
-package game.doppelkopf.api.core
+package game.doppelkopf.api.core.turn
 
-import game.doppelkopf.api.core.dto.turn.CreateTurnDto
-import game.doppelkopf.api.core.dto.turn.TurnInfoDto
+import game.doppelkopf.api.core.turn.dto.CreateTurnDto
+import game.doppelkopf.api.core.turn.dto.TurnInfoDto
 import game.doppelkopf.core.TurnFacade
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.util.UriComponentsBuilder
-import java.util.*
+import java.util.UUID
 
 @RestController
 @RequestMapping("/v1")

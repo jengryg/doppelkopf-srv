@@ -1,16 +1,21 @@
-package game.doppelkopf.api.core
+package game.doppelkopf.api.core.player
 
-import game.doppelkopf.api.core.dto.player.PlayerCreateDto
-import game.doppelkopf.api.core.dto.player.PlayerInfoDto
+import game.doppelkopf.api.core.player.dto.PlayerCreateDto
+import game.doppelkopf.api.core.player.dto.PlayerInfoDto
 import game.doppelkopf.core.PlayerFacade
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.util.UriComponentsBuilder
-import java.util.*
+import java.util.UUID
 
 /**
  * Lets users join a game as player and provides information about the users own players.
