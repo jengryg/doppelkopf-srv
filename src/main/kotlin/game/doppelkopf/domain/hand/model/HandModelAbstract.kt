@@ -2,7 +2,7 @@ package game.doppelkopf.domain.hand.model
 
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.domain.deck.model.Card
-import game.doppelkopf.core.common.enums.Team
+import game.doppelkopf.domain.hand.enums.Team
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.domain.ModelAbstract
 import game.doppelkopf.domain.ModelFactoryProvider

@@ -11,8 +11,8 @@ import game.doppelkopf.adapter.persistence.model.player.PlayerRepository
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundRepository
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
-import game.doppelkopf.core.common.enums.RoundOperation
-import game.doppelkopf.core.common.enums.RoundState
+import game.doppelkopf.domain.round.enums.RoundOperation
+import game.doppelkopf.domain.round.enums.RoundState
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.domain.game.service.GameDealModel

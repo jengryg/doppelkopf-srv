@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.deck.service
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.domain.deck.model.DeckMode
+import game.doppelkopf.domain.deck.enums.DeckMode
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments

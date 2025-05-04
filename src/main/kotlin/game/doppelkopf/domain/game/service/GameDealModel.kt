@@ -5,9 +5,9 @@ import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.domain.deck.model.Card
 import game.doppelkopf.domain.deck.model.Deck
-import game.doppelkopf.domain.deck.model.DeckMode
-import game.doppelkopf.core.common.enums.GameState
-import game.doppelkopf.core.common.enums.Team
+import game.doppelkopf.domain.deck.enums.DeckMode
+import game.doppelkopf.domain.game.enums.GameState
+import game.doppelkopf.domain.hand.enums.Team
 import game.doppelkopf.core.errors.ofForbiddenAction
 import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
@@ -15,7 +15,7 @@ import game.doppelkopf.domain.game.model.GameModelAbstract
 import game.doppelkopf.domain.hand.model.IHandModel
 import game.doppelkopf.domain.player.model.IPlayerModel
 import game.doppelkopf.domain.round.model.IRoundModel
-import game.doppelkopf.domain.user.IUserModel
+import game.doppelkopf.domain.user.model.IUserModel
 import game.doppelkopf.utils.Quadruple
 import org.springframework.lang.CheckReturnValue
 

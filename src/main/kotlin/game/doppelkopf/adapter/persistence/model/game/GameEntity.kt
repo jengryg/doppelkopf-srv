@@ -4,7 +4,7 @@ import game.doppelkopf.adapter.persistence.model.BaseEntity
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
-import game.doppelkopf.core.common.enums.GameState
+import game.doppelkopf.domain.game.enums.GameState
 import game.doppelkopf.domain.game.model.IGameProperties
 import jakarta.persistence.*
 import java.time.Instant

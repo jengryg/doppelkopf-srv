@@ -5,7 +5,7 @@ import game.doppelkopf.adapter.api.core.game.dto.GameInfoDto
 import game.doppelkopf.adapter.api.core.game.dto.GameOperationDto
 import game.doppelkopf.adapter.persistence.model.game.GamePersistence
 import game.doppelkopf.core.GameFacade
-import game.doppelkopf.core.common.enums.GameOperation
+import game.doppelkopf.domain.game.enums.GameOperation
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid

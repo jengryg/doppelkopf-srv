@@ -2,12 +2,12 @@ package game.doppelkopf.domain.game.service
 
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
-import game.doppelkopf.core.common.enums.GameState
+import game.doppelkopf.domain.game.enums.GameState
 import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.game.model.GameModelAbstract
 import game.doppelkopf.domain.player.model.IPlayerModel
-import game.doppelkopf.domain.user.IUserModel
+import game.doppelkopf.domain.user.model.IUserModel
 import org.springframework.lang.CheckReturnValue
 
 class GameJoinModel(

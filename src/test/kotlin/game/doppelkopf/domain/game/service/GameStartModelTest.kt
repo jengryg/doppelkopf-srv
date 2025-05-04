@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.game.service
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.core.common.enums.GameState
+import game.doppelkopf.domain.game.enums.GameState
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider

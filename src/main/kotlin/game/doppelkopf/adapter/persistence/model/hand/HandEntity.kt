@@ -5,9 +5,9 @@ import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
-import game.doppelkopf.core.common.enums.Bidding
-import game.doppelkopf.core.common.enums.Declaration
-import game.doppelkopf.core.common.enums.Team
+import game.doppelkopf.domain.hand.enums.Bidding
+import game.doppelkopf.domain.hand.enums.Declaration
+import game.doppelkopf.domain.hand.enums.Team
 import game.doppelkopf.domain.hand.model.IHandProperties
 import jakarta.persistence.*
 

@@ -8,7 +8,7 @@ import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.game.GameRepository
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
-import game.doppelkopf.core.common.enums.GameOperation
+import game.doppelkopf.domain.game.enums.GameOperation
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.domain.game.service.GameStartModel

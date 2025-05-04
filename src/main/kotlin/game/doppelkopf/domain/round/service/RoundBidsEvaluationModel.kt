@@ -1,12 +1,16 @@
 package game.doppelkopf.domain.round.service
 
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.domain.deck.model.DeckMode
-import game.doppelkopf.core.common.enums.*
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.ofForbiddenAction
 import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.deck.enums.DeckMode
+import game.doppelkopf.domain.hand.enums.Bidding
+import game.doppelkopf.domain.hand.enums.Declaration
+import game.doppelkopf.domain.hand.enums.Team
+import game.doppelkopf.domain.round.enums.RoundContract
+import game.doppelkopf.domain.round.enums.RoundState
 import game.doppelkopf.domain.round.model.RoundModelAbstract
 import org.springframework.lang.CheckReturnValue
 

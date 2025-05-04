@@ -3,7 +3,7 @@ package game.doppelkopf.domain
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.adapter.persistence.model.BaseEntity
 import io.mockk.mockk
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ModelAbstractTest : BaseUnitTest() {
@@ -25,10 +25,10 @@ class ModelAbstractTest : BaseUnitTest() {
         val model = TestModel(entity)
         val other = TestModel(entity)
 
-        Assertions.assertThat(model == other).isTrue
+        assertThat(model == other).isTrue
 
         @Suppress("ReplaceCallWithBinaryOperator")
-        Assertions.assertThat(model.equals(other)).isTrue
+        assertThat(model.equals(other)).isTrue
     }
 
     @Test
@@ -38,7 +38,7 @@ class ModelAbstractTest : BaseUnitTest() {
         val model = TestModel(entity)
         val other = TestModel(entity)
 
-        Assertions.assertThat(model.hashCode()).isEqualTo(other.hashCode())
+        assertThat(model.hashCode()).isEqualTo(other.hashCode())
     }
 
     @Test
@@ -48,6 +48,6 @@ class ModelAbstractTest : BaseUnitTest() {
         val model = TestModel(entity)
         val other = TestModel(entity)
 
-        Assertions.assertThat(model.toString()).isEqualTo(other.toString())
+        assertThat(model.toString()).isEqualTo(other.toString())
     }
 }

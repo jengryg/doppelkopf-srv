@@ -4,8 +4,8 @@ import game.doppelkopf.adapter.persistence.model.BaseEntity
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
-import game.doppelkopf.domain.deck.model.CardDemand
-import game.doppelkopf.core.common.enums.TrickState
+import game.doppelkopf.domain.deck.enums.CardDemand
+import game.doppelkopf.domain.trick.enums.TrickState
 import game.doppelkopf.domain.trick.model.ITrickProperties
 import jakarta.persistence.*
 import java.time.Instant

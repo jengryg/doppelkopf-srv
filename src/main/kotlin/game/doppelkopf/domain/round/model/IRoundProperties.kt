@@ -2,9 +2,9 @@ package game.doppelkopf.domain.round.model
 
 import game.doppelkopf.common.IBaseProperties
 import game.doppelkopf.common.IStartedEnded
-import game.doppelkopf.domain.deck.model.DeckMode
-import game.doppelkopf.core.common.enums.RoundContract
-import game.doppelkopf.core.common.enums.RoundState
+import game.doppelkopf.domain.deck.enums.DeckMode
+import game.doppelkopf.domain.round.enums.RoundContract
+import game.doppelkopf.domain.round.enums.RoundState
 
 interface IRoundProperties : IBaseProperties, IStartedEnded {
     /**

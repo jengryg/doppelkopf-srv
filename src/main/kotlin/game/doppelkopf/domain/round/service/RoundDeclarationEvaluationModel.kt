@@ -1,10 +1,10 @@
 package game.doppelkopf.domain.round.service
 
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.domain.deck.model.DeckMode
-import game.doppelkopf.core.common.enums.Declaration
-import game.doppelkopf.core.common.enums.RoundContract
-import game.doppelkopf.core.common.enums.RoundState
+import game.doppelkopf.domain.deck.enums.DeckMode
+import game.doppelkopf.domain.hand.enums.Declaration
+import game.doppelkopf.domain.round.enums.RoundContract
+import game.doppelkopf.domain.round.enums.RoundState
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.ofForbiddenAction
 import game.doppelkopf.core.errors.ofInvalidAction

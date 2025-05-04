@@ -1,9 +1,9 @@
 package game.doppelkopf.domain.hand.service
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.core.common.enums.Bidding
-import game.doppelkopf.core.common.enums.BiddingOption
-import game.doppelkopf.core.common.enums.Declaration
+import game.doppelkopf.domain.hand.enums.Bidding
+import game.doppelkopf.domain.hand.enums.BiddingOption
+import game.doppelkopf.domain.hand.enums.Declaration
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider

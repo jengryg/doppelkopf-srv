@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.trick.service
 
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
-import game.doppelkopf.core.common.enums.TrickState
+import game.doppelkopf.domain.trick.enums.TrickState
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider

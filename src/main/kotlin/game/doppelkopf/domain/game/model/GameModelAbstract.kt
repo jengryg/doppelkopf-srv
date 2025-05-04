@@ -6,7 +6,7 @@ import game.doppelkopf.domain.ModelAbstract
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.player.model.IPlayerModel
 import game.doppelkopf.domain.round.model.IRoundModel
-import game.doppelkopf.domain.user.IUserModel
+import game.doppelkopf.domain.user.model.IUserModel
 
 abstract class GameModelAbstract(
     entity: GameEntity,

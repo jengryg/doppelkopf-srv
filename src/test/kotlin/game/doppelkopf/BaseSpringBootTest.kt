@@ -7,7 +7,7 @@ import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import game.doppelkopf.adapter.persistence.model.user.UserRepository
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
-import game.doppelkopf.security.Authority
+import game.doppelkopf.domain.user.enums.Authority
 import io.mockk.clearAllMocks
 import io.mockk.unmockkAll
 import org.bouncycastle.util.encoders.Base64

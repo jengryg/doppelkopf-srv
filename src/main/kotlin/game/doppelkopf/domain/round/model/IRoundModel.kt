@@ -7,7 +7,7 @@ import game.doppelkopf.domain.game.model.IGameModel
 import game.doppelkopf.domain.hand.model.IHandModel
 import game.doppelkopf.domain.player.model.IPlayerModel
 import game.doppelkopf.domain.trick.model.ITrickModel
-import game.doppelkopf.domain.user.IUserModel
+import game.doppelkopf.domain.user.model.IUserModel
 
 interface IRoundModel : IRoundProperties, IBaseModel<RoundEntity> {
     val game: IGameModel

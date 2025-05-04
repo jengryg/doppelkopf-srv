@@ -4,7 +4,7 @@ import game.doppelkopf.adapter.api.core.round.dto.RoundInfoDto
 import game.doppelkopf.adapter.api.core.round.dto.RoundOperationDto
 import game.doppelkopf.adapter.persistence.model.round.RoundPersistence
 import game.doppelkopf.core.RoundFacade
-import game.doppelkopf.core.common.enums.RoundOperation
+import game.doppelkopf.domain.round.enums.RoundOperation
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid

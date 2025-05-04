@@ -1,14 +1,14 @@
 package game.doppelkopf.domain.hand.service
 
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
-import game.doppelkopf.core.common.enums.Bidding
-import game.doppelkopf.core.common.enums.BiddingOption
-import game.doppelkopf.core.common.enums.Declaration
+import game.doppelkopf.domain.hand.enums.Bidding
+import game.doppelkopf.domain.hand.enums.BiddingOption
+import game.doppelkopf.domain.hand.enums.Declaration
 import game.doppelkopf.core.errors.ofForbiddenAction
 import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.hand.model.HandModelAbstract
-import game.doppelkopf.domain.user.IUserModel
+import game.doppelkopf.domain.user.model.IUserModel
 import org.springframework.lang.CheckReturnValue
 
 class HandBiddingModel(

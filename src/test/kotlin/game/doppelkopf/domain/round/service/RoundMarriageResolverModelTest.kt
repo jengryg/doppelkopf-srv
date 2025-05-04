@@ -1,8 +1,8 @@
 package game.doppelkopf.domain.round.service
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.core.common.enums.RoundContract
-import game.doppelkopf.core.common.enums.Team
+import game.doppelkopf.domain.round.enums.RoundContract
+import game.doppelkopf.domain.hand.enums.Team
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider

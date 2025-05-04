@@ -1,6 +1,6 @@
 package game.doppelkopf.adapter.api.core.round.dto
 
-import game.doppelkopf.core.common.enums.RoundOperation
+import game.doppelkopf.domain.round.enums.RoundOperation
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(

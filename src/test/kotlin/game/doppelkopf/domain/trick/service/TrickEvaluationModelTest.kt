@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.trick.service
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.core.common.enums.TrickState
+import game.doppelkopf.domain.trick.enums.TrickState
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider
 import org.assertj.core.api.Assertions.*

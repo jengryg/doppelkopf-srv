@@ -1,6 +1,7 @@
 package game.doppelkopf.domain.deck.model
 
 import game.doppelkopf.BaseUnitTest
+import game.doppelkopf.domain.deck.enums.DeckMode
 import game.doppelkopf.domain.deck.errors.InvalidCardException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest

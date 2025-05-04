@@ -1,8 +1,8 @@
 package game.doppelkopf.domain.deck.service
 
-import game.doppelkopf.domain.deck.model.CardKind
-import game.doppelkopf.domain.deck.model.CardSuit
-import game.doppelkopf.domain.deck.model.DeckMode
+import game.doppelkopf.domain.deck.enums.CardKind
+import game.doppelkopf.domain.deck.enums.CardSuit
+import game.doppelkopf.domain.deck.enums.DeckMode
 
 object CardRankingFactory {
     /**

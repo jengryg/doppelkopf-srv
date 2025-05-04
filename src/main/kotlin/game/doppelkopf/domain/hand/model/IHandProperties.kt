@@ -1,9 +1,9 @@
 package game.doppelkopf.domain.hand.model
 
 import game.doppelkopf.common.IBaseProperties
-import game.doppelkopf.core.common.enums.Bidding
-import game.doppelkopf.core.common.enums.Declaration
-import game.doppelkopf.core.common.enums.Team
+import game.doppelkopf.domain.hand.enums.Bidding
+import game.doppelkopf.domain.hand.enums.Declaration
+import game.doppelkopf.domain.hand.enums.Team
 
 interface IHandProperties : IBaseProperties {
     /**

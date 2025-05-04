@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test
 
 class ModelFactoryCacheTest : BaseUnitTest() {
     /**
-     * The simplest derivative of [game.doppelkopf.adapter.persistence.model.BaseEntity] for the test.
+     * The simplest derivative of [BaseEntity] for the test.
      */
     class TestEntity : BaseEntity()
 
     /**
-     * The simplest derivative of [game.doppelkopf.domain.ModelAbstract] using [TestEntity] for the test.
+     * The simplest derivative of [ModelAbstract] using [TestEntity] for the test.
      */
     class TestModel(entity: TestEntity) : ModelAbstract<TestEntity>(entity, mockk())
 

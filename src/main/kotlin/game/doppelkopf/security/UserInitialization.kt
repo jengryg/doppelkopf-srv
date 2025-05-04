@@ -3,6 +3,7 @@ package game.doppelkopf.security
 import game.doppelkopf.CommonConfig
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import game.doppelkopf.adapter.persistence.model.user.UserRepository
+import game.doppelkopf.domain.user.enums.Authority
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
 import jakarta.transaction.Transactional

@@ -15,7 +15,7 @@ import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickRepository
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnRepository
-import game.doppelkopf.domain.deck.model.CardDemand
+import game.doppelkopf.domain.deck.enums.CardDemand
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.InvalidActionException

@@ -3,7 +3,7 @@ package game.doppelkopf.adapter.api.core.trick
 import game.doppelkopf.adapter.api.core.trick.dto.TrickInfoDto
 import game.doppelkopf.adapter.api.core.trick.dto.TrickOperationDto
 import game.doppelkopf.core.TrickFacade
-import game.doppelkopf.core.common.enums.TrickOperation
+import game.doppelkopf.domain.trick.enums.TrickOperation
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity

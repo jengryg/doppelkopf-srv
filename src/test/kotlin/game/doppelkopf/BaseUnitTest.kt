@@ -7,9 +7,9 @@ import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
-import game.doppelkopf.domain.deck.model.CardDemand
-import game.doppelkopf.core.common.enums.Bidding
-import game.doppelkopf.core.common.enums.Declaration
+import game.doppelkopf.domain.deck.enums.CardDemand
+import game.doppelkopf.domain.hand.enums.Bidding
+import game.doppelkopf.domain.hand.enums.Declaration
 import io.mockk.clearAllMocks
 import io.mockk.mockk
 import io.mockk.unmockkAll

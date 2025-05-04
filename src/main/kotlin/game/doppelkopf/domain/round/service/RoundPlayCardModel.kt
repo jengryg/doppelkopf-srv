@@ -4,7 +4,7 @@ import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.domain.deck.model.Card
-import game.doppelkopf.core.common.enums.RoundState
+import game.doppelkopf.domain.round.enums.RoundState
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.ofForbiddenAction
 import game.doppelkopf.core.errors.ofInvalidAction
@@ -15,7 +15,7 @@ import game.doppelkopf.domain.round.model.RoundModelAbstract
 import game.doppelkopf.domain.trick.service.TrickCardPlayModel
 import game.doppelkopf.domain.trick.model.ITrickModel
 import game.doppelkopf.domain.turn.model.ITurnModel
-import game.doppelkopf.domain.user.IUserModel
+import game.doppelkopf.domain.user.model.IUserModel
 import org.springframework.lang.CheckReturnValue
 
 class RoundPlayCardModel(

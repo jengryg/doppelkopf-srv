@@ -1,6 +1,6 @@
 package game.doppelkopf.adapter.api.core.hand.dto
 
-import game.doppelkopf.core.common.enums.BiddingOption
+import game.doppelkopf.domain.hand.enums.BiddingOption
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(

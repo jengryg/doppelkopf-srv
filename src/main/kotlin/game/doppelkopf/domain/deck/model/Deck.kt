@@ -1,12 +1,15 @@
 package game.doppelkopf.domain.deck.model
 
+import game.doppelkopf.domain.deck.enums.CardKind
+import game.doppelkopf.domain.deck.enums.CardSuit
+import game.doppelkopf.domain.deck.enums.DeckMode
 import game.doppelkopf.domain.deck.errors.ofInvalidCardException
 import game.doppelkopf.domain.deck.service.CardRankingFactory
 import game.doppelkopf.utils.Quadruple
 
 /**
  * Use [Deck.create] to instantiate a new [Deck] for the given [DeckMode].
- * Uses [game.doppelkopf.domain.deck.service.CardRankingFactory] to create a ranking map based on the [DeckMode] that determines the ranking of the cards
+ * Uses [CardRankingFactory] to create a ranking map based on the [DeckMode] that determines the ranking of the cards
  * in this [Deck].
  */
 class Deck private constructor(
@@ -29,7 +32,7 @@ class Deck private constructor(
     }.associateBy { it.encoded }.toMap()
 
     /**
-     * @return a [game.doppelkopf.utils.Quadruple] containing four [List] of [Card], one list for each player hand
+     * @return a [Quadruple] containing four [List] of [Card], one list for each player hand
      */
     fun dealHandCards(): Quadruple<List<Card>> {
         return cards.keys.shuffled()

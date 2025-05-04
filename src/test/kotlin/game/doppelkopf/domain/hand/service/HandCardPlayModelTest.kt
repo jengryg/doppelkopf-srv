@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.hand.service
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.domain.deck.model.CardDemand
+import game.doppelkopf.domain.deck.enums.CardDemand
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider
 import org.assertj.core.api.Assertions.assertThat

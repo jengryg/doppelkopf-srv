@@ -1,12 +1,12 @@
 package game.doppelkopf.domain
 
-import game.doppelkopf.domain.game.model.GameModelFactory
-import game.doppelkopf.domain.hand.model.HandModelFactory
-import game.doppelkopf.domain.player.model.PlayerModelFactory
-import game.doppelkopf.domain.round.model.RoundModelFactory
-import game.doppelkopf.domain.trick.model.TrickModelFactory
-import game.doppelkopf.domain.turn.model.TurnModelFactory
-import game.doppelkopf.domain.user.UserModelFactory
+import game.doppelkopf.domain.game.service.GameModelFactory
+import game.doppelkopf.domain.hand.service.HandModelFactory
+import game.doppelkopf.domain.player.service.PlayerModelFactory
+import game.doppelkopf.domain.round.service.RoundModelFactory
+import game.doppelkopf.domain.trick.service.TrickModelFactory
+import game.doppelkopf.domain.turn.service.TurnModelFactory
+import game.doppelkopf.domain.user.service.UserModelFactory
 
 /**
  * Initialize the [ModelFactoryProvider] and supply it to the first model that is instantiated.

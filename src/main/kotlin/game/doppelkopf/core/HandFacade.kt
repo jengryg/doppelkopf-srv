@@ -3,8 +3,8 @@ package game.doppelkopf.core
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.hand.HandPersistence
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
-import game.doppelkopf.core.common.enums.BiddingOption
-import game.doppelkopf.core.common.enums.DeclarationOption
+import game.doppelkopf.domain.hand.enums.BiddingOption
+import game.doppelkopf.domain.hand.enums.DeclarationOption
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.hand.service.HandBiddingModel

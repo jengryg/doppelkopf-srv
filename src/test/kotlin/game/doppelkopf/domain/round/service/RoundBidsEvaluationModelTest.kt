@@ -3,10 +3,14 @@ package game.doppelkopf.domain.round.service
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.domain.deck.model.DeckMode
-import game.doppelkopf.core.common.enums.*
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.deck.enums.DeckMode
+import game.doppelkopf.domain.hand.enums.Bidding
+import game.doppelkopf.domain.hand.enums.Declaration
+import game.doppelkopf.domain.hand.enums.Team
+import game.doppelkopf.domain.round.enums.RoundContract
+import game.doppelkopf.domain.round.enums.RoundState
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

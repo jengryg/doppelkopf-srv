@@ -2,9 +2,9 @@ package game.doppelkopf.domain.game.service
 
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.domain.deck.model.Deck
-import game.doppelkopf.domain.deck.model.DeckMode
-import game.doppelkopf.core.common.enums.GameState
-import game.doppelkopf.core.common.enums.Team
+import game.doppelkopf.domain.deck.enums.DeckMode
+import game.doppelkopf.domain.game.enums.GameState
+import game.doppelkopf.domain.hand.enums.Team
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider

@@ -1,6 +1,9 @@
 package game.doppelkopf.domain.deck.model
 
 import game.doppelkopf.BaseUnitTest
+import game.doppelkopf.domain.deck.enums.CardDemand
+import game.doppelkopf.domain.deck.enums.CardKind
+import game.doppelkopf.domain.deck.enums.CardSuit
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments

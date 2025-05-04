@@ -2,8 +2,8 @@ package game.doppelkopf.domain.trick.model
 
 import game.doppelkopf.common.IBaseProperties
 import game.doppelkopf.common.IStartedEnded
-import game.doppelkopf.domain.deck.model.CardDemand
-import game.doppelkopf.core.common.enums.TrickState
+import game.doppelkopf.domain.deck.enums.CardDemand
+import game.doppelkopf.domain.trick.enums.TrickState
 
 interface ITrickProperties : IBaseProperties, IStartedEnded {
     /**
