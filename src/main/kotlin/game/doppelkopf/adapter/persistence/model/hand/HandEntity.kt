@@ -8,7 +8,7 @@ import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.core.common.enums.Bidding
 import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.core.common.enums.Team
-import game.doppelkopf.core.model.hand.IHandProperties
+import game.doppelkopf.domain.hand.model.IHandProperties
 import jakarta.persistence.*
 
 @Entity

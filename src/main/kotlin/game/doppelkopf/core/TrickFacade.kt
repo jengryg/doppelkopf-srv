@@ -5,7 +5,7 @@ import game.doppelkopf.adapter.persistence.model.round.RoundPersistence
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickRepository
 import game.doppelkopf.core.model.ModelFactoryProvider
-import game.doppelkopf.core.model.trick.handler.TrickEvaluationModel
+import game.doppelkopf.domain.trick.handler.TrickEvaluationModel
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service

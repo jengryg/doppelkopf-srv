@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import game.doppelkopf.adapter.persistence.model.BaseEntity
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
-import game.doppelkopf.core.model.user.IUserProperties
+import game.doppelkopf.domain.user.IUserProperties
 import game.doppelkopf.security.Authority
 import jakarta.persistence.*
 

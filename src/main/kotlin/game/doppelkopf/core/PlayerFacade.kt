@@ -5,7 +5,7 @@ import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import game.doppelkopf.adapter.persistence.model.player.PlayerPersistence
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import game.doppelkopf.core.model.ModelFactoryProvider
-import game.doppelkopf.core.model.game.handler.GameJoinModel
+import game.doppelkopf.domain.game.handler.GameJoinModel
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.*

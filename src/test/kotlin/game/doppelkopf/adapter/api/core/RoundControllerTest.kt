@@ -15,10 +15,10 @@ import game.doppelkopf.core.common.enums.RoundOperation
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
-import game.doppelkopf.core.model.game.handler.GameDealModel
-import game.doppelkopf.core.model.round.handler.RoundBidsEvaluationModel
-import game.doppelkopf.core.model.round.handler.RoundDeclarationEvaluationModel
-import game.doppelkopf.core.model.round.handler.RoundMarriageResolverModel
+import game.doppelkopf.domain.game.handler.GameDealModel
+import game.doppelkopf.domain.round.handler.RoundBidsEvaluationModel
+import game.doppelkopf.domain.round.handler.RoundDeclarationEvaluationModel
+import game.doppelkopf.domain.round.handler.RoundMarriageResolverModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.utils.Quadruple
 import io.mockk.*

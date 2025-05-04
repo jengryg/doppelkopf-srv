@@ -9,7 +9,7 @@ import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.core.cards.DeckMode
 import game.doppelkopf.core.common.enums.RoundContract
 import game.doppelkopf.core.common.enums.RoundState
-import game.doppelkopf.core.model.round.IRoundProperties
+import game.doppelkopf.domain.round.model.IRoundProperties
 import jakarta.persistence.*
 import java.time.Instant
 

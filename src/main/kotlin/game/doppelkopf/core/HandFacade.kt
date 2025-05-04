@@ -7,10 +7,10 @@ import game.doppelkopf.core.common.enums.BiddingOption
 import game.doppelkopf.core.common.enums.DeclarationOption
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.model.ModelFactoryProvider
-import game.doppelkopf.core.model.hand.handler.HandBiddingModel
-import game.doppelkopf.core.model.hand.handler.HandDeclareModel
-import game.doppelkopf.core.model.round.handler.RoundBidsEvaluationModel
-import game.doppelkopf.core.model.round.handler.RoundDeclarationEvaluationModel
+import game.doppelkopf.domain.hand.handler.HandBiddingModel
+import game.doppelkopf.domain.hand.handler.HandDeclareModel
+import game.doppelkopf.domain.round.handler.RoundBidsEvaluationModel
+import game.doppelkopf.domain.round.handler.RoundDeclarationEvaluationModel
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.*

@@ -9,7 +9,7 @@ import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
-import game.doppelkopf.core.model.game.handler.GameJoinModel
+import game.doppelkopf.domain.game.handler.GameJoinModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat

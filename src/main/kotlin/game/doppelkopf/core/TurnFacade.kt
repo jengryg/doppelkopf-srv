@@ -6,9 +6,9 @@ import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnRepository
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import game.doppelkopf.core.model.ModelFactoryProvider
-import game.doppelkopf.core.model.round.handler.RoundMarriageResolverModel
-import game.doppelkopf.core.model.round.handler.RoundPlayCardModel
-import game.doppelkopf.core.model.trick.handler.TrickEvaluationModel
+import game.doppelkopf.domain.round.handler.RoundMarriageResolverModel
+import game.doppelkopf.domain.round.handler.RoundPlayCardModel
+import game.doppelkopf.domain.trick.handler.TrickEvaluationModel
 import org.springframework.stereotype.Service
 import java.util.*
 

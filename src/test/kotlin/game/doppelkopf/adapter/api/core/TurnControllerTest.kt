@@ -19,7 +19,7 @@ import game.doppelkopf.core.cards.CardDemand
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.InvalidActionException
-import game.doppelkopf.core.model.round.handler.RoundPlayCardModel
+import game.doppelkopf.domain.round.handler.RoundPlayCardModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat

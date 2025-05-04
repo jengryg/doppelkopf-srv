@@ -5,7 +5,7 @@ import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
-import game.doppelkopf.core.model.player.IPlayerProperties
+import game.doppelkopf.domain.player.model.IPlayerProperties
 import jakarta.persistence.*
 
 /**
