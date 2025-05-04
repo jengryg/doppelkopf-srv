@@ -3,8 +3,13 @@ package game.doppelkopf.adapter.api.core.round
 import game.doppelkopf.adapter.api.core.round.dto.RoundInfoDto
 import game.doppelkopf.adapter.api.core.round.dto.RoundOperationDto
 import game.doppelkopf.adapter.persistence.model.round.RoundPersistence
-import game.doppelkopf.core.RoundFacade
+import game.doppelkopf.domain.game.GameEngine
+import game.doppelkopf.domain.game.ports.commands.GameCommandDealNewRound
+import game.doppelkopf.domain.round.RoundEngine
 import game.doppelkopf.domain.round.enums.RoundOperation
+import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluateBids
+import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluateDeclarations
+import game.doppelkopf.domain.round.ports.commands.RoundCommandResolveMarriage
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -21,7 +26,8 @@ import java.util.*
 @RequestMapping("/v1")
 class RoundController(
     private val roundPersistence: RoundPersistence,
-    private val roundFacade: RoundFacade
+    private val gameEngine: GameEngine,
+    private val roundEngine: RoundEngine
 ) {
     @Operation(
         summary = "Obtain all rounds of a specific game.",
@@ -43,10 +49,15 @@ class RoundController(
         @PathVariable gameId: UUID,
         @AuthenticationPrincipal userDetails: UserDetails,
     ): ResponseEntity<RoundInfoDto> {
-        return RoundInfoDto(roundFacade.create(gameId, userDetails.entity)).let {
+        return gameEngine.execute(
+            command = GameCommandDealNewRound(
+                user = userDetails,
+                gameId = gameId
+            )
+        ).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/rounds/{id}").build(it.id)
-            ).body(it)
+            ).body(RoundInfoDto(it))
         }
     }
 
@@ -71,11 +82,31 @@ class RoundController(
     fun patch(
         @PathVariable id: UUID,
         @RequestBody @Valid operation: RoundOperationDto,
+        @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<RoundInfoDto> {
         return when (operation.op) {
-            RoundOperation.DECLARE_EVALUATION -> ResponseEntity.ok(RoundInfoDto(roundFacade.evaluateDeclarations(id)))
-            RoundOperation.BID_EVALUATION -> ResponseEntity.ok(RoundInfoDto(roundFacade.evaluateBids(id)))
-            RoundOperation.MARRIAGE_RESOLVER -> ResponseEntity.ok(RoundInfoDto(roundFacade.resolveMarriage(id)))
+            RoundOperation.DECLARE_EVALUATION -> roundEngine.execute(
+                command = RoundCommandEvaluateDeclarations(
+                    user = userDetails,
+                    roundId = id,
+                )
+            )
+
+            RoundOperation.BID_EVALUATION -> roundEngine.execute(
+                command = RoundCommandEvaluateBids(
+                    user = userDetails,
+                    roundId = id,
+                )
+            )
+
+            RoundOperation.MARRIAGE_RESOLVER -> roundEngine.execute(
+                command = RoundCommandResolveMarriage(
+                    user = userDetails,
+                    roundId = id,
+                )
+            )
+        }.let {
+            ResponseEntity.ok(RoundInfoDto(it))
         }
     }
 }

@@ -4,8 +4,11 @@ import game.doppelkopf.adapter.api.core.game.dto.GameCreateDto
 import game.doppelkopf.adapter.api.core.game.dto.GameInfoDto
 import game.doppelkopf.adapter.api.core.game.dto.GameOperationDto
 import game.doppelkopf.adapter.persistence.model.game.GamePersistence
-import game.doppelkopf.core.GameFacade
+import game.doppelkopf.domain.game.GameEngine
 import game.doppelkopf.domain.game.enums.GameOperation
+import game.doppelkopf.domain.game.ports.commands.GameCommandStartPlaying
+import game.doppelkopf.domain.lobby.LobbyEngine
+import game.doppelkopf.domain.lobby.ports.commands.LobbyCommandCreateNewGame
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -22,7 +25,8 @@ import java.util.*
 @RequestMapping("/v1")
 class GameController(
     private val gamePersistence: GamePersistence,
-    private val gameFacade: GameFacade
+    private val lobbyEngine: LobbyEngine,
+    private val gameEngine: GameEngine,
 ) {
     @Operation(
         summary = "List games.",
@@ -44,9 +48,11 @@ class GameController(
         @RequestBody @Valid gameCreateDto: GameCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<GameInfoDto> {
-        val game = gameFacade.create(
-            playerLimit = gameCreateDto.playerLimit,
-            user = userDetails.entity
+        val game = lobbyEngine.execute(
+            command = LobbyCommandCreateNewGame(
+                user = userDetails,
+                playerLimit = gameCreateDto.playerLimit
+            ),
         )
 
         return GameInfoDto(game).let {
@@ -78,7 +84,12 @@ class GameController(
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<GameInfoDto> {
         return when (operation.op) {
-            GameOperation.START -> ResponseEntity.ok(GameInfoDto(gameFacade.start(id, userDetails.entity)))
-        }
+            GameOperation.START -> gameEngine.execute(
+                command = GameCommandStartPlaying(
+                    user = userDetails,
+                    gameId = id
+                )
+            )
+        }.let { ResponseEntity.ok(GameInfoDto(it)) }
     }
 }

@@ -21,4 +21,8 @@ class RoundPersistence(
         return gameRepository.findByIdOrNull(gameId)?.rounds?.toList()
             ?: throw EntityNotFoundException.forEntity<GameEntity>(gameId)
     }
+
+    fun save(entity: RoundEntity): RoundEntity {
+        return roundRepository.save(entity)
+    }
 }

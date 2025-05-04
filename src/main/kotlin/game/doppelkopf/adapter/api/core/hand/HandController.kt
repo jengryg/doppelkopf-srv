@@ -5,7 +5,9 @@ import game.doppelkopf.adapter.api.core.hand.dto.DeclarationCreateDto
 import game.doppelkopf.adapter.api.core.hand.dto.HandForPlayerDto
 import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoDto
 import game.doppelkopf.adapter.persistence.model.hand.HandPersistence
-import game.doppelkopf.core.HandFacade
+import game.doppelkopf.domain.hand.HandEngine
+import game.doppelkopf.domain.hand.ports.commands.HandCommandBid
+import game.doppelkopf.domain.hand.ports.commands.HandCommandDeclare
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -18,7 +20,7 @@ import java.util.*
 @RequestMapping("/v1")
 class HandController(
     private val handPersistence: HandPersistence,
-    private val handFacade: HandFacade
+    private val handEngine: HandEngine,
 ) {
     @Operation(
         summary = "Show general hand information about all hands of the round.",
@@ -44,7 +46,7 @@ class HandController(
         @AuthenticationPrincipal userDetails: UserDetails,
     ): ResponseEntity<HandForPlayerDto> {
         return ResponseEntity.ok(
-            HandForPlayerDto(handFacade.show(handId, userDetails.entity))
+            HandForPlayerDto(handPersistence.loadForUser(handId, userDetails.entity))
         )
     }
 
@@ -58,10 +60,16 @@ class HandController(
         @RequestBody declarationCreateDto: DeclarationCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<HandForPlayerDto> {
-        return HandForPlayerDto(handFacade.declare(handId, declarationCreateDto.declaration, userDetails.entity)).let {
+        return handEngine.execute(
+            command = HandCommandDeclare(
+                user = userDetails,
+                handId = handId,
+                declaration = declarationCreateDto.declaration
+            )
+        ).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/hands/{id}").build(it.id)
-            ).body(it)
+            ).body(HandForPlayerDto(it))
         }
     }
 
@@ -75,10 +83,16 @@ class HandController(
         @RequestBody bidCreateDto: BidCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<HandForPlayerDto> {
-        return HandForPlayerDto(handFacade.bid(handId, bidCreateDto.bid, userDetails.entity)).let {
+        return handEngine.execute(
+            command = HandCommandBid(
+                user = userDetails,
+                handId = handId,
+                bid = bidCreateDto.bid
+            )
+        ).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/hands/{id}").build(it.id)
-            ).body(it)
+            ).body(HandForPlayerDto(it))
         }
     }
 }

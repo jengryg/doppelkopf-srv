@@ -21,4 +21,8 @@ class TurnPersistence(
         return roundRepository.findByIdOrNull(roundId)?.turns?.toList()
             ?: throw EntityNotFoundException.forEntity<RoundEntity>(roundId)
     }
+
+    fun save(entity: TurnEntity): TurnEntity {
+        return turnRepository.save(entity)
+    }
 }

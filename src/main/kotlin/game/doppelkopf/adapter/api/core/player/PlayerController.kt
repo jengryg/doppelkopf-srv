@@ -3,7 +3,8 @@ package game.doppelkopf.adapter.api.core.player
 import game.doppelkopf.adapter.api.core.player.dto.PlayerCreateDto
 import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoDto
 import game.doppelkopf.adapter.persistence.model.player.PlayerPersistence
-import game.doppelkopf.core.PlayerFacade
+import game.doppelkopf.domain.game.GameEngine
+import game.doppelkopf.domain.game.ports.commands.GameCommandAddUserAsPlayer
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -20,7 +21,7 @@ import java.util.*
 @RequestMapping("/v1")
 class PlayerController(
     private val playerPersistence: PlayerPersistence,
-    private val playerFacade: PlayerFacade
+    private val gameEngine: GameEngine
 ) {
     @Operation(
         summary = "Obtain all players of the specified game.",
@@ -45,16 +46,16 @@ class PlayerController(
         @RequestBody @Valid playerCreateDto: PlayerCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<PlayerInfoDto> {
-        val player = playerFacade.create(
-            gameId = gameId,
-            seat = playerCreateDto.seat,
-            user = userDetails.entity
-        )
-
-        return PlayerInfoDto(player).let {
+        return gameEngine.execute(
+            command = GameCommandAddUserAsPlayer(
+                userDetails,
+                gameId = gameId,
+                seat = playerCreateDto.seat
+            )
+        ).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/players/{id}").build(it.id)
-            ).body(it)
+            ).body(PlayerInfoDto(it))
         }
     }
 
