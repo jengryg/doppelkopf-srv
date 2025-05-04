@@ -6,11 +6,11 @@ import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundPersistence
 import game.doppelkopf.adapter.persistence.model.round.RoundRepository
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
-import game.doppelkopf.core.model.ModelFactoryProvider
-import game.doppelkopf.domain.game.handler.GameDealModel
-import game.doppelkopf.domain.round.handler.RoundBidsEvaluationModel
-import game.doppelkopf.domain.round.handler.RoundDeclarationEvaluationModel
-import game.doppelkopf.domain.round.handler.RoundMarriageResolverModel
+import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.game.service.GameDealModel
+import game.doppelkopf.domain.round.service.RoundBidsEvaluationModel
+import game.doppelkopf.domain.round.service.RoundDeclarationEvaluationModel
+import game.doppelkopf.domain.round.service.RoundMarriageResolverModel
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.*

@@ -1,11 +1,11 @@
 package game.doppelkopf.domain.hand.model
 
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
-import game.doppelkopf.domain.cards.Card
+import game.doppelkopf.domain.deck.model.Card
 import game.doppelkopf.core.common.enums.Team
 import game.doppelkopf.core.errors.GameFailedException
-import game.doppelkopf.core.model.ModelAbstract
-import game.doppelkopf.core.model.ModelFactoryProvider
+import game.doppelkopf.domain.ModelAbstract
+import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.player.model.IPlayerModel
 import game.doppelkopf.domain.round.model.IRoundModel
 

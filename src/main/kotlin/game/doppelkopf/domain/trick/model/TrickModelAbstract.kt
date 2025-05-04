@@ -1,11 +1,11 @@
 package game.doppelkopf.domain.trick.model
 
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
-import game.doppelkopf.domain.cards.Card
+import game.doppelkopf.domain.deck.model.Card
 import game.doppelkopf.core.common.enums.TrickState
 import game.doppelkopf.core.errors.GameFailedException
-import game.doppelkopf.core.model.ModelAbstract
-import game.doppelkopf.core.model.ModelFactoryProvider
+import game.doppelkopf.domain.ModelAbstract
+import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.hand.model.IHandModel
 import game.doppelkopf.domain.round.model.IRoundModel
 

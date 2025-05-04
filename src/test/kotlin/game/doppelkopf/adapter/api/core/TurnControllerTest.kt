@@ -15,11 +15,11 @@ import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickRepository
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnRepository
-import game.doppelkopf.domain.cards.CardDemand
+import game.doppelkopf.domain.deck.model.CardDemand
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.InvalidActionException
-import game.doppelkopf.domain.round.handler.RoundPlayCardModel
+import game.doppelkopf.domain.round.service.RoundPlayCardModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat

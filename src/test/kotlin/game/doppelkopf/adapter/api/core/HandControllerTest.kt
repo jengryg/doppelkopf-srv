@@ -16,10 +16,10 @@ import game.doppelkopf.adapter.persistence.model.round.RoundRepository
 import game.doppelkopf.core.common.enums.*
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException
-import game.doppelkopf.domain.hand.handler.HandBiddingModel
-import game.doppelkopf.domain.hand.handler.HandDeclareModel
-import game.doppelkopf.domain.round.handler.RoundBidsEvaluationModel
-import game.doppelkopf.domain.round.handler.RoundDeclarationEvaluationModel
+import game.doppelkopf.domain.hand.service.HandBiddingModel
+import game.doppelkopf.domain.hand.service.HandDeclareModel
+import game.doppelkopf.domain.round.service.RoundBidsEvaluationModel
+import game.doppelkopf.domain.round.service.RoundDeclarationEvaluationModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat

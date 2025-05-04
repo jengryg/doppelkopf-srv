@@ -6,7 +6,7 @@ import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
-import game.doppelkopf.domain.cards.DeckMode
+import game.doppelkopf.domain.deck.model.DeckMode
 import game.doppelkopf.core.common.enums.RoundContract
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.domain.round.model.IRoundProperties

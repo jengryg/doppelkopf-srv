@@ -6,11 +6,11 @@ import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import game.doppelkopf.core.common.enums.BiddingOption
 import game.doppelkopf.core.common.enums.DeclarationOption
 import game.doppelkopf.core.errors.ForbiddenActionException
-import game.doppelkopf.core.model.ModelFactoryProvider
-import game.doppelkopf.domain.hand.handler.HandBiddingModel
-import game.doppelkopf.domain.hand.handler.HandDeclareModel
-import game.doppelkopf.domain.round.handler.RoundBidsEvaluationModel
-import game.doppelkopf.domain.round.handler.RoundDeclarationEvaluationModel
+import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.hand.service.HandBiddingModel
+import game.doppelkopf.domain.hand.service.HandDeclareModel
+import game.doppelkopf.domain.round.service.RoundBidsEvaluationModel
+import game.doppelkopf.domain.round.service.RoundDeclarationEvaluationModel
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.*

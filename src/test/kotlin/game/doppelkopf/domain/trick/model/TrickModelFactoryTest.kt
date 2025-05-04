@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.trick.model
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.core.model.ModelFactoryProvider
+import game.doppelkopf.domain.ModelFactoryProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

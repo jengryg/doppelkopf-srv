@@ -2,8 +2,8 @@ package game.doppelkopf.domain.game.model
 
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.core.errors.ofGameFailed
-import game.doppelkopf.core.model.ModelAbstract
-import game.doppelkopf.core.model.ModelFactoryProvider
+import game.doppelkopf.domain.ModelAbstract
+import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.player.model.IPlayerModel
 import game.doppelkopf.domain.round.model.IRoundModel
 import game.doppelkopf.domain.user.IUserModel

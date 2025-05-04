@@ -1,6 +1,6 @@
 package game.doppelkopf.core.common.enums
 
-import game.doppelkopf.domain.cards.DeckMode
+import game.doppelkopf.domain.deck.model.DeckMode
 
 /**
  * [Bidding] is made by players that have declared RESERVATION.

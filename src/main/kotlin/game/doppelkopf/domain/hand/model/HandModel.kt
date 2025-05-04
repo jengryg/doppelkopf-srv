@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.hand.model
 
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
-import game.doppelkopf.core.model.ModelFactoryProvider
+import game.doppelkopf.domain.ModelFactoryProvider
 
 class HandModel(
     entity: HandEntity,
