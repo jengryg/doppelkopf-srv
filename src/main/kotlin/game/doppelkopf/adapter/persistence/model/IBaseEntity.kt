@@ -1,4 +1,4 @@
-package game.doppelkopf.adapter.persistence
+package game.doppelkopf.adapter.persistence.model
 
 import game.doppelkopf.common.IBaseProperties
 

@@ -1,5 +1,6 @@
 package game.doppelkopf.core.model.trick
 
+import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.core.cards.Card
 import game.doppelkopf.core.common.enums.TrickState
 import game.doppelkopf.core.errors.GameFailedException
@@ -7,7 +8,6 @@ import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.IHandModel
 import game.doppelkopf.core.model.round.IRoundModel
-import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 
 abstract class TrickModelAbstract(
     entity: TrickEntity,

@@ -1,7 +1,7 @@
 package game.doppelkopf.core.model.player
 
-import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
+import game.doppelkopf.core.model.ModelFactoryProvider
 
 class PlayerModel(
     entity: PlayerEntity,

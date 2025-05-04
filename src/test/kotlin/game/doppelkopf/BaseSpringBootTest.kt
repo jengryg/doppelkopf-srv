@@ -1,8 +1,8 @@
 package game.doppelkopf
 
-import game.doppelkopf.adapter.persistence.IBaseEntityRepository
 import game.doppelkopf.adapter.persistence.getEntityKClass
 import game.doppelkopf.adapter.persistence.getRepositoryKClass
+import game.doppelkopf.adapter.persistence.model.IBaseEntityRepository
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import game.doppelkopf.adapter.persistence.model.user.UserRepository
 import game.doppelkopf.instrumentation.logging.Logging
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.actuate.metrics.data.DefaultRepositoryTagsProvider
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
@@ -36,8 +35,6 @@ import java.security.SecureRandom
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag(TestTags.SPRING_INTEGRATION)
 abstract class BaseSpringBootTest : Logging {
-    @Autowired
-    private lateinit var repositoryTagsProvider: DefaultRepositoryTagsProvider
     private val log = logger()
 
     @Autowired

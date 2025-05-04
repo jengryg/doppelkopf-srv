@@ -1,5 +1,8 @@
 package game.doppelkopf.security
 
+import game.doppelkopf.security.Authority.NONE
+
+
 /**
  * We use a basic authority model where each user can only have exactly one authority.
  * The available authorities are the default ones of spring security `ADMIN`, `USER`.

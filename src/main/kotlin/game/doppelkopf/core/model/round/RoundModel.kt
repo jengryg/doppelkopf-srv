@@ -1,7 +1,7 @@
 package game.doppelkopf.core.model.round
 
-import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
+import game.doppelkopf.core.model.ModelFactoryProvider
 
 class RoundModel(
     entity: RoundEntity,

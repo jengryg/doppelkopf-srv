@@ -1,39 +1,19 @@
 package game.doppelkopf.core
 
-import game.doppelkopf.core.model.ModelFactoryProvider
-import game.doppelkopf.core.model.game.handler.GameStartModel
-import game.doppelkopf.adapter.persistence.errors.EntityNotFoundException
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
-import game.doppelkopf.adapter.persistence.model.game.GameRepository
+import game.doppelkopf.adapter.persistence.model.game.GamePersistence
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
+import game.doppelkopf.core.model.ModelFactoryProvider
+import game.doppelkopf.core.model.game.handler.GameStartModel
 import jakarta.transaction.Transactional
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 class GameFacade(
-    private val gameRepository: GameRepository
+    private val gamePersistence: GamePersistence
 ) {
-    /**
-     * @return a list of all [GameEntity] in the database.
-     *
-     * TODO: implement pagination and limiting
-     */
-    fun list(): List<GameEntity> {
-        return gameRepository.findAll()
-    }
-
-    /**
-     * @param id the [UUID] of the game to get
-     * @return the [GameEntity] with [id]
-     * @throws EntityNotFoundException if the [GameEntity] with [id] can not be found
-     */
-    fun load(id: UUID): GameEntity {
-        return gameRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.forEntity<GameEntity>(id)
-    }
-
     /**
      * Create a new game that is owned by [user].
      *
@@ -43,7 +23,7 @@ class GameFacade(
      */
     @Transactional
     fun create(playerLimit: Int, user: UserEntity): GameEntity {
-        return gameRepository.save(
+        return gamePersistence.save(
             GameEntity(
                 creator = user,
                 maxNumberOfPlayers = playerLimit
@@ -65,7 +45,7 @@ class GameFacade(
      */
     @Transactional
     fun start(id: UUID, user: UserEntity): GameEntity {
-        val game = load(id)
+        val game = gamePersistence.load(id)
 
         val mfp = ModelFactoryProvider()
 

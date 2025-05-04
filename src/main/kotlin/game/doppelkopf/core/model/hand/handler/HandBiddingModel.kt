@@ -1,5 +1,6 @@
 package game.doppelkopf.core.model.hand.handler
 
+import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.core.common.enums.Bidding
 import game.doppelkopf.core.common.enums.BiddingOption
 import game.doppelkopf.core.common.enums.Declaration
@@ -8,7 +9,6 @@ import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.HandModelAbstract
 import game.doppelkopf.core.model.user.IUserModel
-import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import org.springframework.lang.CheckReturnValue
 
 class HandBiddingModel(

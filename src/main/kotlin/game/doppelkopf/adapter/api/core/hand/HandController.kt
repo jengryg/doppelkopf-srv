@@ -4,23 +4,20 @@ import game.doppelkopf.adapter.api.core.hand.dto.BidCreateDto
 import game.doppelkopf.adapter.api.core.hand.dto.DeclarationCreateDto
 import game.doppelkopf.adapter.api.core.hand.dto.HandForPlayerDto
 import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoDto
+import game.doppelkopf.adapter.persistence.model.hand.HandPersistence
 import game.doppelkopf.core.HandFacade
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
-import java.util.UUID
+import java.util.*
 
 @RestController
 @RequestMapping("/v1")
 class HandController(
+    private val handPersistence: HandPersistence,
     private val handFacade: HandFacade
 ) {
     @Operation(
@@ -33,7 +30,7 @@ class HandController(
         @AuthenticationPrincipal userDetails: UserDetails,
     ): ResponseEntity<List<HandPublicInfoDto>> {
         return ResponseEntity.ok(
-            handFacade.list(roundId).map { HandPublicInfoDto(it) }
+            handPersistence.listForRound(roundId).map { HandPublicInfoDto(it) }
         )
     }
 

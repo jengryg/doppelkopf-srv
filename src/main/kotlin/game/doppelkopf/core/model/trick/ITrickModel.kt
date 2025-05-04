@@ -1,11 +1,11 @@
 package game.doppelkopf.core.model.trick
 
+import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
+import game.doppelkopf.common.IBaseModel
 import game.doppelkopf.core.cards.Card
 import game.doppelkopf.core.common.enums.TrickState
-import game.doppelkopf.common.IBaseModel
 import game.doppelkopf.core.model.hand.IHandModel
 import game.doppelkopf.core.model.round.IRoundModel
-import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 
 interface ITrickModel : ITrickProperties, IBaseModel<TrickEntity> {
     val round: IRoundModel

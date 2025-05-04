@@ -3,11 +3,6 @@ package game.doppelkopf.adapter.api.core
 import game.doppelkopf.BaseRestAssuredTest
 import game.doppelkopf.adapter.api.core.trick.dto.TrickInfoDto
 import game.doppelkopf.adapter.api.core.trick.dto.TrickOperationDto
-import game.doppelkopf.core.cards.CardDemand
-import game.doppelkopf.core.common.enums.TrickOperation
-import game.doppelkopf.core.errors.InvalidActionException
-import game.doppelkopf.core.model.trick.handler.TrickEvaluationModel
-import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.game.GameRepository
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
@@ -18,6 +13,11 @@ import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundRepository
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickRepository
+import game.doppelkopf.core.cards.CardDemand
+import game.doppelkopf.core.common.enums.TrickOperation
+import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.core.model.trick.handler.TrickEvaluationModel
+import game.doppelkopf.errors.ProblemDetailResponse
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach

@@ -1,7 +1,7 @@
 package game.doppelkopf.adapter.api.core.hand.dto
 
-import game.doppelkopf.core.common.enums.Team
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
+import game.doppelkopf.core.common.enums.Team
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 

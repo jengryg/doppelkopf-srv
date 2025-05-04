@@ -1,35 +1,27 @@
 package game.doppelkopf.core
 
+import game.doppelkopf.adapter.persistence.model.game.GamePersistence
+import game.doppelkopf.adapter.persistence.model.hand.HandRepository
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
+import game.doppelkopf.adapter.persistence.model.round.RoundPersistence
+import game.doppelkopf.adapter.persistence.model.round.RoundRepository
+import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.game.handler.GameDealModel
 import game.doppelkopf.core.model.round.handler.RoundBidsEvaluationModel
 import game.doppelkopf.core.model.round.handler.RoundDeclarationEvaluationModel
 import game.doppelkopf.core.model.round.handler.RoundMarriageResolverModel
-import game.doppelkopf.adapter.persistence.errors.EntityNotFoundException
-import game.doppelkopf.adapter.persistence.model.hand.HandRepository
-import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.adapter.persistence.model.round.RoundRepository
-import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import jakarta.transaction.Transactional
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 class RoundFacade(
-    private val gameFacade: GameFacade,
     private val roundRepository: RoundRepository,
     private val handRepository: HandRepository,
+    private val gamePersistence: GamePersistence,
+    private val roundPersistence: RoundPersistence,
 ) {
-    fun list(gameId: UUID): List<RoundEntity> {
-        return gameFacade.load(gameId).rounds.toList()
-    }
-
-    fun load(roundId: UUID): RoundEntity {
-        return roundRepository.findByIdOrNull(roundId)
-            ?: throw EntityNotFoundException.forEntity<RoundEntity>(roundId)
-    }
-
     /**
      * Start a new round in the game with [gameId] as [user].
      *
@@ -40,7 +32,7 @@ class RoundFacade(
      */
     @Transactional
     fun create(gameId: UUID, user: UserEntity): RoundEntity {
-        val game = gameFacade.load(gameId)
+        val game = gamePersistence.load(gameId)
 
         val mfp = ModelFactoryProvider()
 
@@ -55,7 +47,7 @@ class RoundFacade(
 
     @Transactional
     fun evaluateDeclarations(roundId: UUID): RoundEntity {
-        val round = load(roundId)
+        val round = roundPersistence.load(roundId)
 
         val mfp = ModelFactoryProvider()
 
@@ -66,7 +58,7 @@ class RoundFacade(
 
     @Transactional
     fun evaluateBids(roundId: UUID): RoundEntity {
-        val round = load(roundId)
+        val round = roundPersistence.load(roundId)
 
         val mfp = ModelFactoryProvider()
 
@@ -77,7 +69,7 @@ class RoundFacade(
 
     @Transactional
     fun resolveMarriage(roundId: UUID): RoundEntity {
-        val round = load(roundId)
+        val round = roundPersistence.load(roundId)
 
         val mfp = ModelFactoryProvider()
 

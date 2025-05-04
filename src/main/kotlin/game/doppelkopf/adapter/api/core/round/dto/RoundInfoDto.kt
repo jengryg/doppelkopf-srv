@@ -1,9 +1,9 @@
 package game.doppelkopf.adapter.api.core.round.dto
 
 import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoDto
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.core.common.enums.RoundContractPublic
 import game.doppelkopf.core.common.enums.RoundState
-import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 

@@ -2,6 +2,7 @@ package game.doppelkopf.adapter.api.core.round
 
 import game.doppelkopf.adapter.api.core.round.dto.RoundInfoDto
 import game.doppelkopf.adapter.api.core.round.dto.RoundOperationDto
+import game.doppelkopf.adapter.persistence.model.round.RoundPersistence
 import game.doppelkopf.core.RoundFacade
 import game.doppelkopf.core.common.enums.RoundOperation
 import game.doppelkopf.security.UserDetails
@@ -9,15 +10,9 @@ import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
-import java.util.UUID
+import java.util.*
 
 /**
  * Lets players start and end rounds in a game and provides information about the rounds.
@@ -25,6 +20,7 @@ import java.util.UUID
 @RestController
 @RequestMapping("/v1")
 class RoundController(
+    private val roundPersistence: RoundPersistence,
     private val roundFacade: RoundFacade
 ) {
     @Operation(
@@ -34,7 +30,7 @@ class RoundController(
     @GetMapping("/games/{gameId}/rounds")
     fun list(@PathVariable gameId: UUID): ResponseEntity<List<RoundInfoDto>> {
         return ResponseEntity.ok(
-            roundFacade.list(gameId).map { RoundInfoDto(it) }
+            roundPersistence.listForGame(gameId).map { RoundInfoDto(it) }
         )
     }
 
@@ -63,7 +59,7 @@ class RoundController(
         @PathVariable id: UUID
     ): ResponseEntity<RoundInfoDto> {
         return ResponseEntity.ok(
-            RoundInfoDto(roundFacade.load(id))
+            RoundInfoDto(roundPersistence.load(id))
         )
     }
 

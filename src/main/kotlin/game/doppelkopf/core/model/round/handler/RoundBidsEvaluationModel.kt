@@ -1,5 +1,6 @@
 package game.doppelkopf.core.model.round.handler
 
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.core.cards.DeckMode
 import game.doppelkopf.core.common.enums.*
 import game.doppelkopf.core.errors.GameFailedException
@@ -7,7 +8,6 @@ import game.doppelkopf.core.errors.ofForbiddenAction
 import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.round.RoundModelAbstract
-import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import org.springframework.lang.CheckReturnValue
 
 class RoundBidsEvaluationModel(

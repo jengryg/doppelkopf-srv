@@ -1,5 +1,8 @@
 package game.doppelkopf.core
 
+import game.doppelkopf.adapter.persistence.model.hand.HandEntity
+import game.doppelkopf.adapter.persistence.model.hand.HandPersistence
+import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import game.doppelkopf.core.common.enums.BiddingOption
 import game.doppelkopf.core.common.enums.DeclarationOption
 import game.doppelkopf.core.errors.ForbiddenActionException
@@ -8,31 +11,16 @@ import game.doppelkopf.core.model.hand.handler.HandBiddingModel
 import game.doppelkopf.core.model.hand.handler.HandDeclareModel
 import game.doppelkopf.core.model.round.handler.RoundBidsEvaluationModel
 import game.doppelkopf.core.model.round.handler.RoundDeclarationEvaluationModel
-import game.doppelkopf.adapter.persistence.errors.EntityNotFoundException
-import game.doppelkopf.adapter.persistence.model.hand.HandEntity
-import game.doppelkopf.adapter.persistence.model.hand.HandRepository
-import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import jakarta.transaction.Transactional
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 class HandFacade(
-    private val roundFacade: RoundFacade,
-    private val handRepository: HandRepository
+    private val handPersistence: HandPersistence
 ) {
-    fun list(roundId: UUID): List<HandEntity> {
-        return roundFacade.load(roundId).hands.toList()
-    }
-
-    private fun load(handId: UUID): HandEntity {
-        return handRepository.findByIdOrNull(handId)
-            ?: throw EntityNotFoundException.forEntity<HandEntity>(handId)
-    }
-
     fun show(handId: UUID, user: UserEntity): HandEntity {
-        val hand = load(handId)
+        val hand = handPersistence.load(handId)
 
         if (hand.player.user != user) {
             throw ForbiddenActionException(
@@ -47,7 +35,7 @@ class HandFacade(
 
     @Transactional
     fun declare(handId: UUID, declarationOption: DeclarationOption, user: UserEntity): HandEntity {
-        val hand = load(handId)
+        val hand = handPersistence.load(handId)
 
         val mfp = ModelFactoryProvider()
 
@@ -67,7 +55,7 @@ class HandFacade(
 
     @Transactional
     fun bid(handId: UUID, biddingOption: BiddingOption, user: UserEntity): HandEntity {
-        val hand = load(handId)
+        val hand = handPersistence.load(handId)
 
         val mfp = ModelFactoryProvider()
 

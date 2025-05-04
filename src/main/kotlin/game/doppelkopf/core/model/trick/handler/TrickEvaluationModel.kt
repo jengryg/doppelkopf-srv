@@ -1,11 +1,11 @@
 package game.doppelkopf.core.model.trick.handler
 
+import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.core.common.enums.TrickState
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.trick.TrickModelAbstract
-import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import org.slf4j.helpers.CheckReturnValue
 
 class TrickEvaluationModel(

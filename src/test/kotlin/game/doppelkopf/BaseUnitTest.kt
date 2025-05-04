@@ -1,8 +1,5 @@
 package game.doppelkopf
 
-import game.doppelkopf.core.cards.CardDemand
-import game.doppelkopf.core.common.enums.Bidding
-import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
@@ -10,6 +7,9 @@ import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
+import game.doppelkopf.core.cards.CardDemand
+import game.doppelkopf.core.common.enums.Bidding
+import game.doppelkopf.core.common.enums.Declaration
 import io.mockk.clearAllMocks
 import io.mockk.mockk
 import io.mockk.unmockkAll

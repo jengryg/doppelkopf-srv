@@ -1,12 +1,14 @@
 package game.doppelkopf.adapter.persistence
 
+import game.doppelkopf.adapter.persistence.model.BaseEntity
+import game.doppelkopf.adapter.persistence.model.IBaseEntityRepository
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.allSupertypes
 
 /**
- * Determine the name of the package containing the [IBaseEntityRepository] class.
- * This package is considered to be the root package of all [BaseEntity] and [IBaseEntityRepository] definitions of this
+ * Determine the name of the package containing the [game.doppelkopf.adapter.persistence.model.IBaseEntityRepository] class.
+ * This package is considered to be the root package of all [game.doppelkopf.adapter.persistence.model.BaseEntity] and [game.doppelkopf.adapter.persistence.model.IBaseEntityRepository] definitions of this
  * application.
  */
 @Suppress("unused")

@@ -1,15 +1,15 @@
 package game.doppelkopf.adapter.persistence.model.round
 
-import game.doppelkopf.core.cards.DeckMode
-import game.doppelkopf.core.common.enums.RoundContract
-import game.doppelkopf.core.common.enums.RoundState
-import game.doppelkopf.core.model.round.IRoundProperties
-import game.doppelkopf.adapter.persistence.BaseEntity
+import game.doppelkopf.adapter.persistence.model.BaseEntity
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
+import game.doppelkopf.core.cards.DeckMode
+import game.doppelkopf.core.common.enums.RoundContract
+import game.doppelkopf.core.common.enums.RoundState
+import game.doppelkopf.core.model.round.IRoundProperties
 import jakarta.persistence.*
 import java.time.Instant
 

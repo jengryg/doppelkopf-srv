@@ -1,12 +1,12 @@
 package game.doppelkopf.adapter.persistence.model.trick
 
-import game.doppelkopf.core.cards.CardDemand
-import game.doppelkopf.core.common.enums.TrickState
-import game.doppelkopf.core.model.trick.ITrickProperties
-import game.doppelkopf.adapter.persistence.BaseEntity
+import game.doppelkopf.adapter.persistence.model.BaseEntity
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
+import game.doppelkopf.core.cards.CardDemand
+import game.doppelkopf.core.common.enums.TrickState
+import game.doppelkopf.core.model.trick.ITrickProperties
 import jakarta.persistence.*
 import java.time.Instant
 

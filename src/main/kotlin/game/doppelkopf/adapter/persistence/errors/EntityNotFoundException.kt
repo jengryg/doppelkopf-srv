@@ -1,7 +1,7 @@
 package game.doppelkopf.adapter.persistence.errors
 
+import game.doppelkopf.adapter.persistence.model.BaseEntity
 import game.doppelkopf.errors.ApplicationRuntimeException
-import game.doppelkopf.adapter.persistence.BaseEntity
 import org.springframework.http.HttpStatus
 import java.util.*
 import kotlin.reflect.KClass

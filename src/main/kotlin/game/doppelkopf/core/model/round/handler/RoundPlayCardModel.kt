@@ -1,5 +1,8 @@
 package game.doppelkopf.core.model.round.handler
 
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
+import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
+import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.core.cards.Card
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.errors.GameFailedException
@@ -13,9 +16,6 @@ import game.doppelkopf.core.model.trick.ITrickModel
 import game.doppelkopf.core.model.trick.handler.TrickCardPlayModel
 import game.doppelkopf.core.model.turn.ITurnModel
 import game.doppelkopf.core.model.user.IUserModel
-import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
-import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import org.springframework.lang.CheckReturnValue
 
 class RoundPlayCardModel(

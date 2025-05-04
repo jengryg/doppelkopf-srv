@@ -1,14 +1,14 @@
 package game.doppelkopf.core.model.round.handler
 
 import game.doppelkopf.BaseUnitTest
+import game.doppelkopf.adapter.persistence.model.hand.HandEntity
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.core.cards.DeckMode
 import game.doppelkopf.core.common.enums.Declaration
 import game.doppelkopf.core.common.enums.RoundContract
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.ModelFactoryProvider
-import game.doppelkopf.adapter.persistence.model.hand.HandEntity
-import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

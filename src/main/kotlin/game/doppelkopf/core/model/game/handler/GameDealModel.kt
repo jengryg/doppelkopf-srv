@@ -1,5 +1,8 @@
 package game.doppelkopf.core.model.game.handler
 
+import game.doppelkopf.adapter.persistence.model.game.GameEntity
+import game.doppelkopf.adapter.persistence.model.hand.HandEntity
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.core.cards.Card
 import game.doppelkopf.core.cards.Deck
 import game.doppelkopf.core.cards.DeckMode
@@ -13,9 +16,6 @@ import game.doppelkopf.core.model.hand.IHandModel
 import game.doppelkopf.core.model.player.IPlayerModel
 import game.doppelkopf.core.model.round.IRoundModel
 import game.doppelkopf.core.model.user.IUserModel
-import game.doppelkopf.adapter.persistence.model.game.GameEntity
-import game.doppelkopf.adapter.persistence.model.hand.HandEntity
-import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.utils.Quadruple
 import org.springframework.lang.CheckReturnValue
 

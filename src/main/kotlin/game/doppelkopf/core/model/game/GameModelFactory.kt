@@ -1,9 +1,9 @@
 package game.doppelkopf.core.model.game
 
+import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.common.IModelFactory
 import game.doppelkopf.core.model.ModelFactoryCache
 import game.doppelkopf.core.model.ModelFactoryProvider
-import game.doppelkopf.adapter.persistence.model.game.GameEntity
 
 class GameModelFactory(
     private val factoryProvider: ModelFactoryProvider

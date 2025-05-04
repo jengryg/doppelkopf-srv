@@ -1,9 +1,9 @@
 package game.doppelkopf.core.model.turn
 
+import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.common.IModelFactory
 import game.doppelkopf.core.model.ModelFactoryCache
 import game.doppelkopf.core.model.ModelFactoryProvider
-import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 
 class TurnModelFactory(
     private val factoryProvider: ModelFactoryProvider,

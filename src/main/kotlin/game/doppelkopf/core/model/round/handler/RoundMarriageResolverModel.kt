@@ -1,5 +1,6 @@
 package game.doppelkopf.core.model.round.handler
 
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.core.common.enums.RoundContract
 import game.doppelkopf.core.common.enums.Team
 import game.doppelkopf.core.errors.GameFailedException
@@ -8,7 +9,6 @@ import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.IHandModel
 import game.doppelkopf.core.model.round.RoundModelAbstract
 import game.doppelkopf.core.model.trick.ITrickModel
-import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import org.slf4j.helpers.CheckReturnValue
 
 class RoundMarriageResolverModel(

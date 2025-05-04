@@ -1,5 +1,6 @@
 package game.doppelkopf.core.model.turn
 
+import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.core.cards.Card
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.model.ModelAbstract
@@ -7,7 +8,6 @@ import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.core.model.hand.IHandModel
 import game.doppelkopf.core.model.round.IRoundModel
 import game.doppelkopf.core.model.trick.ITrickModel
-import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 
 abstract class TurnModelAbstract(
     entity: TurnEntity,

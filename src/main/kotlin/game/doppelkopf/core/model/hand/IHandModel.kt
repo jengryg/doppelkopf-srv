@@ -1,11 +1,11 @@
 package game.doppelkopf.core.model.hand
 
+import game.doppelkopf.adapter.persistence.model.hand.HandEntity
+import game.doppelkopf.common.IBaseModel
 import game.doppelkopf.core.cards.Card
 import game.doppelkopf.core.common.enums.Team
-import game.doppelkopf.common.IBaseModel
 import game.doppelkopf.core.model.player.IPlayerModel
 import game.doppelkopf.core.model.round.IRoundModel
-import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 
 interface IHandModel : IHandProperties, IBaseModel<HandEntity> {
     val round: IRoundModel

@@ -3,12 +3,6 @@ package game.doppelkopf.adapter.api.core
 import game.doppelkopf.BaseRestAssuredTest
 import game.doppelkopf.adapter.api.core.turn.dto.CreateTurnDto
 import game.doppelkopf.adapter.api.core.turn.dto.TurnInfoDto
-import game.doppelkopf.core.cards.CardDemand
-import game.doppelkopf.core.errors.ForbiddenActionException
-import game.doppelkopf.core.errors.GameFailedException
-import game.doppelkopf.core.errors.InvalidActionException
-import game.doppelkopf.core.model.round.handler.RoundPlayCardModel
-import game.doppelkopf.errors.ProblemDetailResponse
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.game.GameRepository
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
@@ -21,6 +15,12 @@ import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickRepository
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnRepository
+import game.doppelkopf.core.cards.CardDemand
+import game.doppelkopf.core.errors.ForbiddenActionException
+import game.doppelkopf.core.errors.GameFailedException
+import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.core.model.round.handler.RoundPlayCardModel
+import game.doppelkopf.errors.ProblemDetailResponse
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
