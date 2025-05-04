@@ -1,4 +1,4 @@
-package game.doppelkopf.core.cards
+package game.doppelkopf.domain.cards
 
 /**
  * Enum definition of the kinds of cards for Doppelkopf.

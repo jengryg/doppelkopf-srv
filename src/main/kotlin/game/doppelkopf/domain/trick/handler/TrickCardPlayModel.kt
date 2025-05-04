@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.trick.handler
 
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
-import game.doppelkopf.core.cards.Card
+import game.doppelkopf.domain.cards.Card
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.domain.trick.model.TrickModelAbstract
 

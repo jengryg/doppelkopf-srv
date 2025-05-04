@@ -1,4 +1,4 @@
-package game.doppelkopf.core.cards
+package game.doppelkopf.domain.cards
 
 object CardRankingFactory {
     /**
@@ -15,7 +15,7 @@ object CardRankingFactory {
     /**
      * Create a ranking configuration where no colored cards are considered.
      *
-     * The [Int] in the value part of the map is the [game.doppelkopf.core.cards.Card.ranking] value, the lower it is
+     * The [Int] in the value part of the map is the [Card.ranking] value, the lower it is
      * the higher is the ranking of the card, i.e. cards with smaller numbers beats card with higher number.
      */
     private fun noColor(): MutableMap<String, Int> {
@@ -34,7 +34,7 @@ object CardRankingFactory {
      * Create a ranking configuration where colored cards are given by the [coloredSuit].
      * This configuration is used if the colored cards of the deck are determined by a [CardSuit].
      *
-     * The [Int] in the value part of the map is the [game.doppelkopf.core.cards.Card.ranking] value, the lower it is
+     * The [Int] in the value part of the map is the [Card.ranking] value, the lower it is
      * the higher is the ranking of the card, i.e. cards with smaller numbers beats card with higher number.
      */
     private fun coloredSuit(coloredSuit: CardSuit): MutableMap<String, Int> {
@@ -60,7 +60,7 @@ object CardRankingFactory {
      * Create a ranking configuration where colored cards are given by the [coloredKind].
      * This configuration is used if the colored cards of the decks are determined by a [CardKind].
      *
-     * The [Int] in the value part of the map is the [game.doppelkopf.core.cards.Card.ranking] value, the lower it is
+     * The [Int] in the value part of the map is the [Card.ranking] value, the lower it is
      * the higher is the ranking of the card, i.e. cards with smaller numbers beats card with higher number.
      */
     private fun coloredKind(coloredKind: CardKind): MutableMap<String, Int> {
@@ -75,7 +75,7 @@ object CardRankingFactory {
     /**
      * Returns the ranking configuration for the given [deckMode].
      *
-     * The [Int] in the value part of the map is the [game.doppelkopf.core.cards.Card.ranking] value, the lower it is
+     * The [Int] in the value part of the map is the [Card.ranking] value, the lower it is
      * the higher is the ranking of the card, i.e. cards with smaller numbers beats card with higher number.
      */
     fun createRanking(deckMode: DeckMode): Map<String, Int> {

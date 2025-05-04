@@ -3,7 +3,7 @@ package game.doppelkopf.domain.round.handler
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.core.cards.DeckMode
+import game.doppelkopf.domain.cards.DeckMode
 import game.doppelkopf.core.common.enums.*
 import game.doppelkopf.core.errors.InvalidActionException
 import game.doppelkopf.core.model.ModelFactoryProvider

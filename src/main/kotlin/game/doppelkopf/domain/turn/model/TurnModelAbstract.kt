@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.turn.model
 
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
-import game.doppelkopf.core.cards.Card
+import game.doppelkopf.domain.cards.Card
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.ModelFactoryProvider

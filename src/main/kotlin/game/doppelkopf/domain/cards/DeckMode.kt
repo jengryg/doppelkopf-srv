@@ -1,4 +1,4 @@
-package game.doppelkopf.core.cards
+package game.doppelkopf.domain.cards
 
 /**
  * The default DeckMode of a round of Doppelkopf is [DIAMONDS], but depending on the result of the pre-round auction

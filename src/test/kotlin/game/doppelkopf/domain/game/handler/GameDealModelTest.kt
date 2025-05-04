@@ -1,8 +1,8 @@
 package game.doppelkopf.domain.game.handler
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.core.cards.Deck
-import game.doppelkopf.core.cards.DeckMode
+import game.doppelkopf.domain.cards.Deck
+import game.doppelkopf.domain.cards.DeckMode
 import game.doppelkopf.core.common.enums.GameState
 import game.doppelkopf.core.common.enums.Team
 import game.doppelkopf.core.errors.ForbiddenActionException

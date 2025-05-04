@@ -1,4 +1,4 @@
-package game.doppelkopf.core.cards
+package game.doppelkopf.domain.cards
 
 /**
  * A card in the game of Doppelkopf.

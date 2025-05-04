@@ -1,4 +1,4 @@
-package game.doppelkopf.core.cards
+package game.doppelkopf.domain.cards
 
 /**
  * The first card of each trick defines the [CardDemand] that MUST be satisfied by a player if possible.

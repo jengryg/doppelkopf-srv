@@ -3,7 +3,7 @@ package game.doppelkopf.domain.round.handler
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
-import game.doppelkopf.core.cards.Card
+import game.doppelkopf.domain.cards.Card
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.ofForbiddenAction

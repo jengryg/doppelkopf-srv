@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.round.model
 
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.core.cards.Deck
+import game.doppelkopf.domain.cards.Deck
 import game.doppelkopf.core.model.ModelAbstract
 import game.doppelkopf.core.model.ModelFactoryProvider
 import game.doppelkopf.domain.game.model.IGameModel

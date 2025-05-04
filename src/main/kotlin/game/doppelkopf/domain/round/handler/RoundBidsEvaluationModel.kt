@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.round.handler
 
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.core.cards.DeckMode
+import game.doppelkopf.domain.cards.DeckMode
 import game.doppelkopf.core.common.enums.*
 import game.doppelkopf.core.errors.GameFailedException
 import game.doppelkopf.core.errors.ofForbiddenAction

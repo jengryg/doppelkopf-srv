@@ -2,7 +2,7 @@ package game.doppelkopf.adapter.api.core.trick.dto
 
 import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoDto
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
-import game.doppelkopf.core.cards.CardDemand
+import game.doppelkopf.domain.cards.CardDemand
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 

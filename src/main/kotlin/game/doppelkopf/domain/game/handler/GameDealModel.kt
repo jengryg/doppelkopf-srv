@@ -3,9 +3,9 @@ package game.doppelkopf.domain.game.handler
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.core.cards.Card
-import game.doppelkopf.core.cards.Deck
-import game.doppelkopf.core.cards.DeckMode
+import game.doppelkopf.domain.cards.Card
+import game.doppelkopf.domain.cards.Deck
+import game.doppelkopf.domain.cards.DeckMode
 import game.doppelkopf.core.common.enums.GameState
 import game.doppelkopf.core.common.enums.Team
 import game.doppelkopf.core.errors.ofForbiddenAction

@@ -1,8 +1,8 @@
 package game.doppelkopf.domain.hand.handler
 
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
-import game.doppelkopf.core.cards.Card
-import game.doppelkopf.core.cards.CardDemand
+import game.doppelkopf.domain.cards.Card
+import game.doppelkopf.domain.cards.CardDemand
 import game.doppelkopf.core.errors.ofForbiddenAction
 import game.doppelkopf.core.errors.ofInvalidAction
 import game.doppelkopf.core.model.ModelFactoryProvider

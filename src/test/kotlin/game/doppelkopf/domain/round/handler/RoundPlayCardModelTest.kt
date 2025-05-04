@@ -2,8 +2,8 @@ package game.doppelkopf.domain.round.handler
 
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.core.cards.CardDemand
-import game.doppelkopf.core.cards.InvalidCardException
+import game.doppelkopf.domain.cards.CardDemand
+import game.doppelkopf.domain.cards.InvalidCardException
 import game.doppelkopf.core.common.enums.RoundState
 import game.doppelkopf.core.errors.ForbiddenActionException
 import game.doppelkopf.core.errors.InvalidActionException

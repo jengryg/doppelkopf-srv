@@ -1,4 +1,4 @@
-package game.doppelkopf.core.cards
+package game.doppelkopf.domain.cards
 
 import game.doppelkopf.BaseUnitTest
 import org.assertj.core.api.Assertions.*
