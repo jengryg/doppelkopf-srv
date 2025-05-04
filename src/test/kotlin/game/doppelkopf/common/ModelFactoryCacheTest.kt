@@ -2,6 +2,7 @@ package game.doppelkopf.common
 
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.adapter.persistence.model.BaseEntity
+import game.doppelkopf.common.service.ModelFactoryCache
 import game.doppelkopf.domain.ModelAbstract
 import io.mockk.mockk
 import org.assertj.core.api.Assertions

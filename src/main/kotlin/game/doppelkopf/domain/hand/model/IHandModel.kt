@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.hand.model
 
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
-import game.doppelkopf.common.IBaseModel
+import game.doppelkopf.common.model.IBaseModel
 import game.doppelkopf.domain.deck.model.Card
 import game.doppelkopf.domain.hand.enums.Team
 import game.doppelkopf.domain.player.model.IPlayerModel

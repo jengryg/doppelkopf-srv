@@ -9,4 +9,6 @@ import java.util.*
 class GameCommandStartPlaying(
     override val user: UserDetails,
     override val gameId: UUID,
-) : IGameCommand
+) : IGameCommand {
+    override fun getSlug() = "Game:Start"
+}

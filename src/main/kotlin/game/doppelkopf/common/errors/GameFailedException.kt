@@ -1,4 +1,4 @@
-package game.doppelkopf.core.errors
+package game.doppelkopf.common.errors
 
 import game.doppelkopf.errors.ApplicationRuntimeException
 import org.springframework.http.HttpStatus
@@ -31,7 +31,7 @@ class GameFailedException(
  * @param uuid see [GameFailedException]
  * @param cause see [GameFailedException]
  *
- * @return a [Result] wrapping type [T] in [Result.failure] state with an [ForbiddenActionException]
+ * @return a [Result] wrapping type [T] in [Result.failure] state with an [GameFailedException]
  */
 fun <T> Result.Companion.ofGameFailed(
     reason: String,

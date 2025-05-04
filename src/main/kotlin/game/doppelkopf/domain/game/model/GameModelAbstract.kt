@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.game.model
 
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
-import game.doppelkopf.core.errors.ofGameFailed
+import game.doppelkopf.common.errors.ofGameFailed
 import game.doppelkopf.domain.ModelAbstract
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.player.model.IPlayerModel

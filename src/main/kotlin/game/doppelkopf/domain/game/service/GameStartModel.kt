@@ -2,8 +2,8 @@ package game.doppelkopf.domain.game.service
 
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.domain.game.enums.GameState
-import game.doppelkopf.core.errors.ofForbiddenAction
-import game.doppelkopf.core.errors.ofInvalidAction
+import game.doppelkopf.common.errors.ofForbiddenAction
+import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.game.model.GameModelAbstract
 import game.doppelkopf.domain.user.model.IUserModel

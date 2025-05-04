@@ -9,4 +9,6 @@ import java.util.UUID
 class RoundCommandResolveMarriage(
     override val user: UserDetails,
     override val roundId: UUID
-) : IRoundCommand
+) : IRoundCommand {
+    override fun getSlug() = "Round:ResolveMarriage"
+}

@@ -1,5 +1,7 @@
-package game.doppelkopf.common
+package game.doppelkopf.common.service
 
+import game.doppelkopf.common.model.IBaseModel
+import game.doppelkopf.common.model.IBaseProperties
 import java.util.UUID
 
 /**

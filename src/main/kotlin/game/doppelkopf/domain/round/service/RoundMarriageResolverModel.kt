@@ -3,8 +3,8 @@ package game.doppelkopf.domain.round.service
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.domain.round.enums.RoundContract
 import game.doppelkopf.domain.hand.enums.Team
-import game.doppelkopf.core.errors.GameFailedException
-import game.doppelkopf.core.errors.ofInvalidAction
+import game.doppelkopf.common.errors.GameFailedException
+import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.hand.model.IHandModel
 import game.doppelkopf.domain.round.model.RoundModelAbstract

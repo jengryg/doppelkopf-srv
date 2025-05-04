@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.player.model
 
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
-import game.doppelkopf.common.IBaseModel
+import game.doppelkopf.common.model.IBaseModel
 import game.doppelkopf.domain.game.model.IGameModel
 import game.doppelkopf.domain.user.model.IUserModel
 

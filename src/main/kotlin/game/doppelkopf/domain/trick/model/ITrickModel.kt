@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.trick.model
 
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
-import game.doppelkopf.common.IBaseModel
+import game.doppelkopf.common.model.IBaseModel
 import game.doppelkopf.domain.deck.model.Card
 import game.doppelkopf.domain.trick.enums.TrickState
 import game.doppelkopf.domain.hand.model.IHandModel

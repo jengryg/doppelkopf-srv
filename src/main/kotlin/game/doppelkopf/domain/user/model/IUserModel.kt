@@ -1,6 +1,6 @@
 package game.doppelkopf.domain.user.model
 
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
-import game.doppelkopf.common.IBaseModel
+import game.doppelkopf.common.model.IBaseModel
 
 interface IUserModel : IUserProperties, IBaseModel<UserEntity>

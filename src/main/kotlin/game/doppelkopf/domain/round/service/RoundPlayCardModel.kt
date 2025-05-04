@@ -5,9 +5,9 @@ import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.domain.deck.model.Card
 import game.doppelkopf.domain.round.enums.RoundState
-import game.doppelkopf.core.errors.GameFailedException
-import game.doppelkopf.core.errors.ofForbiddenAction
-import game.doppelkopf.core.errors.ofInvalidAction
+import game.doppelkopf.common.errors.GameFailedException
+import game.doppelkopf.common.errors.ofForbiddenAction
+import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.hand.service.HandCardPlayModel
 import game.doppelkopf.domain.hand.model.IHandModel

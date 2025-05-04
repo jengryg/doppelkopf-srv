@@ -1,7 +1,7 @@
 package game.doppelkopf.domain
 
-import game.doppelkopf.common.IBaseModel
-import game.doppelkopf.common.IBaseProperties
+import game.doppelkopf.common.model.IBaseModel
+import game.doppelkopf.common.model.IBaseProperties
 
 /**
  * [ModelAbstract] provides a basic delegation implementation for [equals], [hashCode] and [toString] to the underlying

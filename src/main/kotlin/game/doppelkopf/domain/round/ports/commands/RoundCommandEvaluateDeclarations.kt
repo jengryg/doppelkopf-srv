@@ -9,4 +9,6 @@ import java.util.*
 class RoundCommandEvaluateDeclarations(
     override val user: UserDetails,
     override val roundId: UUID
-) : IRoundCommand
+) : IRoundCommand {
+    override fun getSlug() = "Round:EvaluateDeclarations"
+}

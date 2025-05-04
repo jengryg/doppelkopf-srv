@@ -3,7 +3,7 @@ package game.doppelkopf.domain.game.service
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import game.doppelkopf.domain.game.enums.GameState
-import game.doppelkopf.core.errors.ofInvalidAction
+import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.game.model.GameModelAbstract
 import game.doppelkopf.domain.player.model.IPlayerModel

@@ -2,7 +2,7 @@ package game.doppelkopf.domain.turn.model
 
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.domain.deck.model.Card
-import game.doppelkopf.core.errors.GameFailedException
+import game.doppelkopf.common.errors.GameFailedException
 import game.doppelkopf.domain.ModelAbstract
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.hand.model.IHandModel

@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.trick.ports.commands
 
 import game.doppelkopf.security.UserDetails
-import java.util.UUID
+import java.util.*
 
 /**
  * Evaluate the trick given by [trickId].
@@ -9,4 +9,6 @@ import java.util.UUID
 class TrickCommandEvaluate(
     override val user: UserDetails,
     override val trickId: UUID
-) : ITrickCommand
+) : ITrickCommand {
+    override fun getSlug() = "Trick:Evaluate"
+}

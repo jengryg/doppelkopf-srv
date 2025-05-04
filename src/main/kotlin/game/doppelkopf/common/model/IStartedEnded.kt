@@ -1,4 +1,4 @@
-package game.doppelkopf.common
+package game.doppelkopf.common.model
 
 import java.time.Instant
 

@@ -13,8 +13,8 @@ import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import game.doppelkopf.adapter.persistence.model.player.PlayerRepository
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundRepository
-import game.doppelkopf.core.errors.ForbiddenActionException
-import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.common.errors.ForbiddenActionException
+import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.hand.enums.*
 import game.doppelkopf.domain.hand.service.HandBiddingModel
 import game.doppelkopf.domain.hand.service.HandDeclareModel

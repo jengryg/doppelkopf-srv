@@ -11,4 +11,6 @@ class HandCommandDeclare(
     override val user: UserDetails,
     override val handId: UUID,
     val declaration: DeclarationOption
-) : IHandCommand
+) : IHandCommand {
+    override fun getSlug() = "Hand:Declare"
+}

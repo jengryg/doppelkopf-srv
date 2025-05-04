@@ -8,8 +8,8 @@ import game.doppelkopf.domain.deck.model.Deck
 import game.doppelkopf.domain.deck.enums.DeckMode
 import game.doppelkopf.domain.game.enums.GameState
 import game.doppelkopf.domain.hand.enums.Team
-import game.doppelkopf.core.errors.ofForbiddenAction
-import game.doppelkopf.core.errors.ofInvalidAction
+import game.doppelkopf.common.errors.ofForbiddenAction
+import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.game.model.GameModelAbstract
 import game.doppelkopf.domain.hand.model.IHandModel

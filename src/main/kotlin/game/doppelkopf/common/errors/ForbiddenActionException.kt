@@ -1,4 +1,4 @@
-package game.doppelkopf.core.errors
+package game.doppelkopf.common.errors
 
 import game.doppelkopf.errors.ApplicationRuntimeException
 import org.springframework.http.HttpStatus

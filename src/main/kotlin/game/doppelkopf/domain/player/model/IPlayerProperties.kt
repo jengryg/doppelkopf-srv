@@ -1,6 +1,6 @@
 package game.doppelkopf.domain.player.model
 
-import game.doppelkopf.common.IBaseProperties
+import game.doppelkopf.common.model.IBaseProperties
 
 interface IPlayerProperties : IBaseProperties {
     /**

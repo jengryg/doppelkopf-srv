@@ -2,8 +2,8 @@ package game.doppelkopf.domain.trick.service
 
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.domain.trick.enums.TrickState
-import game.doppelkopf.core.errors.GameFailedException
-import game.doppelkopf.core.errors.ofInvalidAction
+import game.doppelkopf.common.errors.GameFailedException
+import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.trick.model.TrickModelAbstract
 import org.slf4j.helpers.CheckReturnValue

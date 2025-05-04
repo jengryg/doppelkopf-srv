@@ -1,6 +1,6 @@
 package game.doppelkopf.domain.hand.ports.commands
 
-import game.doppelkopf.common.ICommand
+import game.doppelkopf.common.port.commands.ICommand
 import java.util.*
 
 sealed interface IHandCommand : ICommand {

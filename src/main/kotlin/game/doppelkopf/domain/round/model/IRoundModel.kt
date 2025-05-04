@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.round.model
 
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.common.IBaseModel
+import game.doppelkopf.common.model.IBaseModel
 import game.doppelkopf.domain.deck.model.Deck
 import game.doppelkopf.domain.game.model.IGameModel
 import game.doppelkopf.domain.hand.model.IHandModel

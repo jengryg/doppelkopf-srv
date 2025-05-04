@@ -4,7 +4,7 @@ import game.doppelkopf.adapter.persistence.errors.EntityNotFoundException
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundRepository
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
-import game.doppelkopf.core.errors.ForbiddenActionException
+import game.doppelkopf.common.errors.ForbiddenActionException
 import game.doppelkopf.utils.Quadruple
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service

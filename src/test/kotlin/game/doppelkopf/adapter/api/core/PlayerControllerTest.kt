@@ -7,8 +7,8 @@ import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.game.GameRepository
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
-import game.doppelkopf.core.errors.ForbiddenActionException
-import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.common.errors.ForbiddenActionException
+import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.game.service.GameJoinModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import io.mockk.*

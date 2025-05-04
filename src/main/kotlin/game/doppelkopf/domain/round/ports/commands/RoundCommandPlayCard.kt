@@ -10,4 +10,6 @@ class RoundCommandPlayCard(
     override val user: UserDetails,
     override val roundId: UUID,
     val encodedCard: String,
-) : IRoundCommand
+) : IRoundCommand {
+    override fun getSlug() = "Round:PlayCard"
+}

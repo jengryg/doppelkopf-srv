@@ -3,8 +3,8 @@ package game.doppelkopf.domain.hand.service
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.domain.hand.enums.Declaration
 import game.doppelkopf.domain.hand.enums.DeclarationOption
-import game.doppelkopf.core.errors.ForbiddenActionException
-import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.common.errors.ForbiddenActionException
+import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

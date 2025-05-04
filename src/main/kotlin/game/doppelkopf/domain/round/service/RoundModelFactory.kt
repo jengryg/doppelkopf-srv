@@ -1,8 +1,8 @@
 package game.doppelkopf.domain.round.service
 
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.common.IModelFactory
-import game.doppelkopf.common.ModelFactoryCache
+import game.doppelkopf.common.service.IModelFactory
+import game.doppelkopf.common.service.ModelFactoryCache
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.round.model.RoundModel
 

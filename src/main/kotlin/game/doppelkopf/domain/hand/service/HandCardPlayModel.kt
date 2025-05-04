@@ -3,8 +3,8 @@ package game.doppelkopf.domain.hand.service
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.domain.deck.model.Card
 import game.doppelkopf.domain.deck.enums.CardDemand
-import game.doppelkopf.core.errors.ofForbiddenAction
-import game.doppelkopf.core.errors.ofInvalidAction
+import game.doppelkopf.common.errors.ofForbiddenAction
+import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.hand.model.HandModelAbstract
 import org.springframework.lang.CheckReturnValue

@@ -1,9 +1,9 @@
 package game.doppelkopf.domain.round.service
 
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.core.errors.GameFailedException
-import game.doppelkopf.core.errors.ofForbiddenAction
-import game.doppelkopf.core.errors.ofInvalidAction
+import game.doppelkopf.common.errors.GameFailedException
+import game.doppelkopf.common.errors.ofForbiddenAction
+import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.deck.enums.DeckMode
 import game.doppelkopf.domain.hand.enums.Bidding

@@ -11,4 +11,6 @@ class GameCommandAddUserAsPlayer(
     override val user: UserDetails,
     override val gameId: UUID,
     val seat: Int
-) : IGameCommand
+) : IGameCommand {
+    override fun getSlug() = "Game:AddUserAsPlayer"
+}

@@ -1,4 +1,4 @@
-package game.doppelkopf.common
+package game.doppelkopf.common.model
 
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp

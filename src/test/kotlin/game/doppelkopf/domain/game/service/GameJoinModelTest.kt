@@ -2,7 +2,7 @@ package game.doppelkopf.domain.game.service
 
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.domain.game.enums.GameState
-import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

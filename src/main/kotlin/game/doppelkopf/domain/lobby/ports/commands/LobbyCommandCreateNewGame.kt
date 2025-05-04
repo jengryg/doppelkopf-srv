@@ -8,4 +8,6 @@ import game.doppelkopf.security.UserDetails
 class LobbyCommandCreateNewGame(
     override val user: UserDetails,
     val playerLimit: Int
-) : ILobbyCommand
+) : ILobbyCommand {
+    override fun getSlug() = "Lobby:CreateGame"
+}

@@ -15,7 +15,7 @@ import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickRepository
 import game.doppelkopf.domain.deck.enums.CardDemand
 import game.doppelkopf.domain.trick.enums.TrickOperation
-import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.trick.service.TrickEvaluationModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import io.mockk.*

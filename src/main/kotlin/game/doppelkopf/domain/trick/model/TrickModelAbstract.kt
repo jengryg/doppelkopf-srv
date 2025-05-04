@@ -3,7 +3,7 @@ package game.doppelkopf.domain.trick.model
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.domain.deck.model.Card
 import game.doppelkopf.domain.trick.enums.TrickState
-import game.doppelkopf.core.errors.GameFailedException
+import game.doppelkopf.common.errors.GameFailedException
 import game.doppelkopf.domain.ModelAbstract
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.hand.model.IHandModel

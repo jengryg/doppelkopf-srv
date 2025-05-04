@@ -7,7 +7,7 @@ import game.doppelkopf.domain.deck.enums.DeckMode
 import game.doppelkopf.domain.hand.enums.Declaration
 import game.doppelkopf.domain.round.enums.RoundContract
 import game.doppelkopf.domain.round.enums.RoundState
-import game.doppelkopf.core.errors.InvalidActionException
+import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
