@@ -4,7 +4,7 @@ import game.doppelkopf.adapter.api.core.player.dto.PlayerCreateDto
 import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoDto
 import game.doppelkopf.adapter.persistence.model.player.PlayerPersistence
 import game.doppelkopf.domain.game.GameEngine
-import game.doppelkopf.domain.game.ports.commands.GameCommandAddUserAsPlayer
+import game.doppelkopf.domain.game.ports.commands.GameCommandJoinAsPlayer
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -47,7 +47,7 @@ class PlayerController(
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<PlayerInfoDto> {
         return gameEngine.execute(
-            command = GameCommandAddUserAsPlayer(
+            command = GameCommandJoinAsPlayer(
                 userDetails,
                 gameId = gameId,
                 seat = playerCreateDto.seat

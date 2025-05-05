@@ -8,7 +8,7 @@ import game.doppelkopf.adapter.persistence.model.player.PlayerPersistence
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundPersistence
 import game.doppelkopf.domain.ModelFactoryProvider
-import game.doppelkopf.domain.game.ports.commands.GameCommandAddUserAsPlayer
+import game.doppelkopf.domain.game.ports.commands.GameCommandJoinAsPlayer
 import game.doppelkopf.domain.game.ports.commands.GameCommandDealNewRound
 import game.doppelkopf.domain.game.ports.commands.GameCommandStartPlaying
 import game.doppelkopf.domain.game.ports.commands.IGameCommand
@@ -53,7 +53,7 @@ class GameEngine(
     }
 
     @Transactional
-    fun execute(command: GameCommandAddUserAsPlayer): PlayerEntity {
+    fun execute(command: GameCommandJoinAsPlayer): PlayerEntity {
         val resources = prepareResources(command)
 
         val player = GameJoinModel(

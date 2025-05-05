@@ -10,5 +10,5 @@ class GameCommandDealNewRound(
     override val user: UserDetails,
     override val gameId: UUID,
 ) : IGameCommand {
-    override fun getSlug() = "Game:DealNewRound"
+    override fun getSlug() = "Game:Deal"
 }
