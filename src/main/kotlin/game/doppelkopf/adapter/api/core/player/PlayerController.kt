@@ -3,8 +3,8 @@ package game.doppelkopf.adapter.api.core.player
 import game.doppelkopf.adapter.api.core.player.dto.PlayerCreateDto
 import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoDto
 import game.doppelkopf.adapter.persistence.model.player.PlayerPersistence
-import game.doppelkopf.domain.game.GameEngine
-import game.doppelkopf.domain.game.ports.commands.GameCommandJoinAsPlayer
+import game.doppelkopf.domain.game.GameActionOrchestrator
+import game.doppelkopf.domain.game.ports.actions.GameActionJoinAsPlayer
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -21,7 +21,7 @@ import java.util.*
 @RequestMapping("/v1")
 class PlayerController(
     private val playerPersistence: PlayerPersistence,
-    private val gameEngine: GameEngine
+    private val gameActionOrchestrator: GameActionOrchestrator
 ) {
     @Operation(
         summary = "Obtain all players of the specified game.",
@@ -46,8 +46,8 @@ class PlayerController(
         @RequestBody @Valid playerCreateDto: PlayerCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<PlayerInfoDto> {
-        return gameEngine.execute(
-            command = GameCommandJoinAsPlayer(
+        return gameActionOrchestrator.execute(
+            action = GameActionJoinAsPlayer(
                 userDetails,
                 gameId = gameId,
                 seat = playerCreateDto.seat

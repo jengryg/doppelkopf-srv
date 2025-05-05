@@ -1,13 +1,11 @@
 package game.doppelkopf.domain.round.ports.commands
 
-import game.doppelkopf.security.UserDetails
-import java.util.*
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
+import game.doppelkopf.adapter.persistence.model.user.UserEntity
+import game.doppelkopf.domain.deck.model.Card
 
-/**
- * Play the [encodedCard] in the round given by [roundId] with [user] being the player that plays the card.
- */
 class RoundCommandPlayCard(
-    override val user: UserDetails,
-    override val roundId: UUID,
-    val encodedCard: String,
+    val user: UserEntity,
+    val round: RoundEntity,
+    val card: Card
 ) : IRoundCommand

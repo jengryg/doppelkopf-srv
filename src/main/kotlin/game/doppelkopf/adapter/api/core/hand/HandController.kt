@@ -5,9 +5,9 @@ import game.doppelkopf.adapter.api.core.hand.dto.DeclarationCreateDto
 import game.doppelkopf.adapter.api.core.hand.dto.HandForPlayerDto
 import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoDto
 import game.doppelkopf.adapter.persistence.model.hand.HandPersistence
-import game.doppelkopf.domain.hand.HandEngine
-import game.doppelkopf.domain.hand.ports.commands.HandCommandBid
-import game.doppelkopf.domain.hand.ports.commands.HandCommandDeclare
+import game.doppelkopf.domain.hand.HandActionOrchestrator
+import game.doppelkopf.domain.hand.ports.actions.HandActionBid
+import game.doppelkopf.domain.hand.ports.actions.HandActionDeclare
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -20,7 +20,7 @@ import java.util.*
 @RequestMapping("/v1")
 class HandController(
     private val handPersistence: HandPersistence,
-    private val handEngine: HandEngine,
+    private val handActionOrchestrator: HandActionOrchestrator
 ) {
     @Operation(
         summary = "Show general hand information about all hands of the round.",
@@ -28,8 +28,7 @@ class HandController(
     )
     @GetMapping("/rounds/{roundId}/hands")
     fun list(
-        @PathVariable roundId: UUID,
-        @AuthenticationPrincipal userDetails: UserDetails,
+        @PathVariable roundId: UUID
     ): ResponseEntity<List<HandPublicInfoDto>> {
         return ResponseEntity.ok(
             handPersistence.listForRound(roundId).map { HandPublicInfoDto(it) }
@@ -60,8 +59,8 @@ class HandController(
         @RequestBody declarationCreateDto: DeclarationCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<HandForPlayerDto> {
-        return handEngine.execute(
-            command = HandCommandDeclare(
+        return handActionOrchestrator.execute(
+            action = HandActionDeclare(
                 user = userDetails,
                 handId = handId,
                 declaration = declarationCreateDto.declaration
@@ -83,8 +82,8 @@ class HandController(
         @RequestBody bidCreateDto: BidCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<HandForPlayerDto> {
-        return handEngine.execute(
-            command = HandCommandBid(
+        return handActionOrchestrator.execute(
+            action = HandActionBid(
                 user = userDetails,
                 handId = handId,
                 bid = bidCreateDto.bid

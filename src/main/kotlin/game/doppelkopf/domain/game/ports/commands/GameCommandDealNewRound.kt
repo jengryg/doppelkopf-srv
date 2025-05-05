@@ -1,12 +1,9 @@
 package game.doppelkopf.domain.game.ports.commands
 
-import game.doppelkopf.security.UserDetails
-import java.util.*
+import game.doppelkopf.adapter.persistence.model.game.GameEntity
+import game.doppelkopf.adapter.persistence.model.user.UserEntity
 
-/**
- * Deal a new round in the game given by [gameId] where [user] should be the dealer.
- */
 class GameCommandDealNewRound(
-    override val user: UserDetails,
-    override val gameId: UUID,
+    val user: UserEntity,
+    val game: GameEntity
 ) : IGameCommand

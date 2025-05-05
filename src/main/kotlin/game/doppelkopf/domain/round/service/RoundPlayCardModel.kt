@@ -23,9 +23,7 @@ class RoundPlayCardModel(
     factoryProvider: ModelFactoryProvider
 ) : RoundModelAbstract(entity, factoryProvider) {
 
-    fun playCard(encodedCard: String, user: IUserModel): Pair<ITrickModel, ITurnModel> {
-        val card = deck.getCard(encodedCard).getOrThrow()
-
+    fun playCard(card: Card, user: IUserModel): Pair<ITrickModel, ITurnModel> {
         val (hand, currentTrick) = canPlayCard(user).getOrThrow()
 
         val trick = if (currentTrick == null) {

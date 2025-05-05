@@ -1,11 +1,5 @@
 package game.doppelkopf.domain.hand.ports.commands
 
-import game.doppelkopf.common.port.commands.ICommand
-import java.util.*
+import game.doppelkopf.common.port.ICommand
 
-sealed interface IHandCommand : ICommand {
-    /**
-     * The [UUID] of the hand that this command should be applied to.
-     */
-    val handId: UUID
-}
+sealed interface IHandCommand : ICommand

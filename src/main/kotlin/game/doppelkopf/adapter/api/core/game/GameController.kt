@@ -4,11 +4,11 @@ import game.doppelkopf.adapter.api.core.game.dto.GameCreateDto
 import game.doppelkopf.adapter.api.core.game.dto.GameInfoDto
 import game.doppelkopf.adapter.api.core.game.dto.GameOperationDto
 import game.doppelkopf.adapter.persistence.model.game.GamePersistence
-import game.doppelkopf.domain.game.GameEngine
+import game.doppelkopf.domain.game.GameActionOrchestrator
 import game.doppelkopf.domain.game.enums.GameOperation
-import game.doppelkopf.domain.game.ports.commands.GameCommandStartPlaying
-import game.doppelkopf.domain.lobby.LobbyEngine
-import game.doppelkopf.domain.lobby.ports.commands.LobbyCommandCreateNewGame
+import game.doppelkopf.domain.game.ports.actions.GameActionStartPlaying
+import game.doppelkopf.domain.lobby.LobbyActionOrchestrator
+import game.doppelkopf.domain.lobby.ports.actions.LobbyActionCreateNewGame
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -25,8 +25,8 @@ import java.util.*
 @RequestMapping("/v1")
 class GameController(
     private val gamePersistence: GamePersistence,
-    private val lobbyEngine: LobbyEngine,
-    private val gameEngine: GameEngine,
+    private val lobbyActionOrchestrator: LobbyActionOrchestrator,
+    private val gameActionOrchestrator: GameActionOrchestrator
 ) {
     @Operation(
         summary = "List games.",
@@ -48,8 +48,8 @@ class GameController(
         @RequestBody @Valid gameCreateDto: GameCreateDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<GameInfoDto> {
-        val game = lobbyEngine.execute(
-            command = LobbyCommandCreateNewGame(
+        val game = lobbyActionOrchestrator.execute(
+            action = LobbyActionCreateNewGame(
                 user = userDetails,
                 playerLimit = gameCreateDto.playerLimit
             ),
@@ -84,8 +84,8 @@ class GameController(
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<GameInfoDto> {
         return when (operation.op) {
-            GameOperation.START -> gameEngine.execute(
-                command = GameCommandStartPlaying(
+            GameOperation.START -> gameActionOrchestrator.execute(
+                action = GameActionStartPlaying(
                     user = userDetails,
                     gameId = id
                 )

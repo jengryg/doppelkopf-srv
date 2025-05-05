@@ -1,114 +1,86 @@
 package game.doppelkopf.domain.round
 
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.adapter.persistence.model.round.RoundPersistence
 import game.doppelkopf.adapter.persistence.model.trick.TrickPersistence
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnPersistence
 import game.doppelkopf.domain.ModelFactoryProvider
-import game.doppelkopf.domain.round.ports.commands.*
+import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluateBids
+import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluateDeclarations
+import game.doppelkopf.domain.round.ports.commands.RoundCommandPlayCard
+import game.doppelkopf.domain.round.ports.commands.RoundCommandResolveMarriage
 import game.doppelkopf.domain.round.service.RoundBidsEvaluationModel
 import game.doppelkopf.domain.round.service.RoundDeclarationEvaluationModel
 import game.doppelkopf.domain.round.service.RoundMarriageResolverModel
 import game.doppelkopf.domain.round.service.RoundPlayCardModel
-import game.doppelkopf.domain.trick.service.TrickEvaluationModel
-import game.doppelkopf.domain.user.model.IUserModel
-import jakarta.transaction.Transactional
+import game.doppelkopf.domain.trick.TrickEngine
+import game.doppelkopf.domain.trick.ports.commands.TrickCommandEvaluate
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
 
 @Service
 class RoundEngine(
-    private val roundPersistence: RoundPersistence,
     private val trickPersistence: TrickPersistence,
-    private val turnPersistence: TurnPersistence
+    private val turnPersistence: TurnPersistence,
+    @Lazy
+    private val trickEngine: TrickEngine
 ) {
-    @Transactional
     fun execute(command: RoundCommandEvaluateDeclarations): RoundEntity {
-        val resources = prepareResources(command)
+        val mfp = ModelFactoryProvider()
 
         RoundDeclarationEvaluationModel(
-            entity = resources.round,
-            factoryProvider = resources.mfp
+            entity = command.round,
+            factoryProvider = mfp
         ).evaluateDeclarations()
 
-        return resources.round
+        return command.round
     }
 
-    @Transactional
     fun execute(command: RoundCommandEvaluateBids): RoundEntity {
-        val resources = prepareResources(command)
+        val mfp = ModelFactoryProvider()
 
         RoundBidsEvaluationModel(
-            entity = resources.round,
-            factoryProvider = resources.mfp
+            entity = command.round,
+            factoryProvider = mfp
         ).evaluateBids()
 
-        return resources.round
+        return command.round
     }
 
-    @Transactional
     fun execute(command: RoundCommandResolveMarriage): RoundEntity {
-        val resources = prepareResources(command)
+        val mfp = ModelFactoryProvider()
 
         RoundMarriageResolverModel(
-            entity = resources.round,
-            factoryProvider = resources.mfp
+            entity = command.round,
+            factoryProvider = mfp
         ).resolveMarriage()
 
-        return resources.round
+        return command.round
     }
 
-    @Transactional
     fun execute(command: RoundCommandPlayCard): TurnEntity {
-        val resources = prepareResources(command)
+        val mfp = ModelFactoryProvider()
 
         val (trick, turn) = RoundPlayCardModel(
-            entity = resources.round,
-            factoryProvider = resources.mfp
+            entity = command.round,
+            factoryProvider = mfp,
         ).playCard(
-            encodedCard = command.encodedCard,
-            user = resources.user
+            card = command.card,
+            user = mfp.user.create(command.user)
         )
 
-        // TODO: refactoring
-        TrickEvaluationModel(
-            entity = trick.entity,
-            factoryProvider = resources.mfp
-        ).apply {
-            canEvaluateTrick().onSuccess {
-                evaluateTrick()
-            }
-        }
-
-        // TODO: refactoring
-        RoundMarriageResolverModel(
-            entity = resources.round,
-            factoryProvider = resources.mfp
-        ).apply {
-            canResolveMarriage().onSuccess { resolveMarriage() }
+        // TODO: the engine execute methods are throwing the occurring exceptions, thus we need to silence them for now
+        //  later this should be changed to a more resilient implementation where the engines are not throwing
+        runCatching {
+            trickEngine.execute(
+                command = TrickCommandEvaluate(
+                    trick = trick.entity
+                )
+            )
         }
 
         trickPersistence.save(trick.entity)
 
         return turnPersistence.save(turn.entity)
     }
-
-    private fun prepareResources(command: IRoundCommand): RoundCommandResources {
-        val mfp = ModelFactoryProvider()
-
-        val round = roundPersistence.load(command.roundId)
-        val user = mfp.user.create(command.user.entity)
-
-        return RoundCommandResources(
-            user = user,
-            round = round,
-            mfp = mfp
-        )
-    }
-
-    private inner class RoundCommandResources(
-        val user: IUserModel,
-        val round: RoundEntity,
-        val mfp: ModelFactoryProvider
-    )
 }

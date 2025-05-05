@@ -2,43 +2,32 @@ package game.doppelkopf.domain.lobby
 
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.game.GamePersistence
-import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
-import game.doppelkopf.domain.ModelFactoryProvider
-import game.doppelkopf.domain.lobby.ports.commands.ILobbyCommand
+import game.doppelkopf.domain.game.GameEngine
+import game.doppelkopf.domain.game.ports.commands.GameCommandJoinAsPlayer
 import game.doppelkopf.domain.lobby.ports.commands.LobbyCommandCreateNewGame
-import game.doppelkopf.domain.user.model.IUserModel
-import jakarta.transaction.Transactional
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
 
 @Service
-class LobbyEngine(private val gamePersistence: GamePersistence) {
-    @Transactional
+class LobbyEngine(
+    private val gamePersistence: GamePersistence,
+    @Lazy
+    private val gameEngine: GameEngine
+) {
     fun execute(command: LobbyCommandCreateNewGame): GameEntity {
-        val resources = prepareResources(command)
-
         val game = GameEntity(
-            creator = resources.user.entity,
+            creator = command.user,
             maxNumberOfPlayers = command.playerLimit
-        ).apply {
-            players.add(PlayerEntity(user = command.user.entity, game = this, seat = 0))
-        }
+        ).let { gamePersistence.save(it) }
 
-        return gamePersistence.save(game)
-    }
-
-    private fun prepareResources(command: ILobbyCommand): LobbyCommandResources {
-        val mfp = ModelFactoryProvider()
-
-        val user = mfp.user.create(command.user.entity)
-
-        return LobbyCommandResources(
-            user = user,
-            mfp = mfp,
+        gameEngine.execute(
+            command = GameCommandJoinAsPlayer(
+                user = command.user,
+                game = game,
+                seat = 0
+            )
         )
-    }
 
-    private inner class LobbyCommandResources(
-        val user: IUserModel,
-        val mfp: ModelFactoryProvider
-    )
+        return game
+    }
 }

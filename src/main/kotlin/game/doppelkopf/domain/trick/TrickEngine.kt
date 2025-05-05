@@ -1,43 +1,38 @@
 package game.doppelkopf.domain.trick
 
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
-import game.doppelkopf.adapter.persistence.model.trick.TrickPersistence
 import game.doppelkopf.domain.ModelFactoryProvider
-import game.doppelkopf.domain.trick.ports.commands.ITrickCommand
+import game.doppelkopf.domain.round.RoundEngine
+import game.doppelkopf.domain.round.ports.commands.RoundCommandResolveMarriage
 import game.doppelkopf.domain.trick.ports.commands.TrickCommandEvaluate
 import game.doppelkopf.domain.trick.service.TrickEvaluationModel
-import game.doppelkopf.domain.user.model.IUserModel
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
 
 @Service
-class TrickEngine(private val trickPersistence: TrickPersistence) {
+class TrickEngine(
+    @Lazy
+    private val roundEngine: RoundEngine
+) {
     fun execute(command: TrickCommandEvaluate): TrickEntity {
-        val resources = prepareResources(command)
-
-        TrickEvaluationModel(
-            entity = resources.trick,
-            factoryProvider = resources.mfp
-        ).evaluateTrick()
-
-        return resources.trick
-    }
-
-    private fun prepareResources(command: ITrickCommand): TrickCommandResources {
         val mfp = ModelFactoryProvider()
 
-        val trick = trickPersistence.load(command.trickId)
-        val user = mfp.user.create(command.user.entity)
+        TrickEvaluationModel(
+            entity = command.trick,
+            factoryProvider = mfp
+        ).evaluateTrick()
 
-        return TrickCommandResources(
-            user = user,
-            trick = trick,
-            mfp = mfp
-        )
+        // TODO: the engine execute methods are throwing the occurring exceptions, thus we need to silence them for now
+        //  later this should be changed to a more resilient implementation where the engines are not throwing
+        runCatching {
+            roundEngine.execute(
+                command = RoundCommandResolveMarriage(
+                    round = command.trick.round
+                )
+            )
+            // just ignore the exceptions here
+        }
+
+        return command.trick
     }
-
-    inner class TrickCommandResources(
-        val user: IUserModel,
-        val trick: TrickEntity,
-        val mfp: ModelFactoryProvider
-    )
 }

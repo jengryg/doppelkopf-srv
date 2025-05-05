@@ -3,13 +3,13 @@ package game.doppelkopf.adapter.api.core.round
 import game.doppelkopf.adapter.api.core.round.dto.RoundInfoDto
 import game.doppelkopf.adapter.api.core.round.dto.RoundOperationDto
 import game.doppelkopf.adapter.persistence.model.round.RoundPersistence
-import game.doppelkopf.domain.game.GameEngine
-import game.doppelkopf.domain.game.ports.commands.GameCommandDealNewRound
-import game.doppelkopf.domain.round.RoundEngine
+import game.doppelkopf.domain.game.GameActionOrchestrator
+import game.doppelkopf.domain.game.ports.actions.GameActionDealNewRound
+import game.doppelkopf.domain.round.RoundActionOrchestrator
 import game.doppelkopf.domain.round.enums.RoundOperation
-import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluateBids
-import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluateDeclarations
-import game.doppelkopf.domain.round.ports.commands.RoundCommandResolveMarriage
+import game.doppelkopf.domain.round.ports.actions.RoundActionEvaluateBids
+import game.doppelkopf.domain.round.ports.actions.RoundActionEvaluateDeclarations
+import game.doppelkopf.domain.round.ports.actions.RoundActionResolveMarriage
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -26,8 +26,8 @@ import java.util.*
 @RequestMapping("/v1")
 class RoundController(
     private val roundPersistence: RoundPersistence,
-    private val gameEngine: GameEngine,
-    private val roundEngine: RoundEngine
+    private val gameActionOrchestrator: GameActionOrchestrator,
+    private val roundActionOrchestrator: RoundActionOrchestrator
 ) {
     @Operation(
         summary = "Obtain all rounds of a specific game.",
@@ -49,8 +49,8 @@ class RoundController(
         @PathVariable gameId: UUID,
         @AuthenticationPrincipal userDetails: UserDetails,
     ): ResponseEntity<RoundInfoDto> {
-        return gameEngine.execute(
-            command = GameCommandDealNewRound(
+        return gameActionOrchestrator.execute(
+            action = GameActionDealNewRound(
                 user = userDetails,
                 gameId = gameId
             )
@@ -85,22 +85,22 @@ class RoundController(
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<RoundInfoDto> {
         return when (operation.op) {
-            RoundOperation.DECLARE_EVALUATION -> roundEngine.execute(
-                command = RoundCommandEvaluateDeclarations(
+            RoundOperation.DECLARE_EVALUATION -> roundActionOrchestrator.execute(
+                action = RoundActionEvaluateDeclarations(
                     user = userDetails,
                     roundId = id,
                 )
             )
 
-            RoundOperation.BID_EVALUATION -> roundEngine.execute(
-                command = RoundCommandEvaluateBids(
+            RoundOperation.BID_EVALUATION -> roundActionOrchestrator.execute(
+                action = RoundActionEvaluateBids(
                     user = userDetails,
                     roundId = id,
                 )
             )
 
-            RoundOperation.MARRIAGE_RESOLVER -> roundEngine.execute(
-                command = RoundCommandResolveMarriage(
+            RoundOperation.MARRIAGE_RESOLVER -> roundActionOrchestrator.execute(
+                action = RoundActionResolveMarriage(
                     user = userDetails,
                     roundId = id,
                 )

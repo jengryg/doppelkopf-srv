@@ -2,13 +2,13 @@ package game.doppelkopf.domain.round.service
 
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.domain.deck.enums.CardDemand
-import game.doppelkopf.domain.deck.errors.InvalidCardException
-import game.doppelkopf.domain.round.enums.RoundState
 import game.doppelkopf.common.errors.ForbiddenActionException
 import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.deck.enums.CardDemand
+import game.doppelkopf.domain.deck.model.Deck
 import game.doppelkopf.domain.hand.service.HandCardPlayModel
+import game.doppelkopf.domain.round.enums.RoundState
 import game.doppelkopf.domain.trick.service.TrickCardPlayModel
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
@@ -44,7 +44,8 @@ class RoundPlayCardModelTest : BaseUnitTest() {
         val guard = model.canPlayCard(user)
         assertThat(guard.isSuccess).isTrue
 
-        val (trick, turn) = model.playCard("QC0", user)
+        val card = Deck.create(round.deckMode).getCard("QC0").getOrThrow()
+        val (trick, turn) = model.playCard(card, user)
 
         assertThat(trick.round.id).isEqualTo(round.id)
         assertThat(trick.number).isEqualTo(1)
@@ -98,7 +99,8 @@ class RoundPlayCardModelTest : BaseUnitTest() {
         val guard = model.canPlayCard(winner)
         assertThat(guard.isSuccess).isTrue
 
-        val (trick, turn) = model.playCard("QC0", winner)
+        val card = Deck.create(round.deckMode).getCard("QC0").getOrThrow()
+        val (trick, turn) = model.playCard(card, winner)
 
         assertThat(trick.id).isNotEqualTo(existingTrick.id)
 
@@ -155,7 +157,8 @@ class RoundPlayCardModelTest : BaseUnitTest() {
         val guard = model.canPlayCard(nextTurn)
         assertThat(guard.isSuccess).isTrue
 
-        val (trick, turn) = model.playCard("QC0", nextTurn)
+        val card = Deck.create(round.deckMode).getCard("QC0").getOrThrow()
+        val (trick, turn) = model.playCard(card, nextTurn)
 
         assertThat(trick.id).isEqualTo(existingTrick.id)
 
@@ -167,22 +170,6 @@ class RoundPlayCardModelTest : BaseUnitTest() {
         assertThat(turn.round.id).isEqualTo(round.id)
         assertThat(turn.hand.id).isEqualTo(round.hands.single { it.index == 1 }.id)
         assertThat(turn.trick.id).isEqualTo(trick.id)
-    }
-
-    @Test
-    fun `providing invalid card encoding throws invalid card exception`() {
-        val mfp = ModelFactoryProvider()
-
-        val model = RoundPlayCardModel(
-            entity = createRoundEntity(),
-            factoryProvider = mfp
-        )
-
-        assertThatThrownBy {
-            model.playCard("XYZ", model.dealer.user)
-        }.isInstanceOf(InvalidCardException::class.java)
-            .hasMessageContaining("Encoding 'XYZ' does not match any card of the deck.")
-
     }
 
     @ParameterizedTest
@@ -200,12 +187,14 @@ class RoundPlayCardModelTest : BaseUnitTest() {
         val guard = model.canPlayCard(user)
         assertThat(guard.isFailure).isTrue
 
+        val card = model.deck.getCard("QC0").getOrThrow()
+
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
             .hasMessageContaining("This action can not be performed: The round must be in PLAYING_TRICKS state to open a new trick.")
 
         assertThatThrownBy {
-            model.playCard("QC0", model.dealer.user)
+            model.playCard(card, model.dealer.user)
         }.isInstanceOf(InvalidActionException::class.java)
             .hasMessageContaining("This action can not be performed: The round must be in PLAYING_TRICKS state to open a new trick.")
     }
@@ -224,12 +213,14 @@ class RoundPlayCardModelTest : BaseUnitTest() {
         val guard = model.canPlayCard(user)
         assertThat(guard.isFailure).isTrue
 
+        val card = model.deck.getCard("QC0").getOrThrow()
+
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(ForbiddenActionException::class.java)
             .hasMessageContaining("You are not allowed to perform this action: You are not playing in this round.")
 
         assertThatThrownBy {
-            model.playCard("QC0", model.dealer.user)
+            model.playCard(card, model.dealer.user)
         }.isInstanceOf(ForbiddenActionException::class.java)
             .hasMessageContaining("You are not allowed to perform this action: You are not playing in this round.")
     }
@@ -254,8 +245,10 @@ class RoundPlayCardModelTest : BaseUnitTest() {
             .isInstanceOf(ForbiddenActionException::class.java)
             .hasMessageContaining("You are not allowed to perform this action: Only the player directly behind the dealer can open the first trick of the round.")
 
+        val card = model.deck.getCard("QC0").getOrThrow()
+
         assertThatThrownBy {
-            model.playCard("QC0", user)
+            model.playCard(card, user)
         }.isInstanceOf(ForbiddenActionException::class.java)
             .hasMessageContaining("You are not allowed to perform this action: Only the player directly behind the dealer can open the first trick of the round.")
     }
@@ -284,8 +277,10 @@ class RoundPlayCardModelTest : BaseUnitTest() {
             .isInstanceOf(ForbiddenActionException::class.java)
             .hasMessageContaining("You are not allowed to perform this action: Only the winner of the previous trick can open the next trick of the round.")
 
+        val card = model.deck.getCard("QC0").getOrThrow()
+
         assertThatThrownBy {
-            model.playCard("QC0", notWinner)
+            model.playCard(card, notWinner)
         }.isInstanceOf(ForbiddenActionException::class.java)
             .hasMessageContaining("You are not allowed to perform this action: Only the winner of the previous trick can open the next trick of the round.")
     }
@@ -315,8 +310,10 @@ class RoundPlayCardModelTest : BaseUnitTest() {
             .isInstanceOf(ForbiddenActionException::class.java)
             .hasMessageContaining("You are not allowed to perform this action: It is not your turn to play a card.")
 
+        val card = model.deck.getCard("QC0").getOrThrow()
+
         assertThatThrownBy {
-            model.playCard("QC0", notTurn)
+            model.playCard(card, notTurn)
         }.isInstanceOf(ForbiddenActionException::class.java)
             .hasMessageContaining("You are not allowed to perform this action: It is not your turn to play a card.")
     }

@@ -1,12 +1,7 @@
 package game.doppelkopf.domain.round.ports.commands
 
-import game.doppelkopf.security.UserDetails
-import java.util.UUID
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 
-/**
- * Resolve the marriage in the round given by [roundId].
- */
 class RoundCommandResolveMarriage(
-    override val user: UserDetails,
-    override val roundId: UUID
+    val round: RoundEntity
 ) : IRoundCommand

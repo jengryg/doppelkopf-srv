@@ -1,12 +1,7 @@
 package game.doppelkopf.domain.trick.ports.commands
 
-import game.doppelkopf.security.UserDetails
-import java.util.*
+import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 
-/**
- * Evaluate the trick given by [trickId].
- */
 class TrickCommandEvaluate(
-    override val user: UserDetails,
-    override val trickId: UUID
+    val trick: TrickEntity
 ) : ITrickCommand

@@ -1,12 +1,7 @@
 package game.doppelkopf.domain.round.ports.commands
 
-import game.doppelkopf.security.UserDetails
-import java.util.*
+import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 
-/**
- * Evaluate the bids made by the hands in the round given by [roundId].
- */
 class RoundCommandEvaluateBids(
-    override val user: UserDetails,
-    override val roundId: UUID
+    val round: RoundEntity
 ) : IRoundCommand

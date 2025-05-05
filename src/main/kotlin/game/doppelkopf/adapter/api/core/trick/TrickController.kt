@@ -3,9 +3,9 @@ package game.doppelkopf.adapter.api.core.trick
 import game.doppelkopf.adapter.api.core.trick.dto.TrickInfoDto
 import game.doppelkopf.adapter.api.core.trick.dto.TrickOperationDto
 import game.doppelkopf.adapter.persistence.model.trick.TrickPersistence
-import game.doppelkopf.domain.trick.TrickEngine
+import game.doppelkopf.domain.trick.TrickActionOrchestrator
 import game.doppelkopf.domain.trick.enums.TrickOperation
-import game.doppelkopf.domain.trick.ports.commands.TrickCommandEvaluate
+import game.doppelkopf.domain.trick.ports.actions.TrickActionEvaluate
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -18,7 +18,7 @@ import java.util.*
 @RequestMapping("/v1")
 class TrickController(
     private val trickPersistence: TrickPersistence,
-    private val trickEngine: TrickEngine
+    private val trickActionOrchestrator: TrickActionOrchestrator
 ) {
     @Operation(
         summary = "Obtain all tricks of a specific round.",
@@ -55,8 +55,8 @@ class TrickController(
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<TrickInfoDto> {
         return when (operation.op) {
-            TrickOperation.TRICK_EVALUATION -> trickEngine.execute(
-                command = TrickCommandEvaluate(
+            TrickOperation.TRICK_EVALUATION -> trickActionOrchestrator.execute(
+                action = TrickActionEvaluate(
                     user = userDetails,
                     trickId = id,
                 )

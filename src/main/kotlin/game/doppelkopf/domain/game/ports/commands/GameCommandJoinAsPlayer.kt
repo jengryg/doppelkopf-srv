@@ -1,14 +1,10 @@
 package game.doppelkopf.domain.game.ports.commands
 
-import game.doppelkopf.security.UserDetails
-import java.util.*
+import game.doppelkopf.adapter.persistence.model.game.GameEntity
+import game.doppelkopf.adapter.persistence.model.user.UserEntity
 
-/**
- * Join the game given by [gameId] where [user] is added as player to the game.
- * The position at the table is indicated by the [seat] number.
- */
 class GameCommandJoinAsPlayer(
-    override val user: UserDetails,
-    override val gameId: UUID,
+    val user: UserEntity,
+    val game: GameEntity,
     val seat: Int
 ) : IGameCommand

@@ -21,7 +21,9 @@ class AuthController : Logging {
         description = "This endpoint can be used to check the current login status of the user."
     )
     @GetMapping("/status")
-    fun status(@AuthenticationPrincipal userDetails: UserDetails?): ResponseEntity<PublicUserInfoDto> {
+    fun status(
+        @AuthenticationPrincipal userDetails: UserDetails?
+    ): ResponseEntity<PublicUserInfoDto> {
         log.atDebug()
             .setMessage("Current user login status obtained.")
             .addKeyValue("userDetails") { userDetails?.entity }

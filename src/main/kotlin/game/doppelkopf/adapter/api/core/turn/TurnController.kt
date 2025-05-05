@@ -3,8 +3,8 @@ package game.doppelkopf.adapter.api.core.turn
 import game.doppelkopf.adapter.api.core.turn.dto.CreateTurnDto
 import game.doppelkopf.adapter.api.core.turn.dto.TurnInfoDto
 import game.doppelkopf.adapter.persistence.model.turn.TurnPersistence
-import game.doppelkopf.domain.round.RoundEngine
-import game.doppelkopf.domain.round.ports.commands.RoundCommandPlayCard
+import game.doppelkopf.domain.round.RoundActionOrchestrator
+import game.doppelkopf.domain.round.ports.actions.RoundActionPlayCard
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -17,7 +17,7 @@ import java.util.*
 @RequestMapping("/v1")
 class TurnController(
     private val turnPersistence: TurnPersistence,
-    private val roundEngine: RoundEngine,
+    private val roundActionOrchestrator: RoundActionOrchestrator
 ) {
     @Operation(
         summary = "Obtain all turns of a specific round.",
@@ -42,8 +42,8 @@ class TurnController(
         @RequestBody createTurnDto: CreateTurnDto,
         @AuthenticationPrincipal userDetails: UserDetails
     ): ResponseEntity<TurnInfoDto> {
-        return roundEngine.execute(
-            command = RoundCommandPlayCard(
+        return roundActionOrchestrator.execute(
+            action = RoundActionPlayCard(
                 user = userDetails,
                 roundId = roundId,
                 encodedCard = createTurnDto.card
