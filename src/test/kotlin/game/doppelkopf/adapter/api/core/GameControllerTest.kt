@@ -173,7 +173,6 @@ class GameControllerTest : BaseRestAssuredTest() {
 
             mockkConstructor(GameStartModel::class)
             every { anyConstructed<GameStartModel>().start(any()) } throws InvalidActionException(
-                "Game:Start",
                 "Mocked Model Exception."
             )
 
@@ -182,7 +181,7 @@ class GameControllerTest : BaseRestAssuredTest() {
             response.also {
                 assertThat(response.instance.toString()).isEqualTo("/v1/games/${game.id}")
                 assertThat(response.title).isEqualTo("Invalid action")
-                assertThat(response.detail).isEqualTo("The action 'Game:Start' can not be performed: Mocked Model Exception.")
+                assertThat(response.detail).isEqualTo("This action can not be performed: Mocked Model Exception.")
             }
         }
 
@@ -194,7 +193,6 @@ class GameControllerTest : BaseRestAssuredTest() {
 
             mockkConstructor(GameStartModel::class)
             every { anyConstructed<GameStartModel>().start(any()) } throws ForbiddenActionException(
-                "Game:Start",
                 "Mocked Model Exception."
             )
 
@@ -203,7 +201,7 @@ class GameControllerTest : BaseRestAssuredTest() {
             response.also {
                 assertThat(response.instance.toString()).isEqualTo("/v1/games/${game.id}")
                 assertThat(response.title).isEqualTo("Forbidden action")
-                assertThat(response.detail).isEqualTo("You are not allowed to perform the action 'Game:Start': Mocked Model Exception.")
+                assertThat(response.detail).isEqualTo("You are not allowed to perform this action: Mocked Model Exception.")
             }
         }
     }

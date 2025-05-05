@@ -68,12 +68,12 @@ class RoundBidsEvaluationModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Bids:Evaluate' can not be performed: The round must be in ${RoundState.WAITING_FOR_BIDS} state to process the bids.")
+            .hasMessageContaining("This action can not be performed: The round must be in ${RoundState.WAITING_FOR_BIDS} state to process the bids.")
 
         assertThatThrownBy {
             round.evaluateBids()
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Bids:Evaluate' can not be performed: The round must be in ${RoundState.WAITING_FOR_BIDS} state to process the bids.")
+            .hasMessageContaining("This action can not be performed: The round must be in ${RoundState.WAITING_FOR_BIDS} state to process the bids.")
     }
 
     @Test
@@ -90,12 +90,12 @@ class RoundBidsEvaluationModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Bids:Evaluate' can not be performed: Not all players have finished their bids yet.")
+            .hasMessageContaining("This action can not be performed: Not all players have finished their bids yet.")
 
         assertThatThrownBy {
             round.evaluateBids()
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Bids:Evaluate' can not be performed: Not all players have finished their bids yet.")
+            .hasMessageContaining("This action can not be performed: Not all players have finished their bids yet.")
     }
 
     private fun createRoundWith(healthy: Int, marriage: Int, nothing: Int): RoundEntity {

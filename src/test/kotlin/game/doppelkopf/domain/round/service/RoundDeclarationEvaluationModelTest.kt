@@ -132,12 +132,12 @@ class RoundDeclarationEvaluationModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Declarations:Evaluate' can not be performed: The round must be in ${RoundState.WAITING_FOR_DECLARATIONS} state to process the declarations.")
+            .hasMessageContaining("This action can not be performed: The round must be in ${RoundState.WAITING_FOR_DECLARATIONS} state to process the declarations.")
 
         assertThatThrownBy {
             round.evaluateDeclarations()
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Declarations:Evaluate' can not be performed: The round must be in ${RoundState.WAITING_FOR_DECLARATIONS} state to process the declarations.")
+            .hasMessageContaining("This action can not be performed: The round must be in ${RoundState.WAITING_FOR_DECLARATIONS} state to process the declarations.")
     }
 
     @Test
@@ -159,12 +159,12 @@ class RoundDeclarationEvaluationModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Declarations:Evaluate' can not be performed: Not all players have finished their declaration yet.")
+            .hasMessageContaining("This action can not be performed: Not all players have finished their declaration yet.")
 
         assertThatThrownBy {
             round.evaluateDeclarations()
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Declarations:Evaluate' can not be performed: Not all players have finished their declaration yet.")
+            .hasMessageContaining("This action can not be performed: Not all players have finished their declaration yet.")
     }
 
     private fun createRoundWith(healthy: Int, silentMarriage: Int, reservation: Int, nothing: Int): RoundEntity {

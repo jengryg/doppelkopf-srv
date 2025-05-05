@@ -3,17 +3,17 @@ package game.doppelkopf.domain.round.service
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
-import game.doppelkopf.domain.deck.model.Card
-import game.doppelkopf.domain.round.enums.RoundState
 import game.doppelkopf.common.errors.GameFailedException
 import game.doppelkopf.common.errors.ofForbiddenAction
 import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
-import game.doppelkopf.domain.hand.service.HandCardPlayModel
+import game.doppelkopf.domain.deck.model.Card
 import game.doppelkopf.domain.hand.model.IHandModel
+import game.doppelkopf.domain.hand.service.HandCardPlayModel
+import game.doppelkopf.domain.round.enums.RoundState
 import game.doppelkopf.domain.round.model.RoundModelAbstract
-import game.doppelkopf.domain.trick.service.TrickCardPlayModel
 import game.doppelkopf.domain.trick.model.ITrickModel
+import game.doppelkopf.domain.trick.service.TrickCardPlayModel
 import game.doppelkopf.domain.turn.model.ITurnModel
 import game.doppelkopf.domain.user.model.IUserModel
 import org.springframework.lang.CheckReturnValue
@@ -67,10 +67,10 @@ class RoundPlayCardModel(
     @CheckReturnValue
     fun canPlayCard(user: IUserModel): Result<Pair<HandCardPlayModel, TrickCardPlayModel?>> {
         if (state != RoundState.PLAYING_TRICKS) {
-            return invalid("The round must be in ${RoundState.PLAYING_TRICKS} state to open a new trick.")
+            return Result.ofInvalidAction("The round must be in ${RoundState.PLAYING_TRICKS} state to open a new trick.")
         }
 
-        val hand = hands[user] ?: return forbidden("You are not playing in this round.")
+        val hand = hands[user] ?: return Result.ofForbiddenAction("You are not playing in this round.")
 
         if (entity.tricks.isEmpty()) {
             // There is no trick in this round yet.
@@ -98,7 +98,7 @@ class RoundPlayCardModel(
 
     private fun canPlayFirstTrickOfRound(hand: IHandModel): Result<Pair<HandCardPlayModel, TrickCardPlayModel?>> {
         return if (hand.index != 0) {
-            forbidden("Only the player directly behind the dealer can open the first trick of the round.")
+            Result.ofForbiddenAction("Only the player directly behind the dealer can open the first trick of the round.")
         } else {
             Result.success(
                 Pair(
@@ -121,7 +121,7 @@ class RoundPlayCardModel(
                 )
             )
         } else {
-            forbidden("Only the winner of the previous trick can open the next trick of the round.")
+            Result.ofForbiddenAction("Only the winner of the previous trick can open the next trick of the round.")
         }
     }
 
@@ -137,19 +137,7 @@ class RoundPlayCardModel(
                 )
             )
         } else {
-            forbidden("It is not your turn to play a card.")
-        }
-    }
-
-    companion object {
-        const val ACTION = "Play:Card"
-
-        fun <T> forbidden(reason: String): Result<T> {
-            return Result.ofForbiddenAction(ACTION, reason)
-        }
-
-        fun <T> invalid(reason: String): Result<T> {
-            return Result.ofInvalidAction(ACTION, reason)
+            Result.ofForbiddenAction("It is not your turn to play a card.")
         }
     }
 }

@@ -1,12 +1,12 @@
 package game.doppelkopf.domain.round.service
 
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.domain.round.enums.RoundContract
-import game.doppelkopf.domain.hand.enums.Team
 import game.doppelkopf.common.errors.GameFailedException
 import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.hand.enums.Team
 import game.doppelkopf.domain.hand.model.IHandModel
+import game.doppelkopf.domain.round.enums.RoundContract
 import game.doppelkopf.domain.round.model.RoundModelAbstract
 import game.doppelkopf.domain.trick.model.ITrickModel
 import org.slf4j.helpers.CheckReturnValue
@@ -33,14 +33,14 @@ class RoundMarriageResolverModel(
     @CheckReturnValue
     fun canResolveMarriage(): Result<Pair<IHandModel, ITrickModel>> {
         if (contract != RoundContract.MARRIAGE_UNRESOLVED) {
-            return invalid("Only rounds that have the contract ${RoundContract.MARRIAGE_UNRESOLVED} can resolve a marriage.")
+            return Result.ofInvalidAction("Only rounds that have the contract ${RoundContract.MARRIAGE_UNRESOLVED} can resolve a marriage.")
         }
 
         val trick = getCurrentTrick()
-            ?: return invalid("Could not determine the last trick of the round $this.")
+            ?: return Result.ofInvalidAction("Could not determine the last trick of the round $this.")
 
         val winner = trick.winner
-            ?: return invalid("There is no winner in the current trick $trick to resolve the marriage with.")
+            ?: return Result.ofInvalidAction("There is no winner in the current trick $trick to resolve the marriage with.")
 
         return Result.success(
             Pair(first = winner, second = trick)
@@ -99,13 +99,5 @@ class RoundMarriageResolverModel(
 
         // The marriage of this round is now resolved.
         contract = RoundContract.MARRIAGE_RESOLVED
-    }
-
-    companion object {
-        const val ACTION = "Marriage:Resolve"
-
-        fun <T> invalid(reason: String): Result<T> {
-            return Result.ofInvalidAction(ACTION, reason)
-        }
     }
 }

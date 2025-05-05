@@ -2,9 +2,9 @@ package game.doppelkopf.domain.game.service
 
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
-import game.doppelkopf.domain.game.enums.GameState
 import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.game.enums.GameState
 import game.doppelkopf.domain.game.model.GameModelAbstract
 import game.doppelkopf.domain.player.model.IPlayerModel
 import game.doppelkopf.domain.user.model.IUserModel
@@ -33,20 +33,12 @@ class GameJoinModel(
     @CheckReturnValue
     fun canJoin(user: IUserModel, seat: Int): Result<Unit> {
         return when {
-            state != GameState.INITIALIZED -> invalid("You can not join a game that has already started.")
-            players.size >= maxNumberOfPlayers -> invalid("This game is already at its maximum capacity.")
-            players[user] != null -> invalid("You already joined this game.")
-            players.values.any { it.seat == seat } -> invalid("The seat you have chosen is already taken by another player.")
+            state != GameState.INITIALIZED -> Result.ofInvalidAction("You can not join a game that has already started.")
+            players.size >= maxNumberOfPlayers -> Result.ofInvalidAction("This game is already at its maximum capacity.")
+            players[user] != null -> Result.ofInvalidAction("You already joined this game.")
+            players.values.any { it.seat == seat } -> Result.ofInvalidAction("The seat you have chosen is already taken by another player.")
 
             else -> Result.success(Unit)
-        }
-    }
-
-    companion object {
-        const val ACTION = "Game:Join"
-
-        fun invalid(reason: String): Result<Unit> {
-            return Result.ofInvalidAction(ACTION, reason)
         }
     }
 }

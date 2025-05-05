@@ -81,29 +81,27 @@ class GameDealModel(
     @CheckReturnValue
     fun canDeal(user: IUserModel): Result<IPlayerModel> {
         if (state != GameState.WAITING_FOR_DEAL) {
-            return invalid("The game is currently not in the ${GameState.WAITING_FOR_DEAL.name} state.")
+            return Result.ofInvalidAction("The game is currently not in the ${GameState.WAITING_FOR_DEAL.name} state.")
         }
 
         val dealer = getCurrentDealer().getOrElse {
-            return invalid("The game does not have a designated dealer.")
+            return Result.ofInvalidAction("The game does not have a designated dealer.")
         }
 
         return if (players[user] == dealer) {
             Result.success(dealer)
         } else {
-            forbidden("Only the current dealer of the game can deal this round.")
+            Result.ofForbiddenAction("Only the current dealer of the game can deal this round.")
         }
     }
 
     companion object {
-        const val ACTION = "Game:Deal"
-
         fun forbidden(reason: String): Result<IPlayerModel> {
-            return Result.ofForbiddenAction(ACTION, reason)
+            return Result.ofForbiddenAction( reason)
         }
 
         fun invalid(reason: String): Result<IPlayerModel> {
-            return Result.ofInvalidAction(ACTION, reason)
+            return Result.ofInvalidAction( reason)
         }
     }
 }

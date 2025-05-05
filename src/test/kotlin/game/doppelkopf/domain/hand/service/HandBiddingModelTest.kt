@@ -1,12 +1,13 @@
 package game.doppelkopf.domain.hand.service
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.domain.hand.enums.Bidding
-import game.doppelkopf.domain.hand.enums.BiddingOption
-import game.doppelkopf.domain.hand.enums.Declaration
 import game.doppelkopf.common.errors.ForbiddenActionException
 import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.hand.enums.Bidding
+import game.doppelkopf.domain.hand.enums.BiddingOption
+import game.doppelkopf.domain.hand.enums.Declaration
+import game.doppelkopf.domain.hand.enums.DeclarationOption
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Disabled
@@ -76,12 +77,12 @@ class HandBiddingModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Bidding:Create': You can only bid on your own hand.")
+            .hasMessageContaining("You are not allowed to perform this action: You can only bid on your own hand.")
 
         assertThatThrownBy {
             hand.bid(user = user, biddingOption = biddingOption)
         }.isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Bidding:Create': You can only bid on your own hand.")
+            .hasMessageContaining("You are not allowed to perform this action: You can only bid on your own hand.")
     }
 
     @ParameterizedTest
@@ -103,12 +104,12 @@ class HandBiddingModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Bidding:Create' can not be performed: This hand has already made a bid.")
+            .hasMessageContaining("This action can not be performed: This hand has already made a bid.")
 
         assertThatThrownBy {
             hand.bid(user = hand.player.user, biddingOption = BiddingOption.MARRIAGE)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Bidding:Create' can not be performed: This hand has already made a bid.")
+            .hasMessageContaining("This action can not be performed: This hand has already made a bid.")
     }
 
     @ParameterizedTest
@@ -129,12 +130,12 @@ class HandBiddingModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Bidding:Create' can not be performed: You did not declared a RESERVATION, thus you can not bid.")
+            .hasMessageContaining("This action can not be performed: You did not declared a ${DeclarationOption.RESERVATION}, thus you can not bid.")
 
         assertThatThrownBy {
             hand.bid(user = hand.player.user, biddingOption = BiddingOption.MARRIAGE)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Bidding:Create' can not be performed: You did not declared a RESERVATION, thus you can not bid.")
+            .hasMessageContaining("This action can not be performed: You did not declared a ${DeclarationOption.RESERVATION}, thus you can not bid.")
     }
 
     @Test
@@ -154,11 +155,11 @@ class HandBiddingModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Bidding:Create' can not be performed: You can only bid WEDDING when you have a marriage on hand.")
+            .hasMessageContaining("This action can not be performed: You can only bid WEDDING when you have a marriage on hand.")
 
         assertThatThrownBy {
             hand.bid(user = hand.player.user, biddingOption = BiddingOption.MARRIAGE)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Bidding:Create' can not be performed: You can only bid WEDDING when you have a marriage on hand.")
+            .hasMessageContaining("This action can not be performed: You can only bid WEDDING when you have a marriage on hand.")
     }
 }

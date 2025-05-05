@@ -202,12 +202,12 @@ class RoundPlayCardModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Play:Card' can not be performed: The round must be in PLAYING_TRICKS state to open a new trick.")
+            .hasMessageContaining("This action can not be performed: The round must be in PLAYING_TRICKS state to open a new trick.")
 
         assertThatThrownBy {
             model.playCard("QC0", model.dealer.user)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Play:Card' can not be performed: The round must be in PLAYING_TRICKS state to open a new trick.")
+            .hasMessageContaining("This action can not be performed: The round must be in PLAYING_TRICKS state to open a new trick.")
     }
 
     @Test
@@ -226,12 +226,12 @@ class RoundPlayCardModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Play:Card': You are not playing in this round.")
+            .hasMessageContaining("You are not allowed to perform this action: You are not playing in this round.")
 
         assertThatThrownBy {
             model.playCard("QC0", model.dealer.user)
         }.isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Play:Card': You are not playing in this round.")
+            .hasMessageContaining("You are not allowed to perform this action: You are not playing in this round.")
     }
 
     @Test
@@ -252,12 +252,12 @@ class RoundPlayCardModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Play:Card': Only the player directly behind the dealer can open the first trick of the round.")
+            .hasMessageContaining("You are not allowed to perform this action: Only the player directly behind the dealer can open the first trick of the round.")
 
         assertThatThrownBy {
             model.playCard("QC0", user)
         }.isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Play:Card': Only the player directly behind the dealer can open the first trick of the round.")
+            .hasMessageContaining("You are not allowed to perform this action: Only the player directly behind the dealer can open the first trick of the round.")
     }
 
     @Test
@@ -282,12 +282,12 @@ class RoundPlayCardModelTest : BaseUnitTest() {
         assertThat(guard.isFailure).isTrue
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Play:Card': Only the winner of the previous trick can open the next trick of the round.")
+            .hasMessageContaining("You are not allowed to perform this action: Only the winner of the previous trick can open the next trick of the round.")
 
         assertThatThrownBy {
             model.playCard("QC0", notWinner)
         }.isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Play:Card': Only the winner of the previous trick can open the next trick of the round.")
+            .hasMessageContaining("You are not allowed to perform this action: Only the winner of the previous trick can open the next trick of the round.")
     }
 
     @Test
@@ -313,12 +313,12 @@ class RoundPlayCardModelTest : BaseUnitTest() {
         assertThat(guard.isFailure).isTrue
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Play:Card': It is not your turn to play a card.")
+            .hasMessageContaining("You are not allowed to perform this action: It is not your turn to play a card.")
 
         assertThatThrownBy {
             model.playCard("QC0", notTurn)
         }.isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Play:Card': It is not your turn to play a card.")
+            .hasMessageContaining("You are not allowed to perform this action: It is not your turn to play a card.")
     }
 
     private fun createRound(): RoundEntity {

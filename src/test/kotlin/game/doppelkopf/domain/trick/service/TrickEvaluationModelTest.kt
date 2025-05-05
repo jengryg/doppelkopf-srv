@@ -54,12 +54,12 @@ class TrickEvaluationModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Trick:Evaluate' can not be performed: The trick must be in ${TrickState.FOURTH_CARD_PLAYED} state to be evaluated.")
+            .hasMessageContaining("This action can not be performed: The trick must be in ${TrickState.FOURTH_CARD_PLAYED} state to be evaluated.")
 
         assertThatThrownBy {
             model.evaluateTrick()
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Trick:Evaluate' can not be performed: The trick must be in ${TrickState.FOURTH_CARD_PLAYED} state to be evaluated.")
+            .hasMessageContaining("This action can not be performed: The trick must be in ${TrickState.FOURTH_CARD_PLAYED} state to be evaluated.")
     }
 
     @Test
@@ -78,11 +78,11 @@ class TrickEvaluationModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Trick:Evaluate' can not be performed: The trick already has a winner determined.")
+            .hasMessageContaining("This action can not be performed: The trick already has a winner determined.")
 
         assertThatThrownBy {
             model.evaluateTrick()
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Trick:Evaluate' can not be performed: The trick already has a winner determined.")
+            .hasMessageContaining("This action can not be performed: The trick already has a winner determined.")
     }
 }

@@ -2,7 +2,6 @@ package game.doppelkopf.domain.round.service
 
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.common.errors.GameFailedException
-import game.doppelkopf.common.errors.ofForbiddenAction
 import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.deck.enums.DeckMode
@@ -32,7 +31,7 @@ class RoundBidsEvaluationModel(
     @CheckReturnValue
     fun canEvaluateBids(): Result<BidResult> {
         if (state != RoundState.WAITING_FOR_BIDS) {
-            return invalid(
+            return Result.ofInvalidAction(
                 "The round must be in ${RoundState.WAITING_FOR_BIDS} state to process the bids."
             )
         }
@@ -40,7 +39,7 @@ class RoundBidsEvaluationModel(
         val votes = calculateBidResult()
 
         if (votes.nothing > 0) {
-            return invalid(
+            return Result.ofInvalidAction(
                 "Not all players have finished their bids yet."
             )
         }
@@ -79,18 +78,6 @@ class RoundBidsEvaluationModel(
                 it.playerTeam = Team.NA
                 it.publicTeam = Team.NA
             }
-        }
-    }
-
-    companion object {
-        const val ACTION = "Bids:Evaluate"
-
-        fun <T> forbidden(reason: String): Result<T> {
-            return Result.ofForbiddenAction(ACTION, reason)
-        }
-
-        fun <T> invalid(reason: String): Result<T> {
-            return Result.ofInvalidAction(ACTION, reason)
         }
     }
 }

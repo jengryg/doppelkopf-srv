@@ -4,8 +4,7 @@ import game.doppelkopf.errors.ApplicationRuntimeException
 import org.springframework.http.HttpStatus
 
 class InvalidActionException(
-    action: String,
-    reason: String? = null,
+    reason: String,
     cause: Throwable? = null
 ) : ApplicationRuntimeException(
     HttpStatus.BAD_REQUEST,
@@ -13,11 +12,7 @@ class InvalidActionException(
 ) {
     init {
         setTitle("Invalid action")
-        if (reason != null) {
-            setDetail("The action '$action' can not be performed: $reason")
-        } else {
-            setDetail("The action '$action' can not be performed.")
-        }
+        setDetail("This action can not be performed: $reason")
     }
 }
 
@@ -25,16 +20,14 @@ class InvalidActionException(
  * Instantiate [InvalidActionException] inside a [Result.failure].
  *
  * @param T the type of the wrapped value in [Result]
- * @param action see [InvalidActionException]
  * @param reason see [InvalidActionException]
  * @param cause see [InvalidActionException]
  *
  * @return a [Result] wrapping type [T] in [Result.failure] state with an [InvalidActionException]
  */
 fun <T> Result.Companion.ofInvalidAction(
-    action: String,
-    reason: String? = null,
+    reason: String,
     cause: Throwable? = null
 ): Result<T> {
-    return failure(InvalidActionException(action, reason, cause))
+    return failure(InvalidActionException(reason, cause))
 }

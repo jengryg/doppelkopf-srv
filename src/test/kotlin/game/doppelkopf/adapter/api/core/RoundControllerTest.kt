@@ -180,7 +180,6 @@ class RoundControllerTest : BaseRestAssuredTest() {
 
             mockkConstructor(GameDealModel::class)
             every { anyConstructed<GameDealModel>().deal(any()) } throws InvalidActionException(
-                "Round:Create",
                 "Mocked Model Exception."
             )
 
@@ -188,7 +187,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
 
             assertThat(response.instance.toString()).isEqualTo("/v1/games/${game.id}/rounds")
             assertThat(response.title).isEqualTo("Invalid action")
-            assertThat(response.detail).isEqualTo("The action 'Round:Create' can not be performed: Mocked Model Exception.")
+            assertThat(response.detail).isEqualTo("This action can not be performed: Mocked Model Exception.")
 
             assertThat(location).isNull()
         }
@@ -201,7 +200,6 @@ class RoundControllerTest : BaseRestAssuredTest() {
 
             mockkConstructor(GameDealModel::class)
             every { anyConstructed<GameDealModel>().deal(any()) } throws ForbiddenActionException(
-                "Round:Create",
                 "Mocked Model Exception."
             )
 
@@ -209,7 +207,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
 
             assertThat(response.instance.toString()).isEqualTo("/v1/games/${game.id}/rounds")
             assertThat(response.title).isEqualTo("Forbidden action")
-            assertThat(response.detail).isEqualTo("You are not allowed to perform the action 'Round:Create': Mocked Model Exception.")
+            assertThat(response.detail).isEqualTo("You are not allowed to perform this action: Mocked Model Exception.")
 
             assertThat(location).isNull()
         }
@@ -237,7 +235,6 @@ class RoundControllerTest : BaseRestAssuredTest() {
 
             mockkConstructor(RoundDeclarationEvaluationModel::class)
             every { anyConstructed<RoundDeclarationEvaluationModel>().evaluateDeclarations() } throws InvalidActionException(
-                "Declaration:Process",
                 "Mocked Model Exception."
             )
 
@@ -246,7 +243,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
             response.also {
                 assertThat(response.instance.toString()).isEqualTo("/v1/rounds/${round.id}")
                 assertThat(response.title).isEqualTo("Invalid action")
-                assertThat(response.detail).isEqualTo("The action 'Declaration:Process' can not be performed: Mocked Model Exception.")
+                assertThat(response.detail).isEqualTo("This action can not be performed: Mocked Model Exception.")
             }
         }
     }
@@ -273,7 +270,6 @@ class RoundControllerTest : BaseRestAssuredTest() {
 
             mockkConstructor(RoundBidsEvaluationModel::class)
             every { anyConstructed<RoundBidsEvaluationModel>().evaluateBids() } throws InvalidActionException(
-                "Bidding:Process",
                 "Mocked Model Exception."
             )
 
@@ -282,7 +278,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
             response.also {
                 assertThat(response.instance.toString()).isEqualTo("/v1/rounds/${round.id}")
                 assertThat(response.title).isEqualTo("Invalid action")
-                assertThat(response.detail).isEqualTo("The action 'Bidding:Process' can not be performed: Mocked Model Exception.")
+                assertThat(response.detail).isEqualTo("This action can not be performed: Mocked Model Exception.")
             }
         }
     }
@@ -309,7 +305,6 @@ class RoundControllerTest : BaseRestAssuredTest() {
 
             mockkConstructor(RoundMarriageResolverModel::class)
             every { anyConstructed<RoundMarriageResolverModel>().resolveMarriage() } throws InvalidActionException(
-                "Marriage:Resolve",
                 "Mocked Model Exception."
             )
 
@@ -318,7 +313,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
             response.also {
                 assertThat(response.instance.toString()).isEqualTo("/v1/rounds/${round.id}")
                 assertThat(response.title).isEqualTo("Invalid action")
-                assertThat(response.detail).isEqualTo("The action 'Marriage:Resolve' can not be performed: Mocked Model Exception.")
+                assertThat(response.detail).isEqualTo("This action can not be performed: Mocked Model Exception.")
             }
         }
     }

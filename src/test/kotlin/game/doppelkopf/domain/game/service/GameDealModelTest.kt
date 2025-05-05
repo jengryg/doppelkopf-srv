@@ -1,13 +1,13 @@
 package game.doppelkopf.domain.game.service
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.domain.deck.model.Deck
-import game.doppelkopf.domain.deck.enums.DeckMode
-import game.doppelkopf.domain.game.enums.GameState
-import game.doppelkopf.domain.hand.enums.Team
 import game.doppelkopf.common.errors.ForbiddenActionException
 import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.deck.enums.DeckMode
+import game.doppelkopf.domain.deck.model.Deck
+import game.doppelkopf.domain.game.enums.GameState
+import game.doppelkopf.domain.hand.enums.Team
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -91,12 +91,12 @@ class GameDealModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Deal' can not be performed: The game is currently not in the ${GameState.WAITING_FOR_DEAL} state.")
+            .hasMessageContaining("This action can not be performed: The game is currently not in the ${GameState.WAITING_FOR_DEAL} state.")
 
         assertThatThrownBy {
             game.deal(user = user)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Deal' can not be performed: The game is currently not in the ${GameState.WAITING_FOR_DEAL} state.")
+            .hasMessageContaining("This action can not be performed: The game is currently not in the ${GameState.WAITING_FOR_DEAL} state.")
     }
 
     @Test
@@ -119,11 +119,11 @@ class GameDealModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Game:Deal': Only the current dealer of the game can deal this round.")
+            .hasMessageContaining("You are not allowed to perform this action: Only the current dealer of the game can deal this round.")
 
         assertThatThrownBy {
             game.deal(user = player.user)
         }.isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Game:Deal': Only the current dealer of the game can deal this round.")
+            .hasMessageContaining("You are not allowed to perform this action: Only the current dealer of the game can deal this round.")
     }
 }

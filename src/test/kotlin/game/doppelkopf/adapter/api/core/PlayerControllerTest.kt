@@ -93,7 +93,6 @@ class PlayerControllerTest : BaseRestAssuredTest() {
 
             mockkConstructor(GameJoinModel::class)
             every { anyConstructed<GameJoinModel>().join(any(), 3) } throws InvalidActionException(
-                "Game:Join",
                 "Mocked Model Exception."
             )
 
@@ -101,7 +100,7 @@ class PlayerControllerTest : BaseRestAssuredTest() {
 
             assertThat(response.instance.toString()).isEqualTo("/v1/games/${game.id}/players")
             assertThat(response.title).isEqualTo("Invalid action")
-            assertThat(response.detail).isEqualTo("The action 'Game:Join' can not be performed: Mocked Model Exception.")
+            assertThat(response.detail).isEqualTo("This action can not be performed: Mocked Model Exception.")
 
             assertThat(location).isNull()
         }
@@ -114,7 +113,6 @@ class PlayerControllerTest : BaseRestAssuredTest() {
 
             mockkConstructor(GameJoinModel::class)
             every { anyConstructed<GameJoinModel>().join(any(), 3) } throws ForbiddenActionException(
-                "Game:Join",
                 "Mocked Model Exception."
             )
 
@@ -122,7 +120,7 @@ class PlayerControllerTest : BaseRestAssuredTest() {
 
             assertThat(response.instance.toString()).isEqualTo("/v1/games/${game.id}/players")
             assertThat(response.title).isEqualTo("Forbidden action")
-            assertThat(response.detail).isEqualTo("You are not allowed to perform the action 'Game:Join': Mocked Model Exception.")
+            assertThat(response.detail).isEqualTo("You are not allowed to perform this action: Mocked Model Exception.")
 
             assertThat(location).isNull()
         }

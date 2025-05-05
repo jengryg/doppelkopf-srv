@@ -9,6 +9,4 @@ import java.util.*
 class GameCommandDealNewRound(
     override val user: UserDetails,
     override val gameId: UUID,
-) : IGameCommand {
-    override fun getSlug() = "Game:Deal"
-}
+) : IGameCommand

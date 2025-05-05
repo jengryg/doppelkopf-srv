@@ -11,6 +11,4 @@ class GameCommandJoinAsPlayer(
     override val user: UserDetails,
     override val gameId: UUID,
     val seat: Int
-) : IGameCommand {
-    override fun getSlug() = "Game:Join"
-}
+) : IGameCommand

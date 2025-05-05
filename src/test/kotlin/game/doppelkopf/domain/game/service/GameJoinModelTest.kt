@@ -54,12 +54,12 @@ class GameJoinModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Join' can not be performed: You can not join a game that has already started.")
+            .hasMessageContaining("This action can not be performed: You can not join a game that has already started.")
 
         assertThatThrownBy {
             game.join(user = user, seat = 1)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Join' can not be performed: You can not join a game that has already started.")
+            .hasMessageContaining("This action can not be performed: You can not join a game that has already started.")
     }
 
     @Test
@@ -80,12 +80,12 @@ class GameJoinModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Join' can not be performed: You already joined this game.")
+            .hasMessageContaining("This action can not be performed: You already joined this game.")
 
         assertThatThrownBy {
             game.join(user = user, seat = 1)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Join' can not be performed: You already joined this game.")
+            .hasMessageContaining("This action can not be performed: You already joined this game.")
     }
 
     @Test
@@ -106,12 +106,12 @@ class GameJoinModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Join' can not be performed: The seat you have chosen is already taken by another player.")
+            .hasMessageContaining("This action can not be performed: The seat you have chosen is already taken by another player.")
 
         assertThatThrownBy {
             game.join(user = user, seat = 0)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Join' can not be performed: The seat you have chosen is already taken by another player.")
+            .hasMessageContaining("This action can not be performed: The seat you have chosen is already taken by another player.")
     }
 
     @Test
@@ -134,11 +134,11 @@ class GameJoinModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Join' can not be performed: This game is already at its maximum capacity.")
+            .hasMessageContaining("This action can not be performed: This game is already at its maximum capacity.")
 
         assertThatThrownBy {
             game.join(user = user, seat = 7)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Join' can not be performed: This game is already at its maximum capacity.")
+            .hasMessageContaining("This action can not be performed: This game is already at its maximum capacity.")
     }
 }

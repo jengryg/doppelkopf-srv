@@ -33,7 +33,7 @@ class HandCardPlayModelTest : BaseUnitTest() {
         assertThat(result.isFailure).isTrue
         assertThat(result.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Play:Card' can not be performed: The hand does not contain the card $card.")
+            .hasMessageContaining("This action can not be performed: The hand does not contain the card $card.")
 
     }
 
@@ -69,7 +69,7 @@ class HandCardPlayModelTest : BaseUnitTest() {
         assertThat(result.isFailure).isTrue
         assertThat(result.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Play:Card' can not be performed: You are not allowed to play $card into a trick that demands $demand when your hand can serve the demand.")
+            .hasMessageContaining("This action can not be performed: You are not allowed to play $card into a trick that demands $demand when your hand can serve the demand.")
     }
 
     fun provideIllegalCardPlays(): Stream<Arguments> {

@@ -112,7 +112,7 @@ class HandControllerTest : BaseRestAssuredTest() {
 
             assertThat(response.instance.toString()).isEqualTo("/v1/hands/${hand.id}")
             assertThat(response.title).isEqualTo("Forbidden action")
-            assertThat(response.detail).isEqualTo("You are not allowed to perform the action 'Hand:Show': Only the player holding this hand can show its detailed information.")
+            assertThat(response.detail).isEqualTo("You are not allowed to perform this action: Only the player holding this hand can show its detailed information.")
         }
 
         @Test
@@ -164,7 +164,6 @@ class HandControllerTest : BaseRestAssuredTest() {
                     DeclarationOption.HEALTHY
                 )
             } throws ForbiddenActionException(
-                "Declaration:Create",
                 "Mocked Model Exception."
             )
 
@@ -176,7 +175,7 @@ class HandControllerTest : BaseRestAssuredTest() {
 
             assertThat(response.instance.toString()).isEqualTo("/v1/hands/${hand.id}/declarations")
             assertThat(response.title).isEqualTo("Forbidden action")
-            assertThat(response.detail).isEqualTo("You are not allowed to perform the action 'Declaration:Create': Mocked Model Exception.")
+            assertThat(response.detail).isEqualTo("You are not allowed to perform this action: Mocked Model Exception.")
 
             assertThat(location).isNull()
         }
@@ -193,7 +192,6 @@ class HandControllerTest : BaseRestAssuredTest() {
                     DeclarationOption.HEALTHY
                 )
             } throws InvalidActionException(
-                "Declaration:Create",
                 "Mocked Model Exception."
             )
 
@@ -206,7 +204,7 @@ class HandControllerTest : BaseRestAssuredTest() {
 
             assertThat(response.instance.toString()).isEqualTo("/v1/hands/${hand.id}/declarations")
             assertThat(response.title).isEqualTo("Invalid action")
-            assertThat(response.detail).isEqualTo("The action 'Declaration:Create' can not be performed: Mocked Model Exception.")
+            assertThat(response.detail).isEqualTo("This action can not be performed: Mocked Model Exception.")
 
             assertThat(location).isNull()
         }
@@ -274,7 +272,6 @@ class HandControllerTest : BaseRestAssuredTest() {
                     BiddingOption.MARRIAGE
                 )
             } throws ForbiddenActionException(
-                "Bid:Create",
                 "Mocked Model Exception."
             )
 
@@ -286,7 +283,7 @@ class HandControllerTest : BaseRestAssuredTest() {
 
             assertThat(response.instance.toString()).isEqualTo("/v1/hands/${hand.id}/bids")
             assertThat(response.title).isEqualTo("Forbidden action")
-            assertThat(response.detail).isEqualTo("You are not allowed to perform the action 'Bid:Create': Mocked Model Exception.")
+            assertThat(response.detail).isEqualTo("You are not allowed to perform this action: Mocked Model Exception.")
 
             assertThat(location).isNull()
         }
@@ -303,7 +300,6 @@ class HandControllerTest : BaseRestAssuredTest() {
                     BiddingOption.MARRIAGE
                 )
             } throws InvalidActionException(
-                "Bid:Create",
                 "Mocked Model Exception."
             )
 
@@ -316,7 +312,7 @@ class HandControllerTest : BaseRestAssuredTest() {
 
             assertThat(response.instance.toString()).isEqualTo("/v1/hands/${hand.id}/bids")
             assertThat(response.title).isEqualTo("Invalid action")
-            assertThat(response.detail).isEqualTo("The action 'Bid:Create' can not be performed: Mocked Model Exception.")
+            assertThat(response.detail).isEqualTo("This action can not be performed: Mocked Model Exception.")
 
             assertThat(location).isNull()
         }

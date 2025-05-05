@@ -196,15 +196,14 @@ class TurnControllerTest : BaseRestAssuredTest() {
 
             mockkConstructor(RoundPlayCardModel::class)
             every { anyConstructed<RoundPlayCardModel>().playCard(any(), any()) } throws InvalidActionException(
-                "Play:Card",
-                "Mocked Model Exception"
+                "Mocked Model Exception."
             )
 
             val (response, location) = execPlayCard<ProblemDetailResponse>(round.id, 400)
 
             assertThat(response.instance.toString()).isEqualTo("/v1/rounds/${round.id}/turns")
             assertThat(response.title).isEqualTo("Invalid action")
-            assertThat(response.detail).isEqualTo("The action 'Play:Card' can not be performed: Mocked Model Exception")
+            assertThat(response.detail).isEqualTo("This action can not be performed: Mocked Model Exception.")
 
             assertThat(location).isNull()
         }
@@ -215,15 +214,14 @@ class TurnControllerTest : BaseRestAssuredTest() {
 
             mockkConstructor(RoundPlayCardModel::class)
             every { anyConstructed<RoundPlayCardModel>().playCard(any(), any()) } throws ForbiddenActionException(
-                "Play:Card",
-                "Mocked Model Exception"
+                "Mocked Model Exception."
             )
 
             val (response, location) = execPlayCard<ProblemDetailResponse>(round.id, 403)
 
             assertThat(response.instance.toString()).isEqualTo("/v1/rounds/${round.id}/turns")
             assertThat(response.title).isEqualTo("Forbidden action")
-            assertThat(response.detail).isEqualTo("You are not allowed to perform the action 'Play:Card': Mocked Model Exception")
+            assertThat(response.detail).isEqualTo("You are not allowed to perform this action: Mocked Model Exception.")
 
             assertThat(location).isNull()
         }

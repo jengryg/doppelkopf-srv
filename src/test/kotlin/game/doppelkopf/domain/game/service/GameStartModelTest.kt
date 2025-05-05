@@ -47,12 +47,12 @@ class GameStartModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Game:Start': Only the creator of the game can start it.")
+            .hasMessageContaining("You are not allowed to perform this action: Only the creator of the game can start it.")
 
         assertThatThrownBy {
             game.start(notCreator)
         }.isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Game:Start': Only the creator of the game can start it.")
+            .hasMessageContaining("You are not allowed to perform this action: Only the creator of the game can start it.")
     }
 
     @ParameterizedTest
@@ -70,12 +70,12 @@ class GameStartModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Start' can not be performed: The game has been started already.")
+            .hasMessageContaining("This action can not be performed: The game has been started already.")
 
         assertThatThrownBy {
             game.start(game.creator)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Start' can not be performed: The game has been started already.")
+            .hasMessageContaining("This action can not be performed: The game has been started already.")
     }
 
     @ParameterizedTest
@@ -97,11 +97,11 @@ class GameStartModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Start' can not be performed: The game needs to have at least 4 players.")
+            .hasMessageContaining("This action can not be performed: The game needs to have at least 4 players.")
 
         assertThatThrownBy {
             game.start(game.creator)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Game:Start' can not be performed: The game needs to have at least 4 players.")
+            .hasMessageContaining("This action can not be performed: The game needs to have at least 4 players.")
     }
 }

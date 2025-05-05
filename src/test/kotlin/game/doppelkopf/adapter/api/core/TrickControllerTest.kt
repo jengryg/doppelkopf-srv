@@ -203,7 +203,6 @@ class TrickControllerTest : BaseRestAssuredTest() {
 
             mockkConstructor(TrickEvaluationModel::class)
             every { anyConstructed<TrickEvaluationModel>().evaluateTrick() } throws InvalidActionException(
-                "Trick:Evaluate",
                 "Mocked Model Exception."
             )
 
@@ -212,7 +211,7 @@ class TrickControllerTest : BaseRestAssuredTest() {
             response.also {
                 assertThat(response.instance.toString()).isEqualTo("/v1/tricks/${trick.id}")
                 assertThat(response.title).isEqualTo("Invalid action")
-                assertThat(response.detail).isEqualTo("The action 'Trick:Evaluate' can not be performed: Mocked Model Exception.")
+                assertThat(response.detail).isEqualTo("This action can not be performed: Mocked Model Exception.")
             }
         }
     }

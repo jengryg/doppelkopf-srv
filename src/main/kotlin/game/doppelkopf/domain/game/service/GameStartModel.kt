@@ -35,23 +35,11 @@ class GameStartModel(
     @CheckReturnValue
     fun canStart(user: IUserModel): Result<Unit> {
         return when {
-            creator != user -> forbidden("Only the creator of the game can start it.")
-            state != GameState.INITIALIZED -> invalid("The game has been started already.")
-            players.size < 4 -> invalid("The game needs to have at least 4 players.")
+            creator != user -> Result.ofForbiddenAction("Only the creator of the game can start it.")
+            state != GameState.INITIALIZED -> Result.ofInvalidAction("The game has been started already.")
+            players.size < 4 -> Result.ofInvalidAction("The game needs to have at least 4 players.")
 
             else -> Result.success(Unit)
-        }
-    }
-
-    companion object {
-        const val ACTION = "Game:Start"
-
-        fun forbidden(reason: String): Result<Unit> {
-            return Result.ofForbiddenAction(ACTION, reason)
-        }
-
-        fun invalid(reason: String): Result<Unit> {
-            return Result.ofInvalidAction(ACTION, reason)
         }
     }
 }

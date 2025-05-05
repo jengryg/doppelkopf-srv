@@ -47,7 +47,7 @@ class RoundDeclarationEvaluationModel(
     @CheckReturnValue
     fun canEvaluateDeclarations(): Result<DeclarationResult> {
         if (state != RoundState.WAITING_FOR_DECLARATIONS) {
-            return invalid(
+            return Result.ofInvalidAction(
                 "The round must be in ${RoundState.WAITING_FOR_DECLARATIONS} state to process the declarations."
             )
         }
@@ -55,7 +55,7 @@ class RoundDeclarationEvaluationModel(
         val votes = calculateDeclarationResult()
 
         if (votes.nothing > 0) {
-            return invalid(
+            return Result.ofInvalidAction(
                 "Not all players have finished their declaration yet."
             )
         }
@@ -78,18 +78,6 @@ class RoundDeclarationEvaluationModel(
                 healthy = it[Declaration.HEALTHY] ?: 0,
                 silent = it[Declaration.SILENT_MARRIAGE] ?: 0
             )
-        }
-    }
-
-    companion object {
-        const val ACTION = "Declarations:Evaluate"
-
-        fun <T> forbidden(reason: String): Result<T> {
-            return Result.ofForbiddenAction(ACTION, reason)
-        }
-
-        fun <T> invalid(reason: String): Result<T> {
-            return Result.ofInvalidAction(ACTION, reason)
         }
     }
 }

@@ -83,12 +83,12 @@ class HandDeclareModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Declaration:Create': You can only declare on your own hand.")
+            .hasMessageContaining("You are not allowed to perform this action: You can only declare on your own hand.")
 
         assertThatThrownBy {
             hand.declare(user = user, declarationOption = declarationOption)
         }.isInstanceOf(ForbiddenActionException::class.java)
-            .hasMessageContaining("You are not allowed to perform the action 'Declaration:Create': You can only declare on your own hand.")
+            .hasMessageContaining("You are not allowed to perform this action: You can only declare on your own hand.")
     }
 
     @ParameterizedTest
@@ -109,12 +109,12 @@ class HandDeclareModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Declaration:Create' can not be performed: This hand has already made a declaration.")
+            .hasMessageContaining("This action can not be performed: This hand has already made a declaration.")
 
         assertThatThrownBy {
             hand.declare(user = hand.player.user, declarationOption = DeclarationOption.HEALTHY)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Declaration:Create' can not be performed: This hand has already made a declaration.")
+            .hasMessageContaining("This action can not be performed: This hand has already made a declaration.")
     }
 
     @Test
@@ -131,12 +131,12 @@ class HandDeclareModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Declaration:Create' can not be performed: You can not declare HEALTHY when you have a marriage on hand.")
+            .hasMessageContaining("This action can not be performed: You can not declare HEALTHY when you have a marriage on hand.")
 
         assertThatThrownBy {
             hand.declare(user = hand.player.user, declarationOption = DeclarationOption.HEALTHY)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Declaration:Create' can not be performed: You can not declare HEALTHY when you have a marriage on hand.")
+            .hasMessageContaining("This action can not be performed: You can not declare HEALTHY when you have a marriage on hand.")
     }
 
     @Test
@@ -153,11 +153,11 @@ class HandDeclareModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Declaration:Create' can not be performed: You can not declare SILENT_MARRIAGE when you are not having a marriage on hand.")
+            .hasMessageContaining("This action can not be performed: You can not declare SILENT_MARRIAGE when you are not having a marriage on hand.")
 
         assertThatThrownBy {
             hand.declare(user = hand.player.user, declarationOption = DeclarationOption.SILENT_MARRIAGE)
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Declaration:Create' can not be performed: You can not declare SILENT_MARRIAGE when you are not having a marriage on hand.")
+            .hasMessageContaining("This action can not be performed: You can not declare SILENT_MARRIAGE when you are not having a marriage on hand.")
     }
 }

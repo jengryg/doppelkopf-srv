@@ -24,7 +24,6 @@ class HandPersistence(
         // TODO maybe refactor or change this here?
         return load(handId).takeIf { it.player.user == user }
             ?: throw ForbiddenActionException(
-                "Hand:Show",
                 "Only the player holding this hand can show its detailed information."
             )
     }

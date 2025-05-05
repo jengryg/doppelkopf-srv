@@ -9,6 +9,4 @@ import java.util.*
 class RoundCommandEvaluateBids(
     override val user: UserDetails,
     override val roundId: UUID
-) : IRoundCommand {
-    override fun getSlug() = "Round:EvaluateBids"
-}
+) : IRoundCommand

@@ -20,11 +20,11 @@ class HandCardPlayModel(
     fun playCard(card: Card, demand: CardDemand): Result<Unit> {
         if (!entity.cardsRemaining.remove(card.encoded)) {
             // Could not remove card, i.e. player tried to play a card they do not have.
-            return invalid("The hand does not contain the card $card.")
+            return Result.ofInvalidAction("The hand does not contain the card $card.")
         }
 
         if (!isLegalCardPlay(card, demand)) {
-            return invalid("You are not allowed to play $card into a trick that demands $demand when your hand can serve the demand.")
+            return Result.ofInvalidAction("You are not allowed to play $card into a trick that demands $demand when your hand can serve the demand.")
         }
 
         entity.cardsPlayed.add(card.encoded)
@@ -43,17 +43,5 @@ class HandCardPlayModel(
 
         // Not satisfying the demand is only allowed, if there is
         return cards.all { it.demand != demand }
-    }
-
-    companion object {
-        const val ACTION = "Play:Card"
-
-        fun <T> forbidden(reason: String): Result<T> {
-            return Result.ofForbiddenAction(ACTION, reason)
-        }
-
-        fun <T> invalid(reason: String): Result<T> {
-            return Result.ofInvalidAction(ACTION, reason)
-        }
     }
 }

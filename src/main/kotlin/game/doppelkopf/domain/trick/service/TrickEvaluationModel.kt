@@ -1,10 +1,10 @@
 package game.doppelkopf.domain.trick.service
 
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
-import game.doppelkopf.domain.trick.enums.TrickState
 import game.doppelkopf.common.errors.GameFailedException
 import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.trick.enums.TrickState
 import game.doppelkopf.domain.trick.model.TrickModelAbstract
 import org.slf4j.helpers.CheckReturnValue
 
@@ -36,21 +36,13 @@ class TrickEvaluationModel(
     @CheckReturnValue
     fun canEvaluateTrick(): Result<Unit> {
         if (state != TrickState.FOURTH_CARD_PLAYED) {
-            return invalid("The trick must be in ${TrickState.FOURTH_CARD_PLAYED} state to be evaluated.")
+            return Result.ofInvalidAction("The trick must be in ${TrickState.FOURTH_CARD_PLAYED} state to be evaluated.")
         }
 
         if (winner != null) {
-            return invalid("The trick already has a winner determined.")
+            return Result.ofInvalidAction("The trick already has a winner determined.")
         }
 
         return Result.success(Unit)
-    }
-
-    companion object {
-        const val ACTION = "Trick:Evaluate"
-
-        fun <T> invalid(reason: String): Result<T> {
-            return Result.ofInvalidAction(ACTION, reason)
-        }
     }
 }

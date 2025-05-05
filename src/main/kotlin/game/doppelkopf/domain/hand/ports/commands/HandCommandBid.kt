@@ -11,6 +11,4 @@ class HandCommandBid(
     override val user: UserDetails,
     override val handId: UUID,
     val bid: BiddingOption
-) : IHandCommand {
-    override fun getSlug() = "Hand:Bid"
-}
+) : IHandCommand

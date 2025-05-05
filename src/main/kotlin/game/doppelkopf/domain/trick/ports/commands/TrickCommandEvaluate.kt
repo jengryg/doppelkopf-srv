@@ -9,6 +9,4 @@ import java.util.*
 class TrickCommandEvaluate(
     override val user: UserDetails,
     override val trickId: UUID
-) : ITrickCommand {
-    override fun getSlug() = "Trick:Evaluate"
-}
+) : ITrickCommand

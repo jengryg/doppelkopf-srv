@@ -176,12 +176,12 @@ class RoundMarriageResolverModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Marriage:Resolve' can not be performed: Only rounds that have the contract MARRIAGE_UNRESOLVED can resolve a marriage.")
+            .hasMessageContaining("This action can not be performed: Only rounds that have the contract MARRIAGE_UNRESOLVED can resolve a marriage.")
 
         assertThatThrownBy {
             model.resolveMarriage()
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Marriage:Resolve' can not be performed: Only rounds that have the contract MARRIAGE_UNRESOLVED can resolve a marriage.")
+            .hasMessageContaining("This action can not be performed: Only rounds that have the contract MARRIAGE_UNRESOLVED can resolve a marriage.")
     }
 
     @Test
@@ -199,12 +199,12 @@ class RoundMarriageResolverModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Marriage:Resolve' can not be performed: Could not determine the last trick of the round")
+            .hasMessageContaining("This action can not be performed: Could not determine the last trick of the round")
 
         assertThatThrownBy {
             model.resolveMarriage()
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Marriage:Resolve' can not be performed: Could not determine the last trick of the round")
+            .hasMessageContaining("This action can not be performed: Could not determine the last trick of the round")
     }
 
     @Test
@@ -224,11 +224,11 @@ class RoundMarriageResolverModelTest : BaseUnitTest() {
 
         assertThat(guard.exceptionOrNull())
             .isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Marriage:Resolve' can not be performed: There is no winner in the current trick")
+            .hasMessageContaining("This action can not be performed: There is no winner in the current trick")
 
         assertThatThrownBy {
             model.resolveMarriage()
         }.isInstanceOf(InvalidActionException::class.java)
-            .hasMessageContaining("The action 'Marriage:Resolve' can not be performed: There is no winner in the current trick")
+            .hasMessageContaining("This action can not be performed: There is no winner in the current trick")
     }
 }
