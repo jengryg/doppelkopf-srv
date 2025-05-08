@@ -12,4 +12,9 @@ interface IPlayerProperties : IBaseProperties {
      * Flag to indicate if this player is currently the dealer.
      */
     var dealer: Boolean
+
+    /**
+     * The points of the player.
+     */
+    var points: Int
 }

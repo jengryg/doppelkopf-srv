@@ -3,6 +3,7 @@ package game.doppelkopf.domain
 import game.doppelkopf.domain.game.service.GameModelFactory
 import game.doppelkopf.domain.hand.service.HandModelFactory
 import game.doppelkopf.domain.player.service.PlayerModelFactory
+import game.doppelkopf.domain.result.service.ResultModelFactory
 import game.doppelkopf.domain.round.service.RoundModelFactory
 import game.doppelkopf.domain.trick.service.TrickModelFactory
 import game.doppelkopf.domain.turn.service.TurnModelFactory
@@ -22,4 +23,5 @@ class ModelFactoryProvider {
     val hand = HandModelFactory(this)
     val trick = TrickModelFactory(this)
     val turn = TurnModelFactory(this)
+    val result = ResultModelFactory(this)
 }

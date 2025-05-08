@@ -92,5 +92,18 @@ data class Teamed<out T>(
 
             return Teamed(re, ko)
         }
+
+        /**
+         * Takes [iterable] that is assumed to contain zero or more elements where [selector] returns [Team.RE]
+         * and zero or more elements where [selector] returns [Team.KO] and filters them into [Teamed] lists.
+         *
+         * @return the teamed results containing the lists of elements from [iterable] filtered with [selector].
+         */
+        fun <T> filter(iterable: Iterable<T>, selector: (T) -> Team): Teamed<List<T>> {
+            val re = iterable.filter { selector(it) == Team.RE }
+            val ko = iterable.filter { selector(it) == Team.KO }
+
+            return Teamed(re, ko)
+        }
     }
 }

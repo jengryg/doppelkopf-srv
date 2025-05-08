@@ -5,6 +5,7 @@ import game.doppelkopf.common.model.IStartedEnded
 import game.doppelkopf.domain.deck.enums.DeckMode
 import game.doppelkopf.domain.round.enums.RoundContract
 import game.doppelkopf.domain.round.enums.RoundState
+import game.doppelkopf.domain.round.enums.RoundWinner
 
 interface IRoundProperties : IBaseProperties, IStartedEnded {
     /**
@@ -26,4 +27,9 @@ interface IRoundProperties : IBaseProperties, IStartedEnded {
      * Current [DeckMode] of this round.
      */
     var deckMode: DeckMode
+
+    /**
+     * Current [RoundWinner] of this round.
+     */
+    var winner: RoundWinner
 }

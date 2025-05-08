@@ -1,13 +1,13 @@
 package game.doppelkopf.domain.trick.model
 
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
-import game.doppelkopf.domain.deck.model.Card
-import game.doppelkopf.domain.trick.enums.TrickState
 import game.doppelkopf.common.errors.GameFailedException
 import game.doppelkopf.domain.ModelAbstract
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.deck.model.Card
 import game.doppelkopf.domain.hand.model.IHandModel
 import game.doppelkopf.domain.round.model.IRoundModel
+import game.doppelkopf.domain.trick.enums.TrickState
 
 abstract class TrickModelAbstract(
     entity: TrickEntity,
@@ -78,5 +78,21 @@ abstract class TrickModelAbstract(
         leadingCardIndex = determineLeadingCardIndex()
         // advance the state of the trick
         state = determineStateFromCards()
+    }
+
+    override fun isDoppelkopf(): Boolean {
+        if (size != 4) {
+            return false
+        }
+
+        return score >= 40
+    }
+
+    override fun isCharly(): Boolean {
+        if (size != 4) {
+            return false
+        }
+
+        return cards.last().isCharly
     }
 }

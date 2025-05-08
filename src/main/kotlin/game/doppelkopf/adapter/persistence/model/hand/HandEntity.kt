@@ -58,6 +58,12 @@ class HandEntity(
     @Column
     override var publicTeam: Team = Team.NA
 
+    @Column
+    override var score: Int = 0
+
+    @Column
+    override var tricks: Int = 0
+
     @OneToMany(
         fetch = FetchType.LAZY,
         mappedBy = "winner",

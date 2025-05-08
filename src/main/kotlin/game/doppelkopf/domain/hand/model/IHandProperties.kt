@@ -52,4 +52,14 @@ interface IHandProperties : IBaseProperties {
      * [publicTeam] is safe to be shown to all players of the game at any time.
      */
     var publicTeam: Team
+
+    /**
+     * The total score of the tricks this hand has won.
+     */
+    var score: Int
+
+    /**
+     * The number of tricks this hand has won.
+     */
+    var tricks: Int
 }

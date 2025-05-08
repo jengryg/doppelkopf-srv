@@ -19,4 +19,6 @@ interface ITrickModel : ITrickProperties, IBaseModel<TrickEntity> {
     fun determineScoreFromCards(): Int
     fun determineStateFromCards(): TrickState
     fun updateCachedValues()
+    fun isDoppelkopf() : Boolean
+    fun isCharly() : Boolean
 }

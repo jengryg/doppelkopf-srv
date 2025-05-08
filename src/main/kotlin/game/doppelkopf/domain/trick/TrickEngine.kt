@@ -3,6 +3,7 @@ package game.doppelkopf.domain.trick
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.round.RoundEngine
+import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluate
 import game.doppelkopf.domain.round.ports.commands.RoundCommandResolveMarriage
 import game.doppelkopf.domain.trick.ports.commands.TrickCommandEvaluate
 import game.doppelkopf.domain.trick.service.TrickEvaluationModel
@@ -31,6 +32,14 @@ class TrickEngine(
                 )
             )
             // just ignore the exceptions here
+        }
+
+        runCatching {
+            roundEngine.execute(
+                command = RoundCommandEvaluate(
+                    round = command.trick.round
+                )
+            )
         }
 
         return command.trick

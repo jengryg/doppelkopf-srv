@@ -5,10 +5,7 @@ import game.doppelkopf.adapter.persistence.model.trick.TrickPersistence
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnPersistence
 import game.doppelkopf.domain.ModelFactoryProvider
-import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluateBids
-import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluateDeclarations
-import game.doppelkopf.domain.round.ports.commands.RoundCommandPlayCard
-import game.doppelkopf.domain.round.ports.commands.RoundCommandResolveMarriage
+import game.doppelkopf.domain.round.ports.commands.*
 import game.doppelkopf.domain.round.service.RoundBidsEvaluationModel
 import game.doppelkopf.domain.round.service.RoundDeclarationEvaluationModel
 import game.doppelkopf.domain.round.service.RoundMarriageResolverModel
@@ -82,5 +79,13 @@ class RoundEngine(
         trickPersistence.save(trick.entity)
 
         return turnPersistence.save(turn.entity)
+    }
+
+    fun execute(command: RoundCommandEvaluate): RoundEntity {
+        val mfp = ModelFactoryProvider()
+
+
+
+        return command.round
     }
 }

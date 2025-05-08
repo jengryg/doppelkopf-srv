@@ -1,14 +1,16 @@
 package game.doppelkopf.domain.round.model
 
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
-import game.doppelkopf.domain.deck.model.Deck
 import game.doppelkopf.domain.ModelAbstract
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.deck.model.Deck
 import game.doppelkopf.domain.game.model.IGameModel
 import game.doppelkopf.domain.hand.model.IHandModel
 import game.doppelkopf.domain.player.model.IPlayerModel
+import game.doppelkopf.domain.result.model.IResultModel
 import game.doppelkopf.domain.trick.model.ITrickModel
 import game.doppelkopf.domain.user.model.IUserModel
+import game.doppelkopf.utils.Teamed
 
 abstract class RoundModelAbstract(
     entity: RoundEntity,
@@ -29,6 +31,10 @@ abstract class RoundModelAbstract(
         get() = entity.tricks.associate {
             it.number to factoryProvider.trick.create(it)
         }
+
+    override val results: Teamed<IResultModel>?
+        get() = Teamed.from(entity.results) { it.team.internal }
+            ?.map { factoryProvider.result.create(it) }
 
     override val deck: Deck
         get() = Deck.create(deckMode)

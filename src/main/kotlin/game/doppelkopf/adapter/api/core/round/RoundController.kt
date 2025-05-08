@@ -7,6 +7,7 @@ import game.doppelkopf.domain.game.GameActionOrchestrator
 import game.doppelkopf.domain.game.ports.actions.GameActionDealNewRound
 import game.doppelkopf.domain.round.RoundActionOrchestrator
 import game.doppelkopf.domain.round.enums.RoundOperation
+import game.doppelkopf.domain.round.ports.actions.RoundActionEvaluate
 import game.doppelkopf.domain.round.ports.actions.RoundActionEvaluateBids
 import game.doppelkopf.domain.round.ports.actions.RoundActionEvaluateDeclarations
 import game.doppelkopf.domain.round.ports.actions.RoundActionResolveMarriage
@@ -101,6 +102,13 @@ class RoundController(
 
             RoundOperation.MARRIAGE_RESOLVER -> roundActionOrchestrator.execute(
                 action = RoundActionResolveMarriage(
+                    user = userDetails,
+                    roundId = id,
+                )
+            )
+
+            RoundOperation.RESULT_EVALUATION -> roundActionOrchestrator.execute(
+                action = RoundActionEvaluate(
                     user = userDetails,
                     roundId = id,
                 )

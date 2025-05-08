@@ -4,11 +4,13 @@ import game.doppelkopf.adapter.persistence.model.BaseEntity
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
+import game.doppelkopf.adapter.persistence.model.result.ResultEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.domain.deck.enums.DeckMode
 import game.doppelkopf.domain.round.enums.RoundContract
 import game.doppelkopf.domain.round.enums.RoundState
+import game.doppelkopf.domain.round.enums.RoundWinner
 import game.doppelkopf.domain.round.model.IRoundProperties
 import jakarta.persistence.*
 import java.time.Instant
@@ -48,6 +50,10 @@ class RoundEntity(
     @Enumerated(EnumType.STRING)
     override var deckMode: DeckMode = DeckMode.DIAMONDS
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    override var winner: RoundWinner = RoundWinner.NA
+
     @OneToMany(
         fetch = FetchType.LAZY,
         mappedBy = "round",
@@ -68,4 +74,11 @@ class RoundEntity(
         cascade = [CascadeType.ALL],
     )
     val turns = mutableSetOf<TurnEntity>()
+
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "round",
+        cascade = [CascadeType.ALL],
+    )
+    val results = mutableSetOf<ResultEntity>()
 }

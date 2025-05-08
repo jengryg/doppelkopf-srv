@@ -6,8 +6,10 @@ import game.doppelkopf.domain.deck.model.Deck
 import game.doppelkopf.domain.game.model.IGameModel
 import game.doppelkopf.domain.hand.model.IHandModel
 import game.doppelkopf.domain.player.model.IPlayerModel
+import game.doppelkopf.domain.result.model.IResultModel
 import game.doppelkopf.domain.trick.model.ITrickModel
 import game.doppelkopf.domain.user.model.IUserModel
+import game.doppelkopf.utils.Teamed
 
 interface IRoundModel : IRoundProperties, IBaseModel<RoundEntity> {
     val game: IGameModel
@@ -15,4 +17,5 @@ interface IRoundModel : IRoundProperties, IBaseModel<RoundEntity> {
     val hands: Map<IUserModel, IHandModel>
     val deck: Deck
     val tricks: Map<Int, ITrickModel>
+    val results: Teamed<IResultModel>?
 }

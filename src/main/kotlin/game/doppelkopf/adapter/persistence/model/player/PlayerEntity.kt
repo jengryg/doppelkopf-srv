@@ -32,6 +32,9 @@ class PlayerEntity(
     @Column
     override var dealer: Boolean = false
 
+    @Column
+    override var points: Int = 0
+
     @OneToMany(
         fetch = FetchType.LAZY,
         mappedBy = "dealer",

@@ -14,5 +14,10 @@ enum class RoundOperation {
     /**
      * This operation can be used to trigger the marriage resolver.
      */
-    MARRIAGE_RESOLVER
+    MARRIAGE_RESOLVER,
+
+    /**
+     * This operation can be used to trigger the evaluation of the round.
+     */
+    RESULT_EVALUATION,
 }

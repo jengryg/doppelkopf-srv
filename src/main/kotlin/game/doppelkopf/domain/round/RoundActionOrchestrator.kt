@@ -4,10 +4,12 @@ import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundPersistence
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.domain.deck.model.Deck
+import game.doppelkopf.domain.round.ports.actions.RoundActionEvaluate
 import game.doppelkopf.domain.round.ports.actions.RoundActionEvaluateBids
 import game.doppelkopf.domain.round.ports.actions.RoundActionEvaluateDeclarations
 import game.doppelkopf.domain.round.ports.actions.RoundActionPlayCard
 import game.doppelkopf.domain.round.ports.actions.RoundActionResolveMarriage
+import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluate
 import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluateBids
 import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluateDeclarations
 import game.doppelkopf.domain.round.ports.commands.RoundCommandPlayCard
@@ -54,6 +56,15 @@ class RoundActionOrchestrator(
     @Transactional
     fun execute(action: RoundActionEvaluateBids) : RoundEntity {
         val command = RoundCommandEvaluateBids(
+            round = roundPersistence.load(action.roundId)
+        )
+
+        return roundEngine.execute(command)
+    }
+
+    @Transactional
+    fun execute(action: RoundActionEvaluate) : RoundEntity {
+        val command = RoundCommandEvaluate(
             round = roundPersistence.load(action.roundId)
         )
 
