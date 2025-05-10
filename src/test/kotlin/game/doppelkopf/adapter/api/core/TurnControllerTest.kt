@@ -15,13 +15,19 @@ import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickRepository
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.adapter.persistence.model.turn.TurnRepository
-import game.doppelkopf.domain.deck.enums.CardDemand
 import game.doppelkopf.common.errors.ForbiddenActionException
 import game.doppelkopf.common.errors.GameFailedException
 import game.doppelkopf.common.errors.InvalidActionException
+import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.deck.enums.CardDemand
 import game.doppelkopf.domain.round.service.RoundPlayCardModel
+import game.doppelkopf.domain.trick.model.TrickModel
+import game.doppelkopf.domain.turn.model.TurnModel
 import game.doppelkopf.errors.ProblemDetailResponse
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockkConstructor
+import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -173,8 +179,8 @@ class TurnControllerTest : BaseRestAssuredTest() {
 
             mockkConstructor(RoundPlayCardModel::class)
             every { anyConstructed<RoundPlayCardModel>().playCard(any(), any()) } returns Pair(
-                first = mockk { every { entity } returns trick },
-                second = mockk { every { entity } returns turn }
+                first = TrickModel(trick, ModelFactoryProvider()),
+                second = TurnModel(turn, ModelFactoryProvider())
             )
 
             val (response, location) = execPlayCard<TurnInfoDto>(round.id, 201)

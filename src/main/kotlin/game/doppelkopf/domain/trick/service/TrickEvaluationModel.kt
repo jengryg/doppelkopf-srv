@@ -7,6 +7,7 @@ import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.trick.enums.TrickState
 import game.doppelkopf.domain.trick.model.TrickModelAbstract
 import org.slf4j.helpers.CheckReturnValue
+import java.time.Instant
 
 class TrickEvaluationModel(
     entity: TrickEntity,
@@ -31,6 +32,7 @@ class TrickEvaluationModel(
 
         // Finalize the trick evaluation by setting the winners hand.
         setWinner(hand)
+        ended = Instant.now()
     }
 
     @CheckReturnValue

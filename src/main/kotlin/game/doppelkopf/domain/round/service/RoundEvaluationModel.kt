@@ -16,6 +16,7 @@ import game.doppelkopf.domain.trick.model.ITrickModel
 import game.doppelkopf.utils.Quadruple
 import game.doppelkopf.utils.Teamed
 import org.springframework.lang.CheckReturnValue
+import java.time.Instant
 
 class RoundEvaluationModel(
     entity: RoundEntity,
@@ -87,6 +88,8 @@ class RoundEvaluationModel(
                 pointsForCharly = pointsForCharly.get(team),
             )
         }.map { factoryProvider.result.create(it) }.also { results ->
+            addResult(results.re)
+            addResult(results.ko)
             // add points to player and remove the dealer status
             hands.values.forEach { hand ->
                 hand.player.dealer = false
@@ -105,6 +108,7 @@ class RoundEvaluationModel(
 
             // the round is done and the game is waiting for the deal (now from the new dealer)
             state = RoundState.EVALUATED
+            ended = Instant.now()
             game.state = GameState.WAITING_FOR_DEAL
         }
     }

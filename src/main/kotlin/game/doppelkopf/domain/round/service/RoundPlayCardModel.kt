@@ -58,6 +58,7 @@ class RoundPlayCardModel(
             number = entity.tricks.size + 1,
             demand = firstCard.demand
         ).let { TrickCardPlayModel(entity = it, factoryProvider = factoryProvider) }.also {
+            addTrick(it)
             it.playCard(firstCard)
         }
     }
@@ -135,7 +136,7 @@ class RoundPlayCardModel(
                 )
             )
         } else {
-            Result.ofForbiddenAction("It is not your turn to play a card.")
+            Result.ofForbiddenAction("It is not your turn to play a card. ${hand.index} vs ${trick.getExpectedHandIndex()}")
         }
     }
 }

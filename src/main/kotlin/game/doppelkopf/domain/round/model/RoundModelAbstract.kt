@@ -46,6 +46,20 @@ abstract class RoundModelAbstract(
         entity.hands.add(h.entity)
     }
 
+    /**
+     * Adds [t] to the [tricks] of this round.
+     */
+    fun addTrick(t: ITrickModel) {
+        entity.tricks.add(t.entity)
+    }
+
+    /**
+     * Adds [r] to the [results] of this round.
+     */
+    fun addResult(r: IResultModel) {
+        entity.results.add(r.entity)
+    }
+
     fun getCurrentTrick(): ITrickModel? {
         return entity.tricks.maxByOrNull { it.number }?.let { factoryProvider.trick.create(it) }
     }
