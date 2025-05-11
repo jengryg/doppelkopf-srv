@@ -11,6 +11,11 @@ interface IGameProperties : IBaseProperties, IStartedEnded {
     val maxNumberOfPlayers: Int
 
     /**
+     * The seed that is used for the random generators in this game.
+     */
+    val seed: ByteArray
+
+    /**
      * Current [GameState] of this game.
      */
     var state: GameState

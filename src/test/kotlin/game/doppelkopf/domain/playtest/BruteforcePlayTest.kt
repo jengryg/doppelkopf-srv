@@ -1,4 +1,4 @@
-package game.doppelkopf.domain
+package game.doppelkopf.domain.playtest
 
 import game.doppelkopf.BaseSpringBootTest
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
@@ -27,8 +27,14 @@ import game.doppelkopf.instrumentation.logging.logger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
-class PlayTest : BaseSpringBootTest(), Logging {
+/**
+ * [BruteforcePlayTest] uses a randomly generated seed and uses the bruteforce strategy to play the game.
+ * It is used to ensure the basic functionality of the domain model for playing games.
+ */
+class BruteforcePlayTest : BaseSpringBootTest(), Logging {
     private val log = logger()
 
     @Autowired
@@ -38,16 +44,22 @@ class PlayTest : BaseSpringBootTest(), Logging {
     private lateinit var gameEngine: GameEngine
 
     @Autowired
-    private lateinit var RoundEngine: RoundEngine
+    private lateinit var roundEngine: RoundEngine
 
     @Autowired
     private lateinit var handEngine: HandEngine
 
     val cards = Deck.create(DeckMode.DIAMONDS).cards.values.map { it.encoded }
 
+    @OptIn(ExperimentalEncodingApi::class)
     @Test
     fun `playtest a game with brute force strategy`() {
         val game = `create a new game, join the players and start it`()
+
+        log.atInfo()
+            .setMessage { "Running BruteForce strategy for game." }
+            .addKeyValue("seed") { Base64.UrlSafe.withPadding(Base64.PaddingOption.PRESENT).encode(game.seed) }
+            .log()
 
         assertThat(game.state).isEqualTo(GameState.WAITING_FOR_DEAL)
 
@@ -194,7 +206,7 @@ class PlayTest : BaseSpringBootTest(), Logging {
         var playerIndex = 0
         do {
             val played = `bruteforce the next card to play`(round, testPlayers[playerIndex])
-            if(!played) {
+            if (!played) {
                 playerIndex++
             }
 
@@ -226,7 +238,7 @@ class PlayTest : BaseSpringBootTest(), Logging {
     private fun `bruteforce the next card to play`(round: RoundEntity, user: UserEntity): Boolean {
         cards.forEach { card ->
             val result = runCatching {
-                RoundEngine.execute(
+                roundEngine.execute(
                     RoundCommandPlayCard(
                         user,
                         round,

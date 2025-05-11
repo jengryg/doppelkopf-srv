@@ -9,6 +9,7 @@ import game.doppelkopf.domain.hand.model.IHandModel
 import game.doppelkopf.domain.player.model.IPlayerModel
 import game.doppelkopf.domain.result.model.IResultModel
 import game.doppelkopf.domain.trick.model.ITrickModel
+import game.doppelkopf.domain.turn.model.ITurnModel
 import game.doppelkopf.domain.user.model.IUserModel
 import game.doppelkopf.utils.Teamed
 
@@ -32,6 +33,11 @@ abstract class RoundModelAbstract(
             it.number to factoryProvider.trick.create(it)
         }
 
+    override val turns: Map<Int, ITurnModel>
+        get() = entity.turns.associate {
+            it.number to factoryProvider.turn.create(it)
+        }
+
     override val results: Teamed<IResultModel>?
         get() = Teamed.from(entity.results) { it.team.internal }
             ?.map { factoryProvider.result.create(it) }
@@ -40,24 +46,31 @@ abstract class RoundModelAbstract(
         get() = Deck.create(deckMode)
 
     /**
-     * Adds [h] to the [hands] of this round.
+     * Adds [model] to the [hands] of this round.
      */
-    fun addHand(h: IHandModel) {
-        entity.hands.add(h.entity)
+    override fun addHand(model: IHandModel) {
+        entity.hands.add(model.entity)
     }
 
     /**
-     * Adds [t] to the [tricks] of this round.
+     * Adds [model] to the [tricks] of this round.
      */
-    fun addTrick(t: ITrickModel) {
-        entity.tricks.add(t.entity)
+    override fun addTrick(model: ITrickModel) {
+        entity.tricks.add(model.entity)
     }
 
     /**
-     * Adds [r] to the [results] of this round.
+     * Adds [model] to the [turns] of this round.
      */
-    fun addResult(r: IResultModel) {
-        entity.results.add(r.entity)
+    override fun addTurn(model: ITurnModel) {
+        entity.turns.add(model.entity)
+    }
+
+    /**
+     * Adds [model] to the [results] of this round.
+     */
+    override fun addResult(model: IResultModel) {
+        entity.results.add(model.entity)
     }
 
     fun getCurrentTrick(): ITrickModel? {

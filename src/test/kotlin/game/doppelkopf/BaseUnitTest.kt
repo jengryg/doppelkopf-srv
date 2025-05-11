@@ -78,7 +78,8 @@ abstract class BaseUnitTest {
     ): GameEntity {
         return GameEntity(
             creator = creator,
-            maxNumberOfPlayers = maxNumberOfPlayers
+            maxNumberOfPlayers = maxNumberOfPlayers,
+            seed = ByteArray(256),
         )
     }
 
@@ -94,7 +95,8 @@ abstract class BaseUnitTest {
         return RoundEntity(
             game = game,
             dealer = dealer,
-            number = number
+            number = number,
+            seed = ByteArray(256),
         )
     }
 

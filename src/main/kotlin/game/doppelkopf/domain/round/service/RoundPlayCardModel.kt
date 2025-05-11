@@ -46,7 +46,10 @@ class RoundPlayCardModel(
             trick = trick.entity,
             number = entity.turns.size + 1,
             card = card.encoded
-        ).let { factoryProvider.turn.create(it) }
+        ).let { factoryProvider.turn.create(it) }.also {
+            addTurn(it)
+            trick.addTurn(it)
+        }
 
         return Pair(trick, turn)
     }

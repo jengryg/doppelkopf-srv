@@ -7,6 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
+import java.security.SecureRandom
 
 class DeckTest : BaseUnitTest() {
     @ParameterizedTest
@@ -17,7 +18,11 @@ class DeckTest : BaseUnitTest() {
         assertThat(deck.mode).isEqualTo(deckMode)
         assertThat(deck.cards).hasSize(48)
 
-        val hands = deck.dealHandCards()
+        val hands = deck.dealHandCards(
+            SecureRandom.getInstance("SHA1PRNG").apply {
+                setSeed(ByteArray(256))
+            }
+        )
 
         // TODO: seeded randomness
         val cards = hands.first.plus(hands.second).plus(hands.third).plus(hands.fourth)

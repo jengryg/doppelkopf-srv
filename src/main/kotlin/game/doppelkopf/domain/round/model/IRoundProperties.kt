@@ -14,6 +14,11 @@ interface IRoundProperties : IBaseProperties, IStartedEnded {
     val number: Int
 
     /**
+     * The seed that is used for the random generators in this round.
+     */
+    val seed: ByteArray
+
+    /**
      * Current [RoundState] of this round.
      */
     var state: RoundState

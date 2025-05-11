@@ -6,6 +6,7 @@ import game.doppelkopf.domain.deck.enums.DeckMode
 import game.doppelkopf.domain.deck.errors.ofInvalidCardException
 import game.doppelkopf.domain.deck.service.CardRankingFactory
 import game.doppelkopf.utils.Quadruple
+import java.util.Random
 
 /**
  * Use [Deck.create] to instantiate a new [Deck] for the given [DeckMode].
@@ -34,8 +35,8 @@ class Deck private constructor(
     /**
      * @return a [Quadruple] containing four [List] of [Card], one list for each player hand
      */
-    fun dealHandCards(): Quadruple<List<Card>> {
-        return cards.keys.shuffled()
+    fun dealHandCards(random: Random): Quadruple<List<Card>> {
+        return cards.keys.shuffled(random)
             .map { cards[it]!! }.chunked(cards.size / 4).let {
                 Quadruple(
                     it[0],

@@ -6,6 +6,7 @@ import game.doppelkopf.domain.deck.model.Card
 import game.doppelkopf.domain.trick.enums.TrickState
 import game.doppelkopf.domain.hand.model.IHandModel
 import game.doppelkopf.domain.round.model.IRoundModel
+import game.doppelkopf.domain.turn.model.ITurnModel
 
 interface ITrickModel : ITrickProperties, IBaseModel<TrickEntity> {
     val round: IRoundModel
@@ -13,6 +14,9 @@ interface ITrickModel : ITrickProperties, IBaseModel<TrickEntity> {
     fun setWinner(winner: IHandModel)
     val size: Int
     val cards: List<Card>
+    val turns: Map<Int, ITurnModel>
+
+    fun addTurn(model: ITurnModel)
 
     fun getExpectedHandIndex(): Int
     fun determineLeadingCardIndex(): Int

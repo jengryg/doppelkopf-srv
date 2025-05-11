@@ -354,7 +354,8 @@ class HandControllerTest : BaseRestAssuredTest() {
     private fun createPersistedRoundEntity(): RoundEntity {
         val game = GameEntity(
             creator = testAdmin,
-            maxNumberOfPlayers = 4
+            maxNumberOfPlayers = 4,
+            seed = ByteArray(256),
         ).also { game ->
             game.players.add(PlayerEntity(user = testAdmin, game = game, seat = 0))
             game.players.add(PlayerEntity(user = testUser, game = game, seat = 1))
@@ -365,7 +366,7 @@ class HandControllerTest : BaseRestAssuredTest() {
             gameRepository.save(game)
             playerRepository.saveAll(game.players)
         }
-        val round = RoundEntity(game = game, dealer = game.players.first(), number = 1).apply {
+        val round = RoundEntity(game = game, dealer = game.players.first(), number = 1, seed = ByteArray(256)).apply {
             game.players.forEachIndexed { index, it ->
                 hands.add(
                     HandEntity(

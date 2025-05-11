@@ -38,7 +38,7 @@ class PlayerControllerTest : BaseRestAssuredTest() {
         @Test
         fun `get players of game returns 200 and list of dto`() {
             val game = GameEntity(
-                creator = testPlayers[0], maxNumberOfPlayers = 8
+                creator = testPlayers[0], maxNumberOfPlayers = 8, seed = ByteArray(256),
             ).also { game ->
                 testPlayers.mapIndexed { index, userEntity ->
                     game.players.add(PlayerEntity(user = userEntity, game = game, seat = index))
@@ -165,7 +165,7 @@ class PlayerControllerTest : BaseRestAssuredTest() {
 
     private fun createGameOfUser(userEntity: UserEntity): GameEntity {
         return GameEntity(
-            creator = userEntity, maxNumberOfPlayers = 4
+            creator = userEntity, maxNumberOfPlayers = 4, seed = ByteArray(256)
         ).apply {
             players.add(
                 PlayerEntity(

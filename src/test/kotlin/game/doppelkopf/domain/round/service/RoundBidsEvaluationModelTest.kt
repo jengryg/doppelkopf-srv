@@ -102,7 +102,8 @@ class RoundBidsEvaluationModelTest : BaseUnitTest() {
         return RoundEntity(
             game = mockk(),
             dealer = mockk(),
-            number = 1
+            number = 1,
+            seed = ByteArray(256)
         ).apply {
             state = RoundState.WAITING_FOR_BIDS
 

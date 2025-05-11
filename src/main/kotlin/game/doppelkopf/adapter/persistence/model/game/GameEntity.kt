@@ -23,6 +23,9 @@ class GameEntity(
 
     @Column
     override val maxNumberOfPlayers: Int,
+
+    @Column
+    override val seed: ByteArray
 ) : BaseEntity(), IGameProperties {
     @Column
     override var started: Instant? = null

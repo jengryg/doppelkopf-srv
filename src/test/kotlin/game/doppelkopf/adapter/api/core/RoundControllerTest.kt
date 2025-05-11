@@ -73,10 +73,10 @@ class RoundControllerTest : BaseRestAssuredTest() {
         @Test
         fun `get rounds of game that has some rounds returns 200 with list of dto`() {
             val game = createGameEntity(testUser).apply {
-                rounds.add(RoundEntity(game = this, dealer = players.first(), 1))
-                rounds.add(RoundEntity(game = this, dealer = players.first(), 2))
-                rounds.add(RoundEntity(game = this, dealer = players.first(), 3))
-                rounds.add(RoundEntity(game = this, dealer = players.first(), 4))
+                rounds.add(RoundEntity(game = this, dealer = players.first(), 1, seed = ByteArray(256)))
+                rounds.add(RoundEntity(game = this, dealer = players.first(), 2, seed = ByteArray(256)))
+                rounds.add(RoundEntity(game = this, dealer = players.first(), 3, seed = ByteArray(256)))
+                rounds.add(RoundEntity(game = this, dealer = players.first(), 4, seed = ByteArray(256)))
             }.let {
                 gameRepository.save(it)
             }
@@ -109,7 +109,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
         @Test
         fun `get specific round with known uuid returns 200 and dto`() {
             val game = createGameEntity(testUser).apply {
-                rounds.add(RoundEntity(game = this, dealer = players.first(), 1))
+                rounds.add(RoundEntity(game = this, dealer = players.first(), 1, seed = ByteArray(256)))
             }.let {
                 gameRepository.save(it)
             }
@@ -142,7 +142,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
                 PlayerEntity(game = game, user = testPlayers[1], seat = 6),
                 PlayerEntity(game = game, user = testPlayers[2], seat = 4)
             ).also { playerRepository.saveAll(it.toList()) }
-            val round = RoundEntity(game = game, dealer = players.first, number = 17)
+            val round = RoundEntity(game = game, dealer = players.first, number = 17, seed = ByteArray(256))
             val hands = players.mapIndexed { index, it ->
                 HandEntity(
                     round = round,
@@ -322,14 +322,16 @@ class RoundControllerTest : BaseRestAssuredTest() {
         return RoundEntity(
             game = gameEntity,
             dealer = gameEntity.players.single { it.user.id == gameEntity.creator.id },
-            number = 1
+            number = 1,
+            seed = ByteArray(256)
         )
     }
 
     private fun createGameEntity(creator: UserEntity): GameEntity {
         return GameEntity(
             creator = creator,
-            maxNumberOfPlayers = 4
+            maxNumberOfPlayers = 4,
+            seed = ByteArray(256)
         ).also { game ->
             game.players.add(PlayerEntity(user = creator, game = game, seat = 0))
 

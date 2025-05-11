@@ -1,13 +1,14 @@
 package game.doppelkopf.domain.game.service
 
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
-import game.doppelkopf.domain.game.enums.GameState
 import game.doppelkopf.common.errors.ofForbiddenAction
 import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.game.enums.GameState
 import game.doppelkopf.domain.game.model.GameModelAbstract
 import game.doppelkopf.domain.user.model.IUserModel
 import org.springframework.lang.CheckReturnValue
+import java.security.SecureRandom
 import java.time.Instant
 
 class GameStartModel(
@@ -22,8 +23,12 @@ class GameStartModel(
         canStart(user).getOrThrow()
         // the first dealer is decided randomly
         players.values.forEach { it.dealer = false }
-        // TODO: seeded randomness for seed based games
-        players.values.random().dealer = true
+
+        val dealerIndex = SecureRandom.getInstance("SHA1PRNG").apply {
+            setSeed(seed)
+        }.nextInt(0, players.size)
+
+        players.values.sortedBy { it.seat }[dealerIndex].dealer = true
 
         started = Instant.now()
         state = GameState.WAITING_FOR_DEAL

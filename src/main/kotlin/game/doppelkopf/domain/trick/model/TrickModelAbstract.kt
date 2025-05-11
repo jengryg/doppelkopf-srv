@@ -8,6 +8,7 @@ import game.doppelkopf.domain.deck.model.Card
 import game.doppelkopf.domain.hand.model.IHandModel
 import game.doppelkopf.domain.round.model.IRoundModel
 import game.doppelkopf.domain.trick.enums.TrickState
+import game.doppelkopf.domain.turn.model.ITurnModel
 
 abstract class TrickModelAbstract(
     entity: TrickEntity,
@@ -33,6 +34,18 @@ abstract class TrickModelAbstract(
         get() = round.deck.getCards(entity.cards).getOrElse {
             throw GameFailedException("Can not decode the cards of trick $this.", entity.id, it)
         }
+
+    override val turns: Map<Int, ITurnModel>
+        get() = entity.turns.associate {
+            it.number to factoryProvider.turn.create(it)
+        }
+
+    /**
+     * Adds [model] to the [turns] of this trick.
+     */
+    override fun addTurn(model: ITurnModel) {
+        entity.turns.add(model.entity)
+    }
 
     override fun getExpectedHandIndex(): Int {
         // Since each card played advanced the expected hand index by 1, we can calculate the index of the hand that
@@ -93,6 +106,6 @@ abstract class TrickModelAbstract(
             return false
         }
 
-        return cards.last().isCharly
+        return cards[determineLeadingCardIndex()].isCharly
     }
 }

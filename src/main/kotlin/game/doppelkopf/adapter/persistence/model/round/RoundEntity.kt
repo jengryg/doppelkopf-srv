@@ -31,6 +31,9 @@ class RoundEntity(
 
     @Column
     override val number: Int,
+
+    @Column
+    override val seed: ByteArray,
 ) : BaseEntity(), IRoundProperties {
     @Column
     override var started: Instant? = null

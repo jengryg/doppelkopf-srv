@@ -151,14 +151,15 @@ class ResultControllerTest : BaseRestAssuredTest() {
         }
 
         private fun createPersistedRoundEntity(): RoundEntity {
-            val game = GameEntity(creator = testUser, maxNumberOfPlayers = 4).let {
+            val game = GameEntity(creator = testUser, maxNumberOfPlayers = 4, seed = ByteArray(256)).let {
                 gameRepository.save(it)
             }
 
             return RoundEntity(
                 game = game,
                 dealer = PlayerEntity(game = game, user = testUser, seat = 0).let { playerRepository.save(it) },
-                number = 1
+                number = 1,
+                seed = ByteArray(256)
             ).let { roundRepository.save(it) }
         }
     }

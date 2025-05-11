@@ -208,7 +208,9 @@ class GameControllerTest : BaseRestAssuredTest() {
 
     private fun createGameOfUser(userEntity: UserEntity): GameEntity {
         return GameEntity(
-            creator = userEntity, maxNumberOfPlayers = 4
+            creator = userEntity,
+            maxNumberOfPlayers = 4,
+            seed = ByteArray(256),
         ).apply {
             players.add(
                 PlayerEntity(

@@ -4,5 +4,6 @@ import game.doppelkopf.adapter.persistence.model.user.UserEntity
 
 class LobbyCommandCreateNewGame(
     val user: UserEntity,
-    val playerLimit: Int
+    val playerLimit: Int,
+    val seed: ByteArray? = null
 ) : ILobbyCommand

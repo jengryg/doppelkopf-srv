@@ -3,12 +3,12 @@ package game.doppelkopf.domain.round.service
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
+import game.doppelkopf.common.errors.InvalidActionException
+import game.doppelkopf.domain.ModelFactoryProvider
 import game.doppelkopf.domain.deck.enums.DeckMode
 import game.doppelkopf.domain.hand.enums.Declaration
 import game.doppelkopf.domain.round.enums.RoundContract
 import game.doppelkopf.domain.round.enums.RoundState
-import game.doppelkopf.common.errors.InvalidActionException
-import game.doppelkopf.domain.ModelFactoryProvider
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -171,7 +171,8 @@ class RoundDeclarationEvaluationModelTest : BaseUnitTest() {
         return RoundEntity(
             game = mockk(),
             dealer = mockk(),
-            number = 1
+            number = 1,
+            seed = ByteArray(256)
         ).apply {
             state = RoundState.WAITING_FOR_DECLARATIONS
 

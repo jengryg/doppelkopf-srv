@@ -13,9 +13,9 @@ import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundRepository
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickRepository
+import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.deck.enums.CardDemand
 import game.doppelkopf.domain.trick.enums.TrickOperation
-import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.trick.service.TrickEvaluationModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import io.mockk.*
@@ -219,7 +219,8 @@ class TrickControllerTest : BaseRestAssuredTest() {
     private fun createPersistedRoundEntity(): RoundEntity {
         val game = GameEntity(
             creator = testAdmin,
-            maxNumberOfPlayers = 4
+            maxNumberOfPlayers = 4,
+            seed = ByteArray(256)
         ).also { game ->
             game.players.add(PlayerEntity(user = testAdmin, game = game, seat = 0))
             game.players.add(PlayerEntity(user = testUser, game = game, seat = 1))
@@ -230,7 +231,7 @@ class TrickControllerTest : BaseRestAssuredTest() {
             gameRepository.save(game)
             playerRepository.saveAll(game.players)
         }
-        val round = RoundEntity(game = game, dealer = game.players.first(), number = 1).apply {
+        val round = RoundEntity(game = game, dealer = game.players.first(), number = 1, seed = ByteArray(256)).apply {
             game.players.forEachIndexed { index, it ->
                 hands.add(
                     HandEntity(
