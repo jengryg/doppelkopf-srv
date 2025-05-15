@@ -4,16 +4,8 @@ import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundPersistence
 import game.doppelkopf.adapter.persistence.model.turn.TurnEntity
 import game.doppelkopf.domain.deck.model.Deck
-import game.doppelkopf.domain.round.ports.actions.RoundActionEvaluate
-import game.doppelkopf.domain.round.ports.actions.RoundActionEvaluateBids
-import game.doppelkopf.domain.round.ports.actions.RoundActionEvaluateDeclarations
-import game.doppelkopf.domain.round.ports.actions.RoundActionPlayCard
-import game.doppelkopf.domain.round.ports.actions.RoundActionResolveMarriage
-import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluate
-import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluateBids
-import game.doppelkopf.domain.round.ports.commands.RoundCommandEvaluateDeclarations
-import game.doppelkopf.domain.round.ports.commands.RoundCommandPlayCard
-import game.doppelkopf.domain.round.ports.commands.RoundCommandResolveMarriage
+import game.doppelkopf.domain.round.ports.actions.*
+import game.doppelkopf.domain.round.ports.commands.*
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
@@ -54,7 +46,7 @@ class RoundActionOrchestrator(
     }
 
     @Transactional
-    fun execute(action: RoundActionEvaluateBids) : RoundEntity {
+    fun execute(action: RoundActionEvaluateBids): RoundEntity {
         val command = RoundCommandEvaluateBids(
             round = roundPersistence.load(action.roundId)
         )
@@ -63,7 +55,7 @@ class RoundActionOrchestrator(
     }
 
     @Transactional
-    fun execute(action: RoundActionEvaluate) : RoundEntity {
+    fun execute(action: RoundActionEvaluate): RoundEntity {
         val command = RoundCommandEvaluate(
             round = roundPersistence.load(action.roundId)
         )

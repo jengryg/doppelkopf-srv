@@ -37,6 +37,9 @@ class TrickEntity(
     override var state: TrickState = TrickState.FIRST_CARD_PLAYED
 
     @Column
+    override var resolvedMarriage: Boolean = false
+
+    @Column
     override var leadingCardIndex: Int = 0
 
     @Column

@@ -12,6 +12,16 @@ data class Teamed<out T>(
     val ko: T
 ) {
     /**
+     * @return a [Teamed] where the values of [re] and [ko] were swapped.
+     */
+    fun swap(): Teamed<T> {
+        return Teamed(
+            re = ko,
+            ko = re,
+        )
+    }
+
+    /**
      * @return the instance of [T] tagged with the [DefiniteTeam]
      */
     fun get(team: DefiniteTeam): T {
@@ -74,6 +84,15 @@ data class Teamed<out T>(
             re = block(DefiniteTeam.RE, re, other.re),
             ko = block(DefiniteTeam.KO, ko, other.ko)
         )
+    }
+
+    /**
+     * @return the result of [block] evaluated were the first argument supplied is [re] and the second argument supplied
+     * is [ko].
+     *
+     */
+    fun <S> combine(block: (T, T) -> S): S {
+        return block(re, ko)
     }
 
     companion object {

@@ -2,6 +2,7 @@ package game.doppelkopf.domain.round.model
 
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.common.model.IBaseModel
+import game.doppelkopf.domain.call.model.ICallModel
 import game.doppelkopf.domain.deck.model.Deck
 import game.doppelkopf.domain.game.model.IGameModel
 import game.doppelkopf.domain.hand.model.IHandModel
@@ -25,4 +26,8 @@ interface IRoundModel : IRoundProperties, IBaseModel<RoundEntity> {
     fun addTrick(model: ITrickModel)
     fun addTurn(model: ITurnModel)
     fun addResult(model: IResultModel)
+
+    fun getCurrentTrick(): ITrickModel?
+    fun getCalls() : Teamed<List<ICallModel>>
+    fun determineCardCountOffset(): Int
 }

@@ -72,10 +72,10 @@ class SeededPlayTest : BaseSpringBootTest(), Logging {
             assertThat(it.pointsForWinning).isEqualTo(1)
             assertThat(it.pointsForOpposition).isEqualTo(0)
 
-            assertThat(it.pointsForScore090).isEqualTo(0)
-            assertThat(it.pointsForScore060).isEqualTo(0)
-            assertThat(it.pointsForScore030).isEqualTo(0)
-            assertThat(it.pointsForScore000).isEqualTo(0)
+            assertThat(it.pointsLostScore90).isEqualTo(0)
+            assertThat(it.pointsLostScore60).isEqualTo(0)
+            assertThat(it.pointsLostScore30).isEqualTo(0)
+            assertThat(it.pointsLostScore00).isEqualTo(0)
 
             assertThat(it.pointsForDoppelkopf).isEqualTo(0)
             assertThat(it.pointsForCharly).isEqualTo(1)
@@ -87,10 +87,10 @@ class SeededPlayTest : BaseSpringBootTest(), Logging {
             assertThat(it.pointsForWinning).isEqualTo(0)
             assertThat(it.pointsForOpposition).isEqualTo(0)
 
-            assertThat(it.pointsForScore090).isEqualTo(0)
-            assertThat(it.pointsForScore060).isEqualTo(0)
-            assertThat(it.pointsForScore030).isEqualTo(0)
-            assertThat(it.pointsForScore000).isEqualTo(0)
+            assertThat(it.pointsLostScore90).isEqualTo(0)
+            assertThat(it.pointsLostScore60).isEqualTo(0)
+            assertThat(it.pointsLostScore30).isEqualTo(0)
+            assertThat(it.pointsLostScore00).isEqualTo(0)
 
             assertThat(it.pointsForDoppelkopf).isEqualTo(0)
             assertThat(it.pointsForCharly).isEqualTo(0)

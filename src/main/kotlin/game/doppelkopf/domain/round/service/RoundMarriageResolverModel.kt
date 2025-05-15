@@ -26,7 +26,7 @@ class RoundMarriageResolverModel(
         if (winner.hasMarriage) {
             handleNotResolvedCase(trick, marriageHand)
         } else {
-            handleResolvingCase(winner, marriageHand)
+            handleResolvingCase(trick, winner, marriageHand)
         }
     }
 
@@ -72,10 +72,11 @@ class RoundMarriageResolverModel(
 
             // The marriage of this round is resolved, but into a solo of the hand with the marriage.
             contract = RoundContract.MARRIAGE_SOLO
+            trick.resolvedMarriage = true
         }
     }
 
-    private fun handleResolvingCase(winner: IHandModel, marriageHand: IHandModel) {
+    private fun handleResolvingCase(trick: ITrickModel, winner: IHandModel, marriageHand: IHandModel) {
         // The winner marries the player with the marriage by joining them in the RE team.
         // The other two players are in the KO team.
 
@@ -99,5 +100,6 @@ class RoundMarriageResolverModel(
 
         // The marriage of this round is now resolved.
         contract = RoundContract.MARRIAGE_RESOLVED
+        trick.resolvedMarriage = true
     }
 }

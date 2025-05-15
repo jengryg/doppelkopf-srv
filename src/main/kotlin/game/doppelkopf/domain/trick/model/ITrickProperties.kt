@@ -37,4 +37,9 @@ interface ITrickProperties : IBaseProperties, IStartedEnded {
      * The current state of this trick.
      */
     var state: TrickState
+
+    /**
+     * Flag to indicate if this trick resolved a marriage in the round.
+     */
+    var resolvedMarriage: Boolean
 }

@@ -1,11 +1,14 @@
 package game.doppelkopf.domain.hand.model
 
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
-import game.doppelkopf.domain.deck.model.Card
-import game.doppelkopf.domain.hand.enums.Team
 import game.doppelkopf.common.errors.GameFailedException
 import game.doppelkopf.domain.ModelAbstract
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.call.enums.CallType
+import game.doppelkopf.domain.call.model.CallModel
+import game.doppelkopf.domain.call.model.ICallModel
+import game.doppelkopf.domain.deck.model.Card
+import game.doppelkopf.domain.hand.enums.Team
 import game.doppelkopf.domain.player.model.IPlayerModel
 import game.doppelkopf.domain.round.model.IRoundModel
 
@@ -27,6 +30,18 @@ abstract class HandModelAbstract(
     override val size: Int
         get() = entity.cardsRemaining.size
 
+    override val playedCardCount: Int
+        get() = entity.cardsPlayed.size
+
+    override val calls: Map<CallType, CallModel>
+        get() = entity.calls.associate {
+            it.callType to factoryProvider.call.create(it)
+        }
+
+    override fun addCall(model: ICallModel) {
+        entity.calls.add(model.entity)
+    }
+
     override fun assignPrivateTeam(team: Team) {
         internalTeam = team
         playerTeam = team
@@ -36,5 +51,9 @@ abstract class HandModelAbstract(
         internalTeam = team
         playerTeam = team
         publicTeam = team
+    }
+
+    override fun revealTeam() {
+        publicTeam = internalTeam
     }
 }

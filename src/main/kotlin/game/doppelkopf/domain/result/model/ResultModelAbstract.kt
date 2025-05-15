@@ -13,9 +13,39 @@ abstract class ResultModelAbstract(
         get() = factoryProvider.round.create(entity.round)
 
     override fun getTotalPoints(): Int {
-        return pointsForWinning + pointsForOpposition +
-                pointsForScore090 + pointsForScore060 + pointsForScore030 + pointsForScore000 +
-                pointsForCharly +
-                pointsForDoppelkopf
+        return listOf(
+            // basic points
+            pointsForWinning,
+            // lostScore points
+            pointsLostScore90,
+            pointsLostScore60,
+            pointsLostScore30,
+            pointsLostScore00,
+            // basicCalls points
+            pointsBasicCallsRe,
+            pointsBasicCallsKo,
+            // under calls points
+            pointsUnderCallsRe90,
+            pointsUnderCallsKo90,
+            pointsUnderCallsRe60,
+            pointsUnderCallsKo60,
+            pointsUnderCallsRe30,
+            pointsUnderCallsKo30,
+            pointsUnderCallsRe00,
+            pointsUnderCallsKo00,
+            // beating calls of opposite party points
+            pointsBeatingRe90,
+            pointsBeatingKo90,
+            pointsBeatingRe60,
+            pointsBeatingKo60,
+            pointsBeatingRe30,
+            pointsBeatingKo30,
+            pointsBeatingRe00,
+            pointsBeatingKo00,
+            // special points
+            pointsForOpposition,
+            pointsForDoppelkopf,
+            pointsForCharly,
+        ).sum()
     }
 }

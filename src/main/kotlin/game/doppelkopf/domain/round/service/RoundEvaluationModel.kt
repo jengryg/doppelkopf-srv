@@ -12,8 +12,8 @@ import game.doppelkopf.domain.result.model.IResultModel
 import game.doppelkopf.domain.round.enums.DefiniteRoundWinner
 import game.doppelkopf.domain.round.enums.RoundState
 import game.doppelkopf.domain.round.model.RoundModelAbstract
+import game.doppelkopf.domain.scores.GameResultTable
 import game.doppelkopf.domain.trick.model.ITrickModel
-import game.doppelkopf.utils.Quadruple
 import game.doppelkopf.utils.Teamed
 import org.springframework.lang.CheckReturnValue
 import java.time.Instant
@@ -34,35 +34,15 @@ class RoundEvaluationModel(
         }
 
         val wonTricksByTeam = getTricksWonByTeam()
-        val scoreByTeam = wonTricksByTeam.map { list -> list.sumOf { it.score } }
         val wonTrickCount = wonTricksByTeam.map { list -> list.count() }
 
-        // TODO implement call system that modifies the score targets and allows additional points to be obtained.
-        val targetScore = Teamed(re = 121, ko = 120)
+        val scoreByTeam = wonTricksByTeam.map { list -> list.sumOf { it.score } }
+        val callsByTeam = getCalls().map { list -> list.map { it.callType } }
 
-        val roundWinner = determineWinner(
-            targetScore = targetScore,
-            reachedScore = scoreByTeam,
-            trickCount = wonTrickCount,
-        )
-
-        val pointsForWinning = when (roundWinner) {
-            DefiniteRoundWinner.RE -> Teamed(1, 0)
-            DefiniteRoundWinner.KO -> Teamed(0, 1)
-            DefiniteRoundWinner.DRAW -> Teamed(0, 0)
-        }
-
-        val pointsForOpposition = when (roundWinner) {
-            DefiniteRoundWinner.RE -> Teamed(0, 0)
-            DefiniteRoundWinner.KO -> Teamed(0, 1)
-            DefiniteRoundWinner.DRAW -> Teamed(0, 0)
-        }
-
-        // Normal points rule for the below 90, below 60, below 30 and below 0 (no tricks at all).
-        val pointsForScore = Teamed(
-            // we need to invert re and ko here, since re scores based on the points of ko, and vice versa
-            re = calculatePointsForScore(scoreByTeam.ko, wonTrickCount.ko),
-            ko = calculatePointsForScore(scoreByTeam.re, wonTrickCount.re),
+        val points = GameResultTable(
+            scores = scoreByTeam,
+            noTricks = wonTrickCount.map { it == 0 },
+            calls = callsByTeam
         )
 
         // Doppelkopf points rule for each trick.
@@ -71,19 +51,49 @@ class RoundEvaluationModel(
         // Charly points rule for the last trick of the round.
         val pointsForCharly = calculatePointsForCharly(tricks.values.maxBy { it.number })
 
+        // Opposition points rule when KO wins against RE.
+        val pointsForOpposition = Teamed(
+            re = 0,
+            ko = if (points.winner == DefiniteRoundWinner.KO) 1 else 0
+        )
+
         return scoreByTeam.mapTagged(wonTrickCount) { team, score, count ->
             ResultEntity(
                 round = entity,
                 team = team,
                 score = score,
                 trickCount = count,
-                target = targetScore.get(team),
-                pointsForWinning = pointsForWinning.get(team),
+                target = points.targets.get(team),
+
+                pointsForWinning = team.oneIfMatches(points.basic.winning),
+
+                pointsLostScore90 = team.oneIfMatches(points.lostScore.p90),
+                pointsLostScore60 = team.oneIfMatches(points.lostScore.p60),
+                pointsLostScore30 = team.oneIfMatches(points.lostScore.p30),
+                pointsLostScore00 = team.oneIfMatches(points.lostScore.p00),
+
+                pointsBasicCallsRe = team.oneIfMatches(points.basicCalls.re) * 2,
+                pointsBasicCallsKo = team.oneIfMatches(points.basicCalls.ko) * 2,
+
+                pointsUnderCallsRe90 = team.oneIfMatches(points.underCalls.re.p90),
+                pointsUnderCallsKo90 = team.oneIfMatches(points.underCalls.ko.p90),
+                pointsUnderCallsRe60 = team.oneIfMatches(points.underCalls.re.p60),
+                pointsUnderCallsKo60 = team.oneIfMatches(points.underCalls.ko.p60),
+                pointsUnderCallsRe30 = team.oneIfMatches(points.underCalls.re.p30),
+                pointsUnderCallsKo30 = team.oneIfMatches(points.underCalls.ko.p30),
+                pointsUnderCallsRe00 = team.oneIfMatches(points.underCalls.re.p00),
+                pointsUnderCallsKo00 = team.oneIfMatches(points.underCalls.ko.p00),
+
+                pointsBeatingRe90 = team.oneIfMatches(points.beating.re.p90),
+                pointsBeatingKo90 = team.oneIfMatches(points.beating.ko.p90),
+                pointsBeatingRe60 = team.oneIfMatches(points.beating.re.p60),
+                pointsBeatingKo60 = team.oneIfMatches(points.beating.ko.p60),
+                pointsBeatingRe30 = team.oneIfMatches(points.beating.re.p30),
+                pointsBeatingKo30 = team.oneIfMatches(points.beating.ko.p30),
+                pointsBeatingRe00 = team.oneIfMatches(points.beating.re.p00),
+                pointsBeatingKo00 = team.oneIfMatches(points.beating.ko.p00),
+
                 pointsForOpposition = pointsForOpposition.get(team),
-                pointsForScore090 = pointsForScore.get(team).first,
-                pointsForScore060 = pointsForScore.get(team).second,
-                pointsForScore030 = pointsForScore.get(team).third,
-                pointsForScore000 = pointsForScore.get(team).fourth,
                 pointsForDoppelkopf = pointsForDoppelkopf.get(team),
                 pointsForCharly = pointsForCharly.get(team),
             )
@@ -95,6 +105,7 @@ class RoundEvaluationModel(
                 hand.player.dealer = false
 
                 val factor = if (hand.playsSolo) 3 else 1
+
                 val delta = when (hand.internalTeam) {
                     Team.RE -> results.re.getTotalPoints() - results.ko.getTotalPoints()
                     Team.KO -> results.ko.getTotalPoints() - results.re.getTotalPoints()
@@ -103,7 +114,8 @@ class RoundEvaluationModel(
 
                 hand.player.points += factor * delta
             }
-            // mode dealer button to the player with hand index == 0
+            // move dealer button to the player with hand index == 0, since hand index == 0 sits directly behind the
+            // previous dealer in our seating order
             hands.values.single { it.index == 0 }.player.dealer = true
 
             // the round is done and the game is waiting for the deal (now from the new dealer)
@@ -112,6 +124,7 @@ class RoundEvaluationModel(
             game.state = GameState.WAITING_FOR_DEAL
         }
     }
+
 
     private fun calculatePointsForCharly(lastTrick: ITrickModel): Teamed<Int> {
         if (!lastTrick.isCharly()) {
@@ -122,48 +135,6 @@ class RoundEvaluationModel(
             Team.RE -> Teamed(1, 0)
             Team.KO -> Teamed(0, 1)
             else -> Teamed(0, 0)
-        }
-    }
-
-    /**
-     * One point for each of the following score marks (90,60,30,0):
-     * - score < 90
-     * - score < 60
-     * - score < 30
-     * - trickCount = 0
-     *
-     * @return a [Quadruple] with the marks in the order 90, 60, 30, 0
-     */
-    private fun calculatePointsForScore(score: Int, trickCount: Int): Quadruple<Int> {
-        // The team loses 90, 60, 30 marks when their score is smaller than these marks.
-        // The team only loses the 0 mark when their trickCount is 0.
-        return Quadruple(90, 60, 30, 0).map {
-            if (trickCount == 0 || it > score) 1 else 0
-        }
-    }
-
-    private fun determineWinner(
-        targetScore: Teamed<Int>,
-        reachedScore: Teamed<Int>,
-        trickCount: Teamed<Int>
-    ): DefiniteRoundWinner {
-        // Simple evaluation: when reached > target, the team satisfied the target
-        // Special Case: when the target is 0, the team needs just one trick to satisfy the target, even if the trick
-        // scored no points (e.g. 4 nines in one trick)
-        val satisfied = Teamed(
-            re = (reachedScore.re > targetScore.re) || (targetScore.re == 0 && trickCount.re > 0),
-            ko = (reachedScore.ko > targetScore.ko) || (targetScore.ko == 0 && trickCount.ko > 0)
-        )
-
-        return when {
-            // RE reached target and KO not
-            satisfied.re && !satisfied.ko -> DefiniteRoundWinner.RE
-
-            // KO reached target and RE not
-            !satisfied.re && satisfied.ko -> DefiniteRoundWinner.KO
-
-            // both reached their target (or both did not, math. impossible)
-            else -> DefiniteRoundWinner.DRAW
         }
     }
 

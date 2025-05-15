@@ -1,13 +1,16 @@
 package game.doppelkopf.domain.round.model
 
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
+import game.doppelkopf.common.errors.GameFailedException
 import game.doppelkopf.domain.ModelAbstract
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.call.model.ICallModel
 import game.doppelkopf.domain.deck.model.Deck
 import game.doppelkopf.domain.game.model.IGameModel
 import game.doppelkopf.domain.hand.model.IHandModel
 import game.doppelkopf.domain.player.model.IPlayerModel
 import game.doppelkopf.domain.result.model.IResultModel
+import game.doppelkopf.domain.round.enums.RoundContract
 import game.doppelkopf.domain.trick.model.ITrickModel
 import game.doppelkopf.domain.turn.model.ITurnModel
 import game.doppelkopf.domain.user.model.IUserModel
@@ -73,21 +76,29 @@ abstract class RoundModelAbstract(
         entity.results.add(model.entity)
     }
 
-    /**
-     * Adds [t] to the [tricks] of this round.
-     */
-    fun addTrick(t: ITrickModel) {
-        entity.tricks.add(t.entity)
-    }
-
-    /**
-     * Adds [r] to the [results] of this round.
-     */
-    fun addResult(r: IResultModel) {
-        entity.results.add(r.entity)
-    }
-
-    fun getCurrentTrick(): ITrickModel? {
+    override fun getCurrentTrick(): ITrickModel? {
         return entity.tricks.maxByOrNull { it.number }?.let { factoryProvider.trick.create(it) }
+    }
+
+    override fun getCalls(): Teamed<List<ICallModel>> {
+        val teamedHands = Teamed.filter(hands.values) { it.internalTeam }
+        return teamedHands.map { list -> list.flatMap { it.calls.values }.sortedBy { it.callType.orderIndex } }
+    }
+
+    override fun determineCardCountOffset(): Int {
+        if (contract != RoundContract.MARRIAGE_SOLO && contract != RoundContract.MARRIAGE_RESOLVED) {
+            // offset is only applicable to marriages that got resolved during play.
+            return 0
+        }
+
+        // we already established that the marriage was resolved, thus we expect that there is a resolving trick
+        val resolvingTrick = tricks.values.singleOrNull { it.resolvedMarriage }
+            ?: throw GameFailedException(
+                "Could not determine the trick that resolved the marriage of round $this.",
+                entity.id
+            )
+
+        // By rules, the offset is one less than the resolving trick number (1,2 or 3).
+        return (resolvingTrick.number - 1)
     }
 }

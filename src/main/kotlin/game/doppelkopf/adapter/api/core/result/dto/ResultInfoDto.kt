@@ -40,59 +40,41 @@ class ResultInfoDto(
     val targetScore: Int,
 
     @Schema(
-        description = "The points this team obtained for winning."
+        description = "The basic points for this team."
     )
-    val pointsForWinning: Int,
+    val pointsBasic: BasicPointsDto,
 
     @Schema(
-        description = "The extra point when KO wins against RE."
+        description = "The points for the basic calls."
     )
-    val pointsForOpposition: Int,
+    val pointsBasicCalls: BasicCallsDto,
 
     @Schema(
-        description = "The extra point when the loosing team scores below 90."
+        description = "The points for the under calls."
     )
-    val pointsForScore090: Int,
+    val pointsUnderCalls: UnderCallsDto,
 
     @Schema(
-        description = "The extra point when the loosing team scores below 60."
+        description = "The points based on the levels the score of the looser is below."
     )
-    val pointsForScore060: Int,
+    val pointsLostScore: LostScoreDto,
 
     @Schema(
-        description = "The extra point when the loosing team scores below 30."
+        description = "The points based on special rules."
     )
-    val pointsForScore030: Int,
-
-    @Schema(
-        description = "The extra point when the loosing team scores no trick at all."
-    )
-    val pointsForScore000: Int,
-
-    @Schema(
-        description = "The points this team obtained for winning tricks with a score of 40 or more."
-    )
-    val pointsForDoppelkopf: Int,
-
-    @Schema(
-        description = "The points this team obtained for winning the last trick with Jack of Clubs."
-    )
-    val pointsForCharly: Int,
+    val pointsForSpecial: SpecialPointsDto,
 ) {
-    constructor(resultEntity: ResultEntity) : this(
-        id = resultEntity.id,
-        roundId = resultEntity.round.id,
-        team = resultEntity.team,
-        tricksCount = resultEntity.trickCount,
-        score = resultEntity.score,
-        targetScore = resultEntity.score,
-        pointsForWinning = resultEntity.pointsForWinning,
-        pointsForOpposition = resultEntity.pointsForOpposition,
-        pointsForScore090 = resultEntity.pointsForScore090,
-        pointsForScore060 = resultEntity.pointsForScore060,
-        pointsForScore030 = resultEntity.pointsForScore030,
-        pointsForScore000 = resultEntity.pointsForScore000,
-        pointsForDoppelkopf = resultEntity.pointsForDoppelkopf,
-        pointsForCharly = resultEntity.pointsForCharly,
+    constructor(entity: ResultEntity) : this(
+        id = entity.id,
+        roundId = entity.round.id,
+        team = entity.team,
+        tricksCount = entity.trickCount,
+        score = entity.score,
+        targetScore = entity.target,
+        pointsBasic = BasicPointsDto(entity),
+        pointsBasicCalls = BasicCallsDto(entity),
+        pointsUnderCalls = UnderCallsDto(entity),
+        pointsLostScore = LostScoreDto(entity),
+        pointsForSpecial = SpecialPointsDto(entity)
     )
 }

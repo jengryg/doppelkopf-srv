@@ -1,6 +1,7 @@
 package game.doppelkopf.adapter.persistence.model.hand
 
 import game.doppelkopf.adapter.persistence.model.BaseEntity
+import game.doppelkopf.adapter.persistence.model.call.CallEntity
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
@@ -77,4 +78,11 @@ class HandEntity(
         cascade = [CascadeType.ALL],
     )
     val turns = mutableSetOf<TurnEntity>()
+
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "hand",
+        cascade = [CascadeType.ALL],
+    )
+    val calls = mutableSetOf<CallEntity>()
 }
