@@ -6,13 +6,18 @@ plugins {
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency)
     alias(libs.plugins.kotlin.jpa)
+    alias(libs.plugins.jib)
 
+    distribution
     jacoco
     idea
 }
 
 group = "game"
 version = "0.0.1-SNAPSHOT"
+
+// custom config for otel agent distribution
+val openTelemetryAgent: Configuration by configurations.creating
 
 java {
     toolchain {
@@ -44,7 +49,7 @@ dependencies {
         exclude("org.apache.logging.log4j", "log4j-to-slf4j")
     }
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.micrometer:micrometer-tracing-bridge-brave")
+    implementation("io.micrometer:micrometer-tracing-bridge-otel")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.liquibase:liquibase-core")
     implementation("org.springframework.session:spring-session-core")
@@ -74,6 +79,9 @@ dependencies {
     testImplementation(libs.asserj)
 
     implementation(libs.openapi.webmvc)
+
+    // define the otel agent as dependency for the otel agent distribution
+    openTelemetryAgent(libs.otel.java.agent)
 }
 
 kotlin {
@@ -89,6 +97,55 @@ allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
+}
+
+distributions {
+    // Provide a distribution task that downloads the otel agent and renames it statically.
+    // Run the gradle task installOpenTelemetryAgent to download the jar: build/install/otel-agent/otel-javaagent.jar
+    create("openTelemetryAgent") {
+        distributionBaseName = "otel-agent"
+        contents {
+            from(openTelemetryAgent)
+            rename("opentelemetry-javaagent-.*.jar", "otel-javaagent.jar")
+        }
+    }
+}
+
+// TODO: configurability for image build via CLI
+jib {
+    container {
+        ports = listOf("8081/tcp")
+
+        environment = mapOf(
+            "SERVER_PORT" to "8081"
+        )
+
+        jvmFlags = listOf("-javaagent:/agent/otel/otel-javaagent.jar")
+    }
+
+    extraDirectories {
+        paths {
+            path {
+                setFrom(layout.buildDirectory.file("./install/otel-agent"))
+                into = "/agent/otel"
+            }
+        }
+    }
+
+    from {
+        image = "eclipse-temurin:21"
+    }
+    to {
+        image = "127.0.0.1:5001/dk/doppelkopf"
+        tags = mutableSetOf("latest")
+    }
+}
+
+/*
+ * Configure the jib task to always use the otel agent distribution before building the image.
+ */
+tasks.jib {
+    dependsOn(tasks.getByName("installOpenTelemetryAgentDist"))
 }
 
 /*
@@ -123,9 +180,38 @@ tasks.withType<ProcessResources> {
 }
 
 tasks.withType<Test> {
+    dependsOn(tasks.getByName("installOpenTelemetryAgentDist"))
+
     // enable dynamic agent loading during tests to hide warning
     // agents are loaded during tests for IDE integration and analysis
-    jvmArgs = listOf("-XX:+EnableDynamicAgentLoading")
+    jvmArgs = listOf(
+        "-XX:+EnableDynamicAgentLoading",
+        "-javaagent:${rootProject.projectDir.canonicalPath}\\build\\install\\otel-agent\\otel-javaagent.jar",
+    )
+
+    // https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/
+    // Note: Default is http/protobuf and generally uses port 4318 on the collectors.
+    // For larger payload and high throughput, gRPC is the way to go, but gRPC may not be supported in the overall
+    // network infrastructure due to its use of HTTP/2. The gRPC protocol, generally use port 4317 on the collectors.
+    environment("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4318")
+
+    // Key-value pairs to be used as resource attributes.
+    // https://opentelemetry.io/docs/specs/semconv/resource/#semantic-attributes-with-dedicated-environment-variable
+    "${project.name}-${this.name}".also {
+        environment("OTEL_RESOURCE_ATTRIBUTES", "service.name=$it")
+        logger.info("Test run with opentelemetry agent, setting RESOURCE_ATTRIBUTES: service.name=$it")
+    }
+
+    // Configure the Logback Appender instrumentation
+    // https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/logback/logback-appender-1.0/javaagent
+    systemProperty("otel.instrumentation.logback-appender.experimental-log-attributes", "true")
+    systemProperty("otel.instrumentation.logback-appender.experimental.capture-marker-attribute", "true")
+    systemProperty("otel.instrumentation.logback-appender.experimental.capture-key-value-pair-attributes", "true")
+
+    // Warning: Setting this to true might add performance overhead.
+    systemProperty("otel.instrumentation.logback-appender.experimental.capture-code-attributes", "true")
+
+
     // Use system properties to set the active spring profile to "test", when tests are executed.
     systemProperty("spring.profiles.active", "test")
 
