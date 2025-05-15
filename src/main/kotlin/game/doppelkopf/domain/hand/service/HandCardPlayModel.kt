@@ -30,6 +30,11 @@ class HandCardPlayModel(
         }
         entity.cardsPlayed.add(card.encoded)
 
+        if(card.isQueenOfClubs) {
+            // Playing a queen of clubs reveals the team of the hand.
+            revealTeam()
+        }
+
         return Result.success(Unit)
     }
 

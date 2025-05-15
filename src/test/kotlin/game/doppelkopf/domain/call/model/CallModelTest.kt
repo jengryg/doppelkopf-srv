@@ -1,19 +1,19 @@
-package game.doppelkopf.domain.round.model
+package game.doppelkopf.domain.call.model
 
 import game.doppelkopf.BaseUnitTest
 import game.doppelkopf.domain.ModelFactoryProvider
 import org.assertj.core.api.Assertions.assertThatCode
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 
-class RoundModelTest : BaseUnitTest() {
+class CallModelTest : BaseUnitTest() {
     @Test
     fun `instantiate with entity from helper method`() {
         val mfp = ModelFactoryProvider()
-        val entity = createRoundEntity()
+        val entity = createCallEntity()
 
         assertThatCode {
-            mfp.round.create(entity)
-            RoundModel(entity, mfp)
+            mfp.call.create(entity)
+            CallModel(entity, mfp)
         }.doesNotThrowAnyException()
     }
 }
