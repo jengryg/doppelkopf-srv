@@ -43,6 +43,6 @@ class TurnModelTest : BaseUnitTest() {
         assertThatThrownBy {
             model.card
         }.isInstanceOf(GameFailedException::class.java)
-            .hasMessageContaining("Can not decode card of the turn")
+            .hasMessageContaining("Can not decode the card of the turn")
     }
 }

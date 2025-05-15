@@ -34,12 +34,15 @@ class TrickEngine(
             // just ignore the exceptions here
         }
 
+        // TODO: the engine execute methods are throwing the occurring exceptions, thus we need to silence them for now
+        //  later this should be changed to a more resilient implementation where the engines are not throwing
         runCatching {
             roundEngine.execute(
                 command = RoundCommandEvaluate(
                     round = command.trick.round
                 )
             )
+            // just ignore the exceptions here
         }
 
         return command.trick

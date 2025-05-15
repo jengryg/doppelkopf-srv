@@ -23,9 +23,6 @@ class RoundPlayCardModel(
     factoryProvider: ModelFactoryProvider
 ) : RoundModelAbstract(entity, factoryProvider) {
 
-    // TODO: when Queen of Clubs is played, the team of the hand is revealed, when the second Queen of Clubs is played,
-    //  all teams are revealed
-    //  when both queen of clubs are played, and it is a silent marriage, the silent marriage should be revealed
     fun playCard(card: Card, user: IUserModel): Pair<ITrickModel, ITurnModel> {
         val (hand, currentTrick) = canPlayCard(user).getOrThrow()
 

@@ -18,9 +18,9 @@ import org.springframework.stereotype.Service
 class RoundEngine(
     private val trickPersistence: TrickPersistence,
     private val turnPersistence: TurnPersistence,
+    private val resultPersistence: ResultPersistence,
     @Lazy
-    private val trickEngine: TrickEngine,
-    private val resultPersistence: ResultPersistence
+    private val trickEngine: TrickEngine
 ) {
     fun execute(command: RoundCommandEvaluateDeclarations): RoundEntity {
         val mfp = ModelFactoryProvider()
@@ -80,6 +80,12 @@ class RoundEngine(
             trickPersistence.save(trick.entity)
         }
 
+        execute(
+            command = RoundCommandEvaluateTeamReveal(
+                round = command.round,
+            )
+        )
+
         return turnPersistence.save(turn.entity)
     }
 
@@ -92,6 +98,17 @@ class RoundEngine(
         ).evaluateRound()
 
         resultPersistence.save(results.map { it.entity })
+
+        return command.round
+    }
+
+    fun execute(command: RoundCommandEvaluateTeamReveal): RoundEntity {
+        val mfp = ModelFactoryProvider()
+
+        RoundTeamRevealModel(
+            entity = command.round,
+            factoryProvider = mfp,
+        ).revealTeamsIfPossible()
 
         return command.round
     }
