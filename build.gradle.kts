@@ -1,5 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.spring)
@@ -11,6 +12,7 @@ plugins {
     distribution
     jacoco
     idea
+    `jvm-test-suite`
 }
 
 group = "game"
@@ -179,46 +181,84 @@ tasks.withType<ProcessResources> {
     }
 }
 
-tasks.withType<Test> {
-    dependsOn(tasks.getByName("installOpenTelemetryAgentDist"))
+testing {
+    suites {
+        /**
+         * Defining the shared configuration for all test suites.
+         * https://docs.gradle.org/current/userguide/jvm_test_suite_plugin.html#sharing_configuration_between_multiple_test_suites
+         */
+        withType<JvmTestSuite> {
+            useJUnitJupiter()
 
-    // enable dynamic agent loading during tests to hide warning
-    // agents are loaded during tests for IDE integration and analysis
-    jvmArgs = listOf(
-        "-XX:+EnableDynamicAgentLoading",
-        "-javaagent:${rootProject.projectDir.canonicalPath}\\build\\install\\otel-agent\\otel-javaagent.jar",
-    )
+            targets {
+                all {
+                    testTask.configure {
+                        // enable dynamic agent loading during tests to hide warning
+                        // agents are loaded during tests for IDE integration and analysis
+                        jvmArgs("-XX:+EnableDynamicAgentLoading")
 
-    // https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/
-    // Note: Default is http/protobuf and generally uses port 4318 on the collectors.
-    // For larger payload and high throughput, gRPC is the way to go, but gRPC may not be supported in the overall
-    // network infrastructure due to its use of HTTP/2. The gRPC protocol, generally use port 4317 on the collectors.
-    environment("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4318")
+                        // Use system properties to set the active spring profile to "test", when tests are executed.
+                        systemProperty("spring.profiles.active", "test")
 
-    // Key-value pairs to be used as resource attributes.
-    // https://opentelemetry.io/docs/specs/semconv/resource/#semantic-attributes-with-dedicated-environment-variable
-    "${project.name}-${this.name}".also {
-        environment("OTEL_RESOURCE_ATTRIBUTES", "service.name=$it")
-        logger.info("Test run with opentelemetry agent, setting RESOURCE_ATTRIBUTES: service.name=$it")
+                        // Always generate the jacoco coverage report after tests were run.
+                        finalizedBy(tasks.jacocoTestReport)
+                    }
+                }
+            }
+        }
+
+        /**
+         * Configure the standard test suite, i.e. `src/test/kotlin`.
+         *
+         * https://docs.gradle.org/current/userguide/jvm_test_suite_plugin.html#sec:configuring_the_built_in_test_suite
+         */
+        @Suppress("unused")
+        val test by getting(JvmTestSuite::class) {
+            targets {
+                all {
+                    testTask.configure {
+                        // use the distribution to ensure that the opentelemetry java agent jar is present
+                        dependsOn(tasks.getByName("installOpenTelemetryAgentDist"))
+                        // get otelAgentJar from build directory
+                        val otelAgentJar =
+                            layout.buildDirectory.file("install/otel-agent/otel-javaagent.jar").get().asFile
+
+                        logger.info("Located opentelemetry agent at ${otelAgentJar.absolutePath}")
+
+                        // attach agent using the absolute path
+                        jvmArgs(
+                            "-javaagent:${otelAgentJar.absolutePath}",
+                        )
+
+                        // https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/
+                        // Note: Default is http/protobuf and generally uses port 4318 on the collectors.
+                        // For larger payload and high throughput, gRPC is the way to go, but gRPC may not be supported
+                        // in the overall network infrastructure due to its use of HTTP/2.
+                        // The gRPC protocol, generally uses port 4317 on the collectors.
+                        environment("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4318")
+
+                        // Key-value pairs to be used as resource attributes.
+                        // https://opentelemetry.io/docs/specs/semconv/resource/#semantic-attributes-with-dedicated-environment-variable
+                        "${project.name}-${this.name}".also {
+                            environment("OTEL_RESOURCE_ATTRIBUTES", "service.name=$it")
+                            logger.info("Test run with opentelemetry agent, setting RESOURCE_ATTRIBUTES: service.name=$it")
+                        }
+
+                        // Configure the Logback Appender instrumentation
+                        // https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/logback/logback-appender-1.0/javaagent
+                        systemProperties(
+                            mapOf(
+                                "otel.instrumentation.logback-appender.experimental-log-attributes" to "true",
+                                "otel.instrumentation.logback-appender.experimental.capture-marker-attribute" to "true",
+                                "otel.instrumentation.logback-appender.experimental.capture-key-value-pair-attributes" to "true",
+                                "otel.instrumentation.logback-appender.experimental.capture-code-attributes" to "true"
+                            )
+                        )
+                    }
+                }
+            }
+        }
     }
-
-    // Configure the Logback Appender instrumentation
-    // https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/logback/logback-appender-1.0/javaagent
-    systemProperty("otel.instrumentation.logback-appender.experimental-log-attributes", "true")
-    systemProperty("otel.instrumentation.logback-appender.experimental.capture-marker-attribute", "true")
-    systemProperty("otel.instrumentation.logback-appender.experimental.capture-key-value-pair-attributes", "true")
-
-    // Warning: Setting this to true might add performance overhead.
-    systemProperty("otel.instrumentation.logback-appender.experimental.capture-code-attributes", "true")
-
-
-    // Use system properties to set the active spring profile to "test", when tests are executed.
-    systemProperty("spring.profiles.active", "test")
-
-    useJUnitPlatform()
-
-    // Always generate the jacoco coverage report after tests were run.
-    finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.withType<JacocoReport> {
