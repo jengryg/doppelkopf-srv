@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package game.doppelkopf.domain.hand.enums
 
 import game.doppelkopf.domain.round.enums.RoundContract
@@ -35,14 +37,13 @@ enum class BiddingOption(
 ) {
     MARRIAGE(Bidding.MARRIAGE),
 
-//    TODO: SOLO SYSTEM IMPLEMENTATION
-//    SOLO_DIAMONDS(Bidding.SOLO_DIAMONDS),
-//    SOLO_HEARTS(Bidding.SOLO_HEARTS),
-//    SOLO_SPADES(Bidding.SOLO_SPADES),
-//    SOLO_CLUBS(Bidding.SOLO_CLUBS),
-//
-//    SOLO_QUEENS(Bidding.SOLO_QUEENS),
-//    SOLO_JACKS(Bidding.SOLO_JACKS),
-//
-//    SOLO_FREE(Bidding.SOLO_FREE),
+    SOLO_DIAMONDS(Bidding.SOLO_DIAMONDS),
+    SOLO_HEARTS(Bidding.SOLO_HEARTS),
+    SOLO_SPADES(Bidding.SOLO_SPADES),
+    SOLO_CLUBS(Bidding.SOLO_CLUBS),
+
+    SOLO_QUEENS(Bidding.SOLO_QUEENS),
+    SOLO_JACKS(Bidding.SOLO_JACKS),
+
+    SOLO_FREE(Bidding.SOLO_FREE),
 }

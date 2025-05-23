@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-class SeededPlayTest : BaseSpringBootTest(), Logging {
+class SeededNormalPlayTest : BaseSpringBootTest(), Logging {
     private val log = logger()
 
     @Autowired

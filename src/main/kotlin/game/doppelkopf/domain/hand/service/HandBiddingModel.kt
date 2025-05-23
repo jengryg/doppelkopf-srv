@@ -1,12 +1,12 @@
 package game.doppelkopf.domain.hand.service
 
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
-import game.doppelkopf.domain.hand.enums.Bidding
-import game.doppelkopf.domain.hand.enums.BiddingOption
-import game.doppelkopf.domain.hand.enums.Declaration
 import game.doppelkopf.common.errors.ofForbiddenAction
 import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.hand.enums.Bidding
+import game.doppelkopf.domain.hand.enums.BiddingOption
+import game.doppelkopf.domain.hand.enums.Declaration
 import game.doppelkopf.domain.hand.model.HandModelAbstract
 import game.doppelkopf.domain.user.model.IUserModel
 import org.springframework.lang.CheckReturnValue
@@ -33,9 +33,8 @@ class HandBiddingModel(
                     else -> Result.ofInvalidAction("You can only bid WEDDING when you have a marriage on hand.")
                 }
 
-                // TODO: SOLO SYSTEM IMPLEMENTATION
                 // all other options are solos, and those are always allowed to bid
-                // else -> Result.success(Unit)
+                else -> Result.success(Unit)
             }
         }
     }
