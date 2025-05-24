@@ -113,8 +113,19 @@ distributions {
     }
 }
 
-// TODO: configurability for image build via CLI
 jib {
+    val imageBase = (property("image.base") as? String)
+        ?: throw StopExecutionException("base image can not be determined from property image.base")
+
+    val imageRegistry = (property("image.registry") as? String)?.let { "$it/" }
+        ?: ""
+
+    val imageRepository = (property("image.repository") as? String)?.takeIf { it.isNotBlank() }
+        ?: rootProject.name
+
+    val imageTags = (property("image.tag") as? String)?.split(",")
+        ?: throw StopExecutionException("target image tag can not be determined from property image.tag")
+
     container {
         ports = listOf("8081/tcp")
 
@@ -135,11 +146,15 @@ jib {
     }
 
     from {
-        image = "eclipse-temurin:21"
+        image = imageBase
     }
     to {
-        image = "127.0.0.1:5001/dk/doppelkopf"
-        tags = mutableSetOf("latest")
+        image = "${imageRegistry}${imageRepository}/${project.name}".also {
+            logger.lifecycle("Building image $it.")
+        }
+        tags = imageTags.toSet().also {
+            logger.lifecycle("Tagging image with tags: ${imageTags.joinToString(", ")}")
+        }
     }
 }
 
