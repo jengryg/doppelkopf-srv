@@ -5,7 +5,6 @@ import game.doppelkopf.adapter.api.core.call.dto.CallInfoDto
 import game.doppelkopf.adapter.persistence.model.call.CallPersistence
 import game.doppelkopf.domain.hand.HandActionOrchestrator
 import game.doppelkopf.domain.hand.ports.actions.HandActionCall
-import game.doppelkopf.domain.round.RoundActionOrchestrator
 import game.doppelkopf.security.UserDetails
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity

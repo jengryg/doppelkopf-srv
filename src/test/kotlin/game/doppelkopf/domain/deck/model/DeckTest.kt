@@ -24,7 +24,6 @@ class DeckTest : BaseUnitTest() {
             }
         )
 
-        // TODO: seeded randomness
         val cards = hands.first.plus(hands.second).plus(hands.third).plus(hands.fourth)
 
         assertThat(cards).containsExactlyInAnyOrderElementsOf(deck.cards.values)

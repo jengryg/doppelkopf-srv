@@ -8,9 +8,9 @@ import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.game.GameRepository
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
-import game.doppelkopf.domain.game.enums.GameOperation
 import game.doppelkopf.common.errors.ForbiddenActionException
 import game.doppelkopf.common.errors.InvalidActionException
+import game.doppelkopf.domain.game.enums.GameOperation
 import game.doppelkopf.domain.game.service.GameStartModel
 import game.doppelkopf.errors.ProblemDetailResponse
 import io.mockk.*

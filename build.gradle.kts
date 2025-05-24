@@ -44,6 +44,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-graphql")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -149,12 +150,8 @@ jib {
         image = imageBase
     }
     to {
-        image = "${imageRegistry}${imageRepository}/${project.name}".also {
-            logger.lifecycle("Building image $it.")
-        }
-        tags = imageTags.toSet().also {
-            logger.lifecycle("Tagging image with tags: ${imageTags.joinToString(", ")}")
-        }
+        image = "${imageRegistry}${imageRepository}/${project.name}"
+        tags = imageTags.toSet()
     }
 }
 

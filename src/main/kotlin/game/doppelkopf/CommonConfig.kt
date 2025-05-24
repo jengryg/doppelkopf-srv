@@ -1,3 +1,5 @@
+@file:Suppress("CanUnescapeDollarLiteral")
+
 package game.doppelkopf
 
 import game.doppelkopf.instrumentation.logging.Logging

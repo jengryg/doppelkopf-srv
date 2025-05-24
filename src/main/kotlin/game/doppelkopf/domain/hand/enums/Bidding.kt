@@ -2,8 +2,8 @@
 
 package game.doppelkopf.domain.hand.enums
 
-import game.doppelkopf.domain.round.enums.RoundContract
 import game.doppelkopf.domain.deck.enums.DeckMode
+import game.doppelkopf.domain.round.enums.RoundContract
 
 /**
  * [Bidding] is made by players that have declared RESERVATION.

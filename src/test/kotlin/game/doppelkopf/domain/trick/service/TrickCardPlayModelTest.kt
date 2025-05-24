@@ -1,8 +1,8 @@
 package game.doppelkopf.domain.trick.service
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.domain.trick.enums.TrickState
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.trick.enums.TrickState
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.params.ParameterizedTest

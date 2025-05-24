@@ -6,7 +6,7 @@ import game.doppelkopf.domain.deck.enums.DeckMode
 import game.doppelkopf.domain.deck.errors.ofInvalidCardException
 import game.doppelkopf.domain.deck.service.CardRankingFactory
 import game.doppelkopf.utils.Quadruple
-import java.util.Random
+import java.util.*
 
 /**
  * Use [Deck.create] to instantiate a new [Deck] for the given [DeckMode].

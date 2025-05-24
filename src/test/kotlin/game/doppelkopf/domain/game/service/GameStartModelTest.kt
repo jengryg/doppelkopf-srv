@@ -1,10 +1,10 @@
 package game.doppelkopf.domain.game.service
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.domain.game.enums.GameState
 import game.doppelkopf.common.errors.ForbiddenActionException
 import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.game.enums.GameState
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest

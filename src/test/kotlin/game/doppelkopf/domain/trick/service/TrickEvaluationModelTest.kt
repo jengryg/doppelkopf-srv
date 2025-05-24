@@ -1,9 +1,9 @@
 package game.doppelkopf.domain.trick.service
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.domain.trick.enums.TrickState
 import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.trick.enums.TrickState
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest

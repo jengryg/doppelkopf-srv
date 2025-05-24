@@ -1,11 +1,11 @@
 package game.doppelkopf.domain.hand.service
 
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
-import game.doppelkopf.domain.hand.enums.Declaration
-import game.doppelkopf.domain.hand.enums.DeclarationOption
 import game.doppelkopf.common.errors.ofForbiddenAction
 import game.doppelkopf.common.errors.ofInvalidAction
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.hand.enums.Declaration
+import game.doppelkopf.domain.hand.enums.DeclarationOption
 import game.doppelkopf.domain.hand.model.HandModelAbstract
 import game.doppelkopf.domain.user.model.IUserModel
 import org.springframework.lang.CheckReturnValue

@@ -2,7 +2,7 @@ package game.doppelkopf.common.service
 
 import game.doppelkopf.common.model.IBaseModel
 import game.doppelkopf.common.model.IBaseProperties
-import java.util.UUID
+import java.util.*
 
 /**
  * [MutableMap] based cache for the [IModelFactory] implementations that identifies each

@@ -4,12 +4,7 @@ import game.doppelkopf.adapter.persistence.model.BaseEntity
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.domain.call.enums.CallType
 import game.doppelkopf.domain.call.model.ICallProperties
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.*
 
 @Entity
 class CallEntity(

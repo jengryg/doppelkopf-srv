@@ -1,11 +1,11 @@
 package game.doppelkopf.domain.round.service
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.domain.round.enums.RoundContract
-import game.doppelkopf.domain.hand.enums.Team
 import game.doppelkopf.common.errors.GameFailedException
 import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.hand.enums.Team
+import game.doppelkopf.domain.round.enums.RoundContract
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest

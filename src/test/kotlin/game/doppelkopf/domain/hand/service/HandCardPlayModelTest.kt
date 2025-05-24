@@ -1,9 +1,9 @@
 package game.doppelkopf.domain.hand.service
 
 import game.doppelkopf.BaseUnitTest
-import game.doppelkopf.domain.deck.enums.CardDemand
 import game.doppelkopf.common.errors.InvalidActionException
 import game.doppelkopf.domain.ModelFactoryProvider
+import game.doppelkopf.domain.deck.enums.CardDemand
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments

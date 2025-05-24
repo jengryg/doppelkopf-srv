@@ -1,7 +1,7 @@
 package game.doppelkopf.domain.round.ports.actions
 
 import game.doppelkopf.security.UserDetails
-import java.util.UUID
+import java.util.*
 
 /**
  * Resolve the marriage in the round given by [roundId].
