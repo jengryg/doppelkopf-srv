@@ -24,7 +24,7 @@ class RoundInfoDto(
     val gameId: UUID,
 
     @Schema(
-        description = "The player that dealt this round.r"
+        description = "The player that dealt this round."
     )
     val dealer: PlayerInfoDto,
 
