@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import java.security.SecureRandom
+import java.util.UUID
 
 /**
  * General base class for [SpringBootTest] of this application.
@@ -175,5 +176,9 @@ abstract class BaseSpringBootTest : Logging {
                 .addKeyValue("user") { it }
                 .log()
         }
+    }
+
+    companion object {
+        val zeroId = UUID.fromString("00000000-0000-0000-0000-000000000000")!!
     }
 }

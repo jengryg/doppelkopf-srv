@@ -216,8 +216,4 @@ abstract class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
             response().jsonPath().getList("$", T::class.java)
         }
     }
-
-    companion object {
-        val zeroId = UUID.fromString("00000000-0000-0000-0000-000000000000")!!
-    }
 }

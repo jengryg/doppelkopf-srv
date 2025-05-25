@@ -7,6 +7,22 @@ server:
   # Each service should use another port number in the temp profiles.
   port: 16000
 
+spring:
+  jpa:
+    hibernate:
+      # activate hibernates schema recreation for temp profile
+      ddl-auto: create
+  liquibase:
+    # disable liquibase for the temp profile
+    enabled: false
+  graphql:
+    graphiql:
+      enabled: true
+    schema:
+      printer:
+        # Enable the endpoint that prints the graphql schema for development purpose.
+        enabled: true
+
 management:
   endpoint:
     health:
@@ -20,12 +36,3 @@ app:
   common:
     stage: "temp"
     version: "0.0.0"
-
-spring:
-  jpa:
-    hibernate:
-      # activate hibernates schema recreation for temp profile
-      ddl-auto: create
-  liquibase:
-    # disable liquibase for the temp profile
-    enabled: false

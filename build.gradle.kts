@@ -51,6 +51,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web") {
         exclude("org.apache.logging.log4j", "log4j-to-slf4j")
     }
+    implementation("org.springframework:spring-webflux") {
+        exclude("org.apache.logging.log4j", "log4j-to-slf4j")
+    }
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.micrometer:micrometer-tracing-bridge-otel")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -65,6 +68,7 @@ dependencies {
         exclude("junit", "junit")
     }
     testImplementation(libs.mockk)
+    testImplementation("org.springframework.graphql:spring-graphql-test")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.springframework.security:spring-security-test")
