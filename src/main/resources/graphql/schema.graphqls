@@ -8,16 +8,75 @@ scalar Instant
 All queries this graphQL API supports.
 """
 type Query {
+    user(id: ID!): User!
+
     game(id: ID!) : Game!
     games: [Game!]!
+
+    player(id: ID!): Player!
+    players: [Player!]!
+
+    round(id: ID!): Round!
+    rounds: [Round!]!
+
+    publicHand(id: ID!): PublicHand!
+    publicHands(roundId: ID!): [PublicHand!]!
+
+    privateHand(id: ID!): PrivateHand!
+
+    trick(id: ID!): Trick!
+    tricks(roundId: ID!): [Trick!]!
+
+    turn(id: ID!): Turn!
+    turns(roundId: ID!): [Turn!]!
+
+    call(id: ID!): Call!
+    calls(roundId: ID!): [Call!]!
 }
 
 """
 All mutations this graphQL API supports.
 """
 type Mutation {
+    """
+    Create a new game based on the provided data.
+    """
     createGame(createGameInput: CreateGameInput!): Game!
-    startGame(id: ID!): Game!
+
+    """
+    Start the game with the specified id.
+    """
+    startGame(gameId: ID!): Game!
+
+    """
+    Join a game as user to create a new player.
+    """
+    joinGame(joinGameInput: JoinGameInput!): Player!
+
+    """
+    Deal cards in the specified game to create a new round.
+    """
+    createRound(gameId: ID!): Round!
+
+    """
+    Make a declare for the hand based on the provided data.
+    """
+    declare(declareInput: DeclareInput): PrivateHand!
+
+    """
+    Make a bid for the hand based on the provided data.
+    """
+    bid(bidInput: BidInput): PrivateHand!
+
+    """
+    Play a card in the round based on the provided data.
+    """
+    playCard(playCardInput: PlayCardInput): Turn!
+
+    """
+    Make a call in the round based on the provided data.
+    """
+    makeCall(makeCallInput: MakeCallInput): Call!
 }
 
 """
@@ -51,13 +110,12 @@ type StartedEnded {
 }
 
 """
-Send this to create a new game.
+Information about a user.
 """
-input CreateGameInput {
-    """
-    How many players are at most allowed to join the game.
-    """
-    playerLimit: Int!
+type User {
+    id: ID!
+    name: String!
+    cu: CreatedUpdated!
 }
 
 """
@@ -70,9 +128,104 @@ type Game {
     id: ID!
 
     """
+    The created and updated meta data of this game.
+    """
+    cu: CreatedUpdated!
+
+    """
+    The started and ended moments of this game.
+    """
+    se: StartedEnded!
+
+    """
     How many players are at most allowed to join this game.
     """
     playerLimit: Int!
+
+    """
+    The players of this game.
+    """
+    players: [Player!]!
+
+    """
+    The rounds of this game.
+    """
+    rounds: [Round!]!
+
+    """
+    The current active round of this game if there is one, otherwise null.
+    """
+    currentRound: Round
+}
+
+"""
+Send this to create a new game.
+"""
+input CreateGameInput {
+    """
+    How many players are at most allowed to join the game.
+    """
+    playerLimit: Int!
+}
+
+"""
+Information about the player, that is a user in a game.
+"""
+type Player {
+    """
+    The UUID of this player.
+    """
+    id: ID!
+
+    """
+    The created and updated meta data of this game.
+    """
+    cu: CreatedUpdated!
+
+    """
+    The UUID of the game this player is playing in.
+    """
+    gameId: ID!
+
+    """
+    The number of the seat this player is sitting on in the game.
+    """
+    seat: Int!
+
+    """
+    The user that is playing in the game as this player.
+    """
+    user: User!
+
+    """
+    Is this player is the current dealer in the game.
+    """
+    dealer: Boolean!
+}
+
+"""
+Join a game at the specified seat as player.
+"""
+input JoinGameInput {
+    """
+    The UUID of the game to join.
+    """
+    gameId: ID!
+
+    """
+    The seat position to take.
+    """
+    seat: Int!
+}
+
+"""
+Information about a round in a game of Doppelkopf.
+"""
+type Round {
+    """
+    The UUID of this round.
+    """
+    id: ID!
 
     """
     The created and updated meta data of this game.
@@ -83,4 +236,517 @@ type Game {
     The started and ended moments of this game.
     """
     se: StartedEnded!
+
+    """
+    The UUID of the game this round is played in.
+    """
+    gameId: ID!
+
+    """
+    The player that dealt this round.
+    """
+    dealer: Player!
+
+    """
+    The number of this round, incrementally starting at 1.
+    """
+    number: Int!
+
+    """
+    The current state of the round.
+    """
+    state: RoundState!
+
+    """
+    The public contract information of the round.
+    """
+    contract: RoundContract!
+
+    """
+    The result of this round if available, otherwise null.
+    """
+    result: TeamedResult
+
+    """
+    The public information about the hands of the other players.
+    """
+    hands: [PublicHand!]
+
+    """
+    The private information about the hand.
+    This shows the hand of the player, if the authenticated user has a hand in this round. Otherwise null.
+    """
+    hand: PrivateHand
+
+    """
+    The tricks of this round.
+    """
+    tricks: [Trick!]!
+
+    """
+    The current active trick of this round if there is one, otherwise null.
+    """
+    currentTrick: Trick
+
+    """
+    The calls made in this round.
+    """
+    calls: [Call!]!
+}
+
+"""
+Public information about a hand.
+"""
+type PublicHand {
+    """
+    The UUID of this hand.
+    """
+    id: ID!
+
+    """
+    The created and updated meta data of this game.
+    """
+    cu: CreatedUpdated!
+
+    """
+    The UUID of the player this hand is played by.
+    """
+    playerId: ID!
+
+    """
+    The UUID of the round this hand is played in.
+    """
+    roundId: ID!
+
+    """
+    The declaration of this hand if it was already made, otherwise null.
+    """
+    declared: Declaration
+
+    """
+    The bid of this hand if it was already made, otherwise null.
+    """
+    bid: Bidding
+
+    """
+    The team this hands plays on, from the viewpoint of other players in the game.
+    """
+    team: Team
+
+    """
+    The calls made by this hand.
+    """
+    calls: [Call!]!
+}
+
+"""
+Private information about a hand.
+This is only available to the owner of the hand.
+"""
+type PrivateHand {
+    """
+    The UUID of this hand.
+    """
+    id: ID!
+
+    """
+    The public information about this hand.
+    """
+    public: PublicHand!
+
+    """
+    The team this hands plays on, from the viewpoint of the player of this hand.
+    """
+    team: Team
+
+    """
+    The cards that were already played by this hand.
+    """
+    cardsPlayed: [String!]!
+
+    """
+    The cards that this hand has still to play.
+    """
+    cardsRemaining: [String!]!
+}
+
+"""
+The bids the players can make for their hands.
+"""
+enum Bidding {
+    MARRIAGE
+    SOLO_DIAMONDS
+    SOLO_HEARTS
+    SOLO_SPADES
+    SOLO_CLUBS
+    SOLO_QUEENS
+    SOLO_JACKS
+    SOLO_FREE
+}
+
+"""
+The declarations the players can make for their hands.
+"""
+enum Declaration {
+    NOTHING
+    HEALTHY
+    RESERVATION
+}
+
+"""
+Send this to make the declaration on the hand given by the specified id.
+Only possible if the specified hand belongs to the user.
+"""
+input DeclareInput {
+    handId: ID!
+    declaration: Declaration!
+}
+
+"""
+Send this to make the bid on the hand given by the specified id.
+Only possible if the specified hand belongs to the user.
+"""
+input BidInput {
+    handId: ID!
+    bid: Bidding!
+}
+
+"""
+Indicates the current phase the round is in.
+"""
+enum RoundState {
+    WAITING_FOR_DECLARATIONS
+    WAITING_FOR_BIDS
+    PLAYING_TRICKS
+    EVALUATED
+}
+
+"""
+Indicates the specific variant of the round that is played based on the game rules.
+"""
+enum RoundContract {
+    UNDECIDED
+    NORMAL
+    MARRIAGE
+    MARRIAGE_SOLO
+    SOLO
+}
+
+"""
+Results tagged with the corresponding team.
+"""
+type TeamedResult {
+    """
+    Result of the re team.
+    """
+    re: RoundResult!
+
+    """
+    Result of the ko team.
+    """
+    ko: RoundResult!
+}
+
+"""
+The Doppelkopf game has two teams playing against each other, RE and KO.
+"""
+enum Team {
+    RE
+    KO
+}
+
+"""
+Information about a result of a round in a game of Doppelkopf.
+"""
+type RoundResult {
+    """
+    The UUID of this result.
+    """
+    id: ID!
+
+    """
+    The created and updated meta data of this game.
+    """
+    cu: CreatedUpdated!
+
+    """
+    The UUID of the round this result is from.
+    """
+    roundId: ID!
+
+    """
+    The team this result is for.
+    """
+    team: Team!
+
+    """
+    The number of tricks this team obtained.
+    """
+
+    tricksCount: Int!
+    """
+    The total score this team obtained.
+    """
+
+    scoreObtained: Int!
+
+    """
+    The target score this team must obtain.
+    """
+    scoreTarget: Int!
+
+    """
+    The points awarded to this team.
+    """
+    points: PointsResult!
+}
+
+"""
+The points divided in multiple categories.
+"""
+type PointsResult {
+    winning: Int!
+    teamCalls: PointsResultTeamCalls!
+    underCalls: PointsResultUnderCalls!
+    lostScore: ScoreQuadruple!
+    special: PointsResultSpecial!
+}
+
+"""
+There are multiple aspects of Doppelkopf using the 4 levels (90, 60, 30, 0), e.g. calls, score level.
+This type allows us to have a simple representation of these aspects.
+"""
+type ScoreQuadruple {
+    p90: Int!
+    p60: Int!
+    p30: Int!
+    p00: Int!
+}
+
+"""
+These special points can only be obtained when the round is played according to the NORMAL or MARRIAGE contract.
+"""
+type PointsResultSpecial {
+    """
+    If KO wins against RE, they get an extra point.
+    """
+    opposition: Int!
+
+    """
+    Each trick that has 40 or more score, give the team that scored this trick 1 extra point.
+    """
+    doppelkopf: Int!
+
+    """
+    If the last trick is won with Jack of Clubs (charly), the team scoring this trick gets 1 extra point.
+    """
+    charly: Int!
+}
+
+"""
+The points for the under calls of each team.
+"""
+type PointsResultUnderCalls {
+    """
+    The winner gets 1 point for each under call made by RE team.
+    """
+    re: ScoreQuadruple!
+
+    """
+    The winner gets 1 point for each under call made by KO team.
+    """
+    ko: ScoreQuadruple!
+}
+
+"""
+The points for the team calls of each teams.
+"""
+type PointsResultTeamCalls {
+    """
+    The winner gets 2 points if RE made their team call.
+    """
+    re: Int!
+
+    """
+    The winner gets 2 points if KO made their team call.
+    """
+    ko: Int!
+}
+
+"""
+Information about a Trick in a round of Doppelkopf.
+"""
+type Trick {
+    """
+    The UUID of this trick.
+    """
+    id: ID!
+
+    """
+    The created and updated meta data of this game.
+    """
+    cu: CreatedUpdated!
+
+    """
+    The started and ended moments of this game.
+    """
+    se: StartedEnded!
+
+    """
+    The UUID of the round this trick is played in.
+    """
+    roundId: ID!
+
+    """
+    The cards that this trick currently contains in order.
+    """
+    cards: [String!]!
+
+    """
+    The number of this trick with respect to the round.
+    """
+    number: Int!
+
+    """
+    The demand of this trick.
+    """
+    demand: CardDemand!
+
+    """
+    The index of the hand that played the first card of this hand.
+    """
+    openIndex: Int!
+
+    """
+    The index of the currently leading card of this trick with respect to the cards list.
+    """
+    leadingCardIndex: Int!
+
+    """
+    The winner of this trick if known, otherwise null.
+    """
+    winner: PublicHand
+}
+
+"""
+The first card of each trick defined the [CardDemand] that MUST be satisfied by a hand, if it can.
+"""
+enum CardDemand {
+    COLORED
+    DIAMOND
+    HEARTS
+    SPADES
+    CLUBS
+}
+
+"""
+Information about a turn in a round and trick of Doppelkopf.
+"""
+type Turn {
+    """
+    The UUID of this turn.
+    """
+    id: ID!
+
+    """
+    The created and updated meta data of this game.
+    """
+    cu: CreatedUpdated!
+
+    """
+    The UUID of the round this turn is made in.
+    """
+    roundId: ID!
+
+    """
+    The UUID of the hand this turn is made by.
+    """
+    handId: ID!
+
+    """
+    The UUID of the trick this turn is made in.
+    """
+    trickId: ID!
+
+    """
+    The number of this turn, incrementally starting at 1.
+    """
+    number: Int!
+
+    """
+    The card played in this turn.
+    """
+    card: String!
+}
+
+"""
+Send this to play the card in the round with the specified id.
+"""
+input PlayCardInput {
+    """
+    The UUID of the round to play the card in.
+    """
+    roundId: ID!
+
+    """
+    The card you want to play.
+    Must be one of the remaining cards on your hand.
+    """
+    card: String!
+}
+
+type Call {
+    """
+    The UUID of this call.
+    """
+    id: ID!
+
+    """
+    The created and updated meta data of this game.
+    """
+    cu: CreatedUpdated!
+
+    """
+    The UUID of the hand this call was made by.
+    """
+    handId: ID!
+
+    """
+    The UUID of the round this call was made in.
+    """
+    roundId: ID!
+
+    """
+    The type of this call.
+    """
+    callType: CallType!
+
+    """
+    The description of this call.
+    """
+    description: String!
+
+    """
+    The number of cards tha hand had already played when this call was made.
+    """
+    cardsPlayedBefore: Int!
+}
+
+"""
+The different types of calls that can be made.
+"""
+enum CallType {
+    UNDER_120
+    UNDER_90
+    UNDER_60
+    UNDER_30
+    NO_TRICKS
+}
+
+"""
+Send this to make a call for the hand specified by id.
+"""
+input MakeCallInput {
+    handId: ID!
+    callType: CallType!
 }
