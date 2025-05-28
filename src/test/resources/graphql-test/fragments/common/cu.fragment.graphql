@@ -1,0 +1,6 @@
+fragment cu on HasCreatedUpdated {
+    cu {
+        created
+        updated
+    }
+}

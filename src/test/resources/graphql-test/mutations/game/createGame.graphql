@@ -1,0 +1,5 @@
+mutation createGame($playerLimit: Int!) {
+    createGame(createGameInput: {playerLimit: $playerLimit}) {
+        ...gameProperties
+    }
+}

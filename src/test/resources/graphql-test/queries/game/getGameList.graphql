@@ -1,0 +1,5 @@
+query getGameList {
+    games {
+        ...gameProperties
+    }
+}

@@ -1,0 +1,6 @@
+fragment gameProperties on Game {
+    id
+    playerLimit
+    ...cu
+    ...se
+}

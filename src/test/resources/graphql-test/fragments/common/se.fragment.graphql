@@ -1,0 +1,6 @@
+fragment se on HasStartedEnded {
+    se {
+        started
+        ended
+    }
+}

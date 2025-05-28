@@ -1,0 +1,6 @@
+query publicUser($id: ID!) {
+    publicUser(id: $id) {
+        name
+        id
+    }
+}
