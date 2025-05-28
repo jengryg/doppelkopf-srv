@@ -1,0 +1,5 @@
+query getPlayer($id: ID!) {
+    player(id: $id) {
+        ...playerProperties
+    }
+}

@@ -1,0 +1,16 @@
+fragment roundProperties on Round {
+    id
+    number
+    contract
+    state
+    result {
+        re {
+            ...resultProperties
+        }
+        ko {
+            ...resultProperties
+        }
+    }
+    ...cu
+    ...se
+}

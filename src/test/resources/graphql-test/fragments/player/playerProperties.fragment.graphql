@@ -1,0 +1,6 @@
+fragment playerProperties on Player {
+    id
+    seat
+    dealer
+    ...cu
+}

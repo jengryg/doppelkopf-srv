@@ -1,0 +1,5 @@
+mutation playCard($roundId: ID!, $card: String!) {
+    playCard(playCardInput: {roundId: $roundId, card: $card}) {
+        ...turnProperties
+    }
+}

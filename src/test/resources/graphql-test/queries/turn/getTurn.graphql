@@ -1,0 +1,5 @@
+query getTurn($id: ID!) {
+    trick(id: $id) {
+        ...trickProperties
+    }
+}

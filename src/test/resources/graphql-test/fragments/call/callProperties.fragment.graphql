@@ -1,0 +1,7 @@
+fragment callProperties on Call {
+    id
+    callType
+    cardsPlayedBefore
+    description
+    ...cu
+}

@@ -1,0 +1,31 @@
+fragment resultProperties on RoundResult {
+    id
+    team
+    trickCount
+    scoreObtained
+    scoreTarget
+    points {
+        winning
+        teamCalls {
+            re
+            ko
+        }
+        underCalls {
+            re {
+                ...sq
+            }
+            ko {
+                ...sq
+            }
+        }
+        lostScore {
+            ...sq
+        }
+        special {
+            charly
+            doppelkopf
+            opposition
+        }
+    }
+    ...cu
+}

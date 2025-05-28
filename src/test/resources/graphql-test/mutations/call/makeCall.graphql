@@ -1,0 +1,5 @@
+mutation makeCall($handId: ID!, $callType: CallType!) {
+    makeCall(makeCallInput: {callType: $callType, handId: $handId}) {
+        ...callProperties
+    }
+}

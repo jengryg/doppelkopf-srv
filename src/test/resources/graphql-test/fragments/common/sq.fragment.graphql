@@ -1,0 +1,6 @@
+fragment sq on ScoreQuadruple {
+    p90
+    p60
+    p30
+    p00
+}

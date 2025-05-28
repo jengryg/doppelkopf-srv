@@ -1,0 +1,5 @@
+mutation createRound($gameId: ID!){
+    createRound(gameId: $gameId) {
+        ...roundProperties
+    }
+}

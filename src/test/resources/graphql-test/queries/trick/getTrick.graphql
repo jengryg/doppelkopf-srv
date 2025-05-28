@@ -1,0 +1,5 @@
+query getTrick($id: ID!) {
+    trick(id: $id){
+        ...trickProperties
+    }
+}

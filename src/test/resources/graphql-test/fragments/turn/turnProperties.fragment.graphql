@@ -1,0 +1,6 @@
+fragment turnProperties on Turn {
+    id
+    number
+    card
+    ...cu
+}

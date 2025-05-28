@@ -1,0 +1,5 @@
+query getRound($id: ID!) {
+    round(id: $id) {
+        ...roundProperties
+    }
+}

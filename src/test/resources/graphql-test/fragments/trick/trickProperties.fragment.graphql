@@ -1,0 +1,10 @@
+fragment trickProperties on Trick {
+    id
+    number
+    demand
+    openIndex
+    leadingCardIndex
+    cards
+    ...cu
+    ...se
+}

@@ -1,0 +1,5 @@
+mutation joinGame($gameId: ID!, $seat: Int!) {
+    joinGame(joinGameInput: {gameId: $gameId, seat: $seat}) {
+        ...playerProperties
+    }
+}

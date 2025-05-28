@@ -1,0 +1,5 @@
+query getPrivateHand($id: ID!) {
+    privateHand(id: $id) {
+        ...privateHandProperties
+    }
+}

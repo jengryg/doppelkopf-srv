@@ -1,0 +1,7 @@
+fragment publicHandProperties on PublicHand {
+    id
+    team
+    declared
+    bid
+    ...cu
+}

@@ -1,0 +1,9 @@
+fragment privateHandProperties on PrivateHand {
+    id
+    team
+    cardsPlayed
+    cardsRemaining
+    public {
+        ...publicHandProperties
+    }
+}
