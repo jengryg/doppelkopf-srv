@@ -13,7 +13,7 @@ import game.doppelkopf.utils.Quadruple
  */
 interface IModelFactory<T : IBaseProperties, M : IBaseModel<T>> {
     /**
-     * Use the given [entity] to get an instance of model [M] from the
+     * Use the given [entity] to get an instance of model [M].
      */
     fun create(entity: T): M
 

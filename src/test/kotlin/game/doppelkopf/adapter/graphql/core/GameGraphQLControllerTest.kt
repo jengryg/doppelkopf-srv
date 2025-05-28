@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-class GameGraphQlTest : BaseGraphQLTest() {
+class GameGraphQLControllerTest : BaseGraphQLTest() {
     @Autowired
     private lateinit var gameRepository: GameRepository
 
@@ -26,11 +26,11 @@ class GameGraphQlTest : BaseGraphQLTest() {
     inner class GetAndList {
         @Test
         fun `get specific with unknown uuid returns error`() {
+            // TODO: store documents in resources and call them fluent api and variable setting
             val document = """
                 {
                     game(id: "$zeroId") {
                         id
-                        
                     }
                 }
             """.trimIndent()

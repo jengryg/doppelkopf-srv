@@ -30,6 +30,11 @@ spring:
         # by default the endpoint that prints the schema should be disabled
         # we enable it only for development purposes in the profile specific configurations
         enabled: false
+  web:
+    # Fixing locale to en_US to prevent language mixing.
+    # TODO: remove this configuration when the application support localization
+    locale: en_US
+    locale-resolver: fixed
 
 management:
   endpoints:
@@ -90,3 +95,7 @@ app:
   meta:
     api:
       title: "Doppelkopf"
+
+  graphql:
+    max-complexity: 25000
+    max-depth: 20

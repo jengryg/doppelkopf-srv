@@ -8,30 +8,61 @@ scalar Instant
 All queries this graphQL API supports.
 """
 type Query {
-    user(id: ID!): User!
+    """
+    Gets detailed information about the current user.
+    """
+    privateUser: PrivateUser!
 
-    game(id: ID!) : Game!
+    """
+    Gets the public information about the user with the specified id.
+    """
+    publicUser(id: ID!): PublicUser!
+
+    """
+    Get all games currently available.
+    """
     games: [Game!]!
 
+    """
+    Get information about the game with the specified id.
+    """
+    game(id: ID!) : Game!
+
+    """
+    Get information about the player with the specified id.
+    """
     player(id: ID!): Player!
-    players: [Player!]!
 
+    """
+    Get information about the round with the specified id.
+    """
     round(id: ID!): Round!
-    rounds: [Round!]!
 
+    """
+    Get the public information about the hand with the specified id.
+    """
     publicHand(id: ID!): PublicHand!
-    publicHands(roundId: ID!): [PublicHand!]!
 
+    """
+    Get the private information about the hand with the specified id.
+    This can only be used by the owner of the hand.
+    """
     privateHand(id: ID!): PrivateHand!
 
+    """
+    Get information about the trick with the specified id.
+    """
     trick(id: ID!): Trick!
-    tricks(roundId: ID!): [Trick!]!
 
+    """
+    Get information about the turn with the specified id.
+    """
     turn(id: ID!): Turn!
-    turns(roundId: ID!): [Turn!]!
 
+    """
+    Get information about the call with the specified id.
+    """
     call(id: ID!): Call!
-    calls(roundId: ID!): [Call!]!
 }
 
 """
@@ -95,6 +126,13 @@ type CreatedUpdated {
 }
 
 """
+Common interface for all types that provide CreatedUpdated time instant information.
+"""
+interface HasCreatedUpdated {
+    cu: CreatedUpdated
+}
+
+"""
 Object metadata that tracks when an object was started and ended.
 """
 type StartedEnded {
@@ -110,18 +148,33 @@ type StartedEnded {
 }
 
 """
-Information about a user.
+Common interface for all types that provide StartedEnded time instant information.
 """
-type User {
+interface HasStartedEnded {
+    se: StartedEnded
+}
+
+"""
+Information about a user that is only available to that user themselves.
+"""
+type PrivateUser implements HasCreatedUpdated {
     id: ID!
     name: String!
     cu: CreatedUpdated!
 }
 
 """
+Information about a user that is available to all other users.
+"""
+type PublicUser {
+    id: ID!
+    name: String!
+}
+
+"""
 Information about a game of Doppelkopf.
 """
-type Game {
+type Game implements HasCreatedUpdated & HasStartedEnded {
     """
     "The UUID of this game."
     """
@@ -148,6 +201,11 @@ type Game {
     players: [Player!]!
 
     """
+    The player of the current user if they are playing in this game, otherwise null.
+    """
+    player: Player
+
+    """
     The rounds of this game.
     """
     rounds: [Round!]!
@@ -171,7 +229,7 @@ input CreateGameInput {
 """
 Information about the player, that is a user in a game.
 """
-type Player {
+type Player implements HasCreatedUpdated {
     """
     The UUID of this player.
     """
@@ -183,9 +241,9 @@ type Player {
     cu: CreatedUpdated!
 
     """
-    The UUID of the game this player is playing in.
+    The game this player is playing in.
     """
-    gameId: ID!
+    game: Game!
 
     """
     The number of the seat this player is sitting on in the game.
@@ -195,7 +253,7 @@ type Player {
     """
     The user that is playing in the game as this player.
     """
-    user: User!
+    user: PublicUser!
 
     """
     Is this player is the current dealer in the game.
@@ -221,7 +279,7 @@ input JoinGameInput {
 """
 Information about a round in a game of Doppelkopf.
 """
-type Round {
+type Round implements HasCreatedUpdated & HasStartedEnded {
     """
     The UUID of this round.
     """
@@ -238,9 +296,9 @@ type Round {
     se: StartedEnded!
 
     """
-    The UUID of the game this round is played in.
+    The game this round is played in.
     """
-    gameId: ID!
+    game: Game!
 
     """
     The player that dealt this round.
@@ -268,7 +326,7 @@ type Round {
     result: TeamedResult
 
     """
-    The public information about the hands of the other players.
+    The public information about the hands of the players.
     """
     hands: [PublicHand!]
 
@@ -297,7 +355,7 @@ type Round {
 """
 Public information about a hand.
 """
-type PublicHand {
+type PublicHand implements HasCreatedUpdated {
     """
     The UUID of this hand.
     """
@@ -309,14 +367,14 @@ type PublicHand {
     cu: CreatedUpdated!
 
     """
-    The UUID of the player this hand is played by.
+    The player this hand is played by.
     """
-    playerId: ID!
+    player: Player!
 
     """
-    The UUID of the round this hand is played in.
+    The round this hand is played in.
     """
-    roundId: ID!
+    round: Round!
 
     """
     The declaration of this hand if it was already made, otherwise null.
@@ -458,7 +516,7 @@ enum Team {
 """
 Information about a result of a round in a game of Doppelkopf.
 """
-type RoundResult {
+type RoundResult implements HasCreatedUpdated {
     """
     The UUID of this result.
     """
@@ -470,9 +528,9 @@ type RoundResult {
     cu: CreatedUpdated!
 
     """
-    The UUID of the round this result is from.
+    The round this result is from.
     """
-    roundId: ID!
+    round: Round!
 
     """
     The team this result is for.
@@ -483,7 +541,7 @@ type RoundResult {
     The number of tricks this team obtained.
     """
 
-    tricksCount: Int!
+    trickCount: Int!
     """
     The total score this team obtained.
     """
@@ -576,7 +634,7 @@ type PointsResultTeamCalls {
 """
 Information about a Trick in a round of Doppelkopf.
 """
-type Trick {
+type Trick implements HasCreatedUpdated & HasStartedEnded {
     """
     The UUID of this trick.
     """
@@ -593,9 +651,9 @@ type Trick {
     se: StartedEnded!
 
     """
-    The UUID of the round this trick is played in.
+    The round this trick is played in.
     """
-    roundId: ID!
+    round: Round!
 
     """
     The cards that this trick currently contains in order.
@@ -642,7 +700,7 @@ enum CardDemand {
 """
 Information about a turn in a round and trick of Doppelkopf.
 """
-type Turn {
+type Turn implements HasCreatedUpdated {
     """
     The UUID of this turn.
     """
@@ -654,19 +712,19 @@ type Turn {
     cu: CreatedUpdated!
 
     """
-    The UUID of the round this turn is made in.
+    The round this turn is made in.
     """
-    roundId: ID!
+    round: Round!
 
     """
-    The UUID of the hand this turn is made by.
+    The the hand this turn is made by.
     """
-    handId: ID!
+    hand: PublicHand!
 
     """
-    The UUID of the trick this turn is made in.
+    The trick this turn is made in.
     """
-    trickId: ID!
+    trick: Trick!
 
     """
     The number of this turn, incrementally starting at 1.
@@ -695,7 +753,7 @@ input PlayCardInput {
     card: String!
 }
 
-type Call {
+type Call implements HasCreatedUpdated {
     """
     The UUID of this call.
     """
@@ -707,14 +765,14 @@ type Call {
     cu: CreatedUpdated!
 
     """
-    The UUID of the hand this call was made by.
+    The hand this call was made by.
     """
-    handId: ID!
+    hand: PublicHand!
 
     """
-    The UUID of the round this call was made in.
+    The round this call was made in.
     """
-    roundId: ID!
+    round: Round!
 
     """
     The type of this call.

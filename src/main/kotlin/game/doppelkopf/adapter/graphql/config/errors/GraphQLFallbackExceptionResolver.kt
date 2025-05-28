@@ -6,6 +6,8 @@ import graphql.ErrorType
 import graphql.GraphQLError
 import graphql.GraphqlErrorBuilder
 import graphql.schema.DataFetchingEnvironment
+import jakarta.validation.ConstraintViolation
+import jakarta.validation.ConstraintViolationException
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.graphql.execution.DataFetcherExceptionResolverAdapter
@@ -56,14 +58,46 @@ class GraphQLFallbackExceptionResolver : DataFetcherExceptionResolverAdapter(), 
     override fun resolveToMultipleErrors(ex: Throwable, env: DataFetchingEnvironment): List<GraphQLError>? {
         return when (ex) {
             // handle validation errors originating from the @Valid annotation
-            is MethodArgumentNotValidException -> ex.bindingResult.allErrors.map { error ->
-                when (error) {
-                    is FieldError -> resolveFieldError(error, env)
-                    else -> resolveObjectError(error, env)
-                }
-            }
+            is MethodArgumentNotValidException -> handleMethodArgumentNotValidException(ex, env)
+            is ConstraintViolationException -> handleConstraintValidationException(ex, env)
             // pass the exception to the resolveToSingleError method
             else -> null
+        }
+    }
+
+    private fun handleConstraintValidationException(
+        ex: ConstraintViolationException,
+        env: DataFetchingEnvironment
+    ): List<GraphQLError>? {
+        return ex.constraintViolations.map { violation ->
+            resolveViolation(violation, env)
+        }
+    }
+
+    private fun resolveViolation(violation: ConstraintViolation<*>, env: DataFetchingEnvironment): GraphQLError {
+        return GraphqlErrorBuilder
+            .newError(env)
+            .message("Validation failed for field '${violation.propertyPath}': ${violation.message}")
+            .errorType(ErrorType.ValidationError)
+            .extensions(
+                mapOf(
+                    "field" to violation.propertyPath.toString(),
+                    "rejectedValue" to violation.invalidValue,
+                    "message" to violation.message
+                )
+            )
+            .build()
+    }
+
+    private fun handleMethodArgumentNotValidException(
+        ex: MethodArgumentNotValidException,
+        env: DataFetchingEnvironment
+    ): List<GraphQLError> {
+        return ex.bindingResult.allErrors.map { error ->
+            when (error) {
+                is FieldError -> resolveFieldError(error, env)
+                else -> resolveObjectError(error, env)
+            }
         }
     }
 
