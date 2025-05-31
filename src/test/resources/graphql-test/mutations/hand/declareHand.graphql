@@ -1,4 +1,4 @@
-mutation declareHand($handId: ID!, $declaration: Declaration!) {
+mutation declareHand($handId: ID!, $declaration: DeclarationOption!) {
     declare(declareInput: {handId: $handId, declaration: $declaration}) {
         ...privateHandProperties
     }

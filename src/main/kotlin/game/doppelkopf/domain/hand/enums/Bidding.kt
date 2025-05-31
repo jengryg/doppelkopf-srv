@@ -12,20 +12,86 @@ enum class Bidding(
     val roundContract: RoundContract,
     val deckMode: DeckMode,
     val isSolo: Boolean,
+    val biddingPublic: BiddingPublic,
 ) {
-    NOTHING(roundContract = RoundContract.UNDECIDED, deckMode = DeckMode.DIAMONDS, isSolo = false),
+    NOTHING(
+        roundContract = RoundContract.UNDECIDED,
+        deckMode = DeckMode.DIAMONDS,
+        isSolo = false,
+        biddingPublic = BiddingPublic.NOTHING
+    ),
 
-    MARRIAGE(roundContract = RoundContract.MARRIAGE_UNRESOLVED, deckMode = DeckMode.DIAMONDS, isSolo = false),
+    MARRIAGE(
+        roundContract = RoundContract.MARRIAGE_UNRESOLVED,
+        deckMode = DeckMode.DIAMONDS,
+        isSolo = false,
+        biddingPublic = BiddingPublic.MARRIAGE
+    ),
 
-    SOLO_DIAMONDS(roundContract = RoundContract.SOLO, deckMode = DeckMode.DIAMONDS, isSolo = true),
-    SOLO_HEARTS(roundContract = RoundContract.SOLO, deckMode = DeckMode.HEARTS, isSolo = true),
-    SOLO_SPADES(roundContract = RoundContract.SOLO, deckMode = DeckMode.SPADES, isSolo = true),
-    SOLO_CLUBS(roundContract = RoundContract.SOLO, deckMode = DeckMode.CLUBS, isSolo = true),
+    SOLO_DIAMONDS(
+        roundContract = RoundContract.SOLO,
+        deckMode = DeckMode.DIAMONDS,
+        isSolo = true,
+        biddingPublic = BiddingPublic.SOLO_DIAMONDS
+    ),
+    SOLO_HEARTS(
+        roundContract = RoundContract.SOLO,
+        deckMode = DeckMode.HEARTS,
+        isSolo = true,
+        biddingPublic = BiddingPublic.SOLO_HEARTS
+    ),
+    SOLO_SPADES(
+        roundContract = RoundContract.SOLO,
+        deckMode = DeckMode.SPADES,
+        isSolo = true,
+        biddingPublic = BiddingPublic.SOLO_SPADES
+    ),
+    SOLO_CLUBS(
+        roundContract = RoundContract.SOLO,
+        deckMode = DeckMode.CLUBS,
+        isSolo = true,
+        biddingPublic = BiddingPublic.SOLO_CLUBS
+    ),
 
-    SOLO_QUEENS(roundContract = RoundContract.SOLO, deckMode = DeckMode.QUEENS, isSolo = true),
-    SOLO_JACKS(roundContract = RoundContract.SOLO, deckMode = DeckMode.JACKS, isSolo = true),
+    SOLO_QUEENS(
+        roundContract = RoundContract.SOLO,
+        deckMode = DeckMode.QUEENS,
+        isSolo = true,
+        biddingPublic = BiddingPublic.SOLO_QUEENS
+    ),
+    SOLO_JACKS(
+        roundContract = RoundContract.SOLO,
+        deckMode = DeckMode.JACKS,
+        isSolo = true,
+        biddingPublic = BiddingPublic.SOLO_JACKS
+    ),
 
-    SOLO_FREE(roundContract = RoundContract.SOLO, deckMode = DeckMode.FREE, isSolo = true),
+    SOLO_FREE(
+        roundContract = RoundContract.SOLO,
+        deckMode = DeckMode.FREE,
+        isSolo = true,
+        biddingPublic = BiddingPublic.SOLO_FREE
+    ),
+}
+
+/**
+ * [BiddingPublic] is used to communicate the choice of the players to each other.
+ * It does not directly hide something, but for consistency to the declarations we use it.
+ */
+enum class BiddingPublic {
+    NOTHING,
+
+    MARRIAGE,
+
+    SOLO_DIAMONDS,
+    SOLO_HEARTS,
+    SOLO_SPADES,
+    SOLO_CLUBS,
+
+    SOLO_QUEENS,
+    SOLO_JACKS,
+
+    SOLO_FREE,
 }
 
 /**

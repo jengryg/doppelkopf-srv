@@ -6,15 +6,15 @@ import game.doppelkopf.adapter.graphql.core.player.dto.Player
 import game.doppelkopf.adapter.graphql.core.round.dto.Round
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
-import game.doppelkopf.domain.hand.enums.Bidding
-import game.doppelkopf.domain.hand.enums.Declaration
+import game.doppelkopf.domain.hand.enums.BiddingPublic
+import game.doppelkopf.domain.hand.enums.DeclarationPublic
 import game.doppelkopf.domain.hand.enums.Team
 import java.util.*
 
 data class PublicHand(
     val id: UUID,
-    val declared: Declaration?,
-    val bid: Bidding?,
+    val declared: DeclarationPublic,
+    val bid: BiddingPublic,
     val team: Team?,
     private val _cu: Lazy<CreatedUpdated>,
     private val _player: Lazy<Player>,
@@ -28,8 +28,8 @@ data class PublicHand(
 
     constructor(entity: HandEntity, currentUser: UserEntity?) : this(
         id = entity.id,
-        declared = entity.declared,
-        bid = entity.bidding,
+        declared = entity.declared.declarationPublic,
+        bid = entity.bidding.biddingPublic,
         team = entity.publicTeam,
         _cu = lazy { CreatedUpdated(entity) },
         _player = lazy { Player(entity.player, currentUser) },

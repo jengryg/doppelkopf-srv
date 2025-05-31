@@ -23,7 +23,7 @@ data class Call(
         _cu = lazy { CreatedUpdated(entity) },
         _hand = lazy { PublicHand(entity.hand, currentUser) },
         callType = entity.callType,
-        // TODO: we may want to refactory the way the callType and identifiers are handled to simplify this
+        // TODO: we may want to refactor the way the callType and identifiers are handled to simplify this
         description = entity.callType.publicIdentifiers.get(entity.hand.publicTeam) ?: entity.callType.name,
         cardsPlayedBefore = entity.cardsPlayedBefore,
     )

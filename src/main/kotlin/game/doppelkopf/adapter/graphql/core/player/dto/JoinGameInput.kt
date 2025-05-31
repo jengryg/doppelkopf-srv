@@ -6,6 +6,6 @@ import java.util.*
 data class JoinGameInput(
     val gameId: UUID,
 
-    @field:Range(min = 0, max = 7)
+    @field:Range(min = 1, max = 7) // seat number 0 is automatically occupied by the game creator
     val seat: Int
 )

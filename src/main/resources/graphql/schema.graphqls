@@ -196,6 +196,11 @@ type Game implements HasCreatedUpdated & HasStartedEnded {
     playerLimit: Int!
 
     """
+    The current state of this game.
+    """
+    state: GameState!
+
+    """
     The players of this game.
     """
     players: [Player!]!
@@ -214,6 +219,15 @@ type Game implements HasCreatedUpdated & HasStartedEnded {
     The current active round of this game if there is one, otherwise null.
     """
     currentRound: Round
+}
+
+"""
+Indicates the current phase the game is in.
+"""
+enum GameState {
+    INITIALIZED
+    WAITING_FOR_DEAL
+    PLAYING_ROUND
 }
 
 """
@@ -318,7 +332,7 @@ type Round implements HasCreatedUpdated & HasStartedEnded {
     """
     The public contract information of the round.
     """
-    contract: RoundContract!
+    contract: RoundContractPublic!
 
     """
     The result of this round if available, otherwise null.
@@ -377,19 +391,19 @@ type PublicHand implements HasCreatedUpdated {
     round: Round!
 
     """
-    The declaration of this hand if it was already made, otherwise null.
+    The declaration of this hand if it was already made.
     """
-    declared: Declaration
+    declared: DeclarationPublic!
 
     """
-    The bid of this hand if it was already made, otherwise null.
+    The bid of this hand if it was already made.
     """
-    bid: Bidding
+    bid: BiddingPublic!
 
     """
     The team this hands plays on, from the viewpoint of other players in the game.
     """
-    team: Team
+    team: Team!
 
     """
     The calls made by this hand.
@@ -415,7 +429,7 @@ type PrivateHand {
     """
     The team this hands plays on, from the viewpoint of the player of this hand.
     """
-    team: Team
+    team: Team!
 
     """
     The cards that were already played by this hand.
@@ -429,26 +443,63 @@ type PrivateHand {
 }
 
 """
-The bids the players can make for their hands.
+The public bids that are derived from the bids the players can make for their hands.
+This enum is used for the communication out of the system.
 """
-enum Bidding {
+enum BiddingPublic {
+    NOTHING
+
     MARRIAGE
+
     SOLO_DIAMONDS
     SOLO_HEARTS
     SOLO_SPADES
     SOLO_CLUBS
+
     SOLO_QUEENS
     SOLO_JACKS
+
     SOLO_FREE
 }
 
 """
-The declarations the players can make for their hands.
+The bids the player can make for their hands.
+This enum is used for the communication into the system. It prevents the usage of NOTHING.
 """
-enum Declaration {
+enum BiddingOption {
+    MARRIAGE
+
+    SOLO_DIAMONDS
+    SOLO_HEARTS
+    SOLO_SPADES
+    SOLO_CLUBS
+
+    SOLO_QUEENS
+    SOLO_JACKS
+
+    SOLO_FREE
+}
+
+"""
+The public declarations that are derived from the declarations the players can make for their hands.
+This enum hides the SILENT_MARRIAGE option from the public.
+"""
+enum DeclarationPublic {
     NOTHING
     HEALTHY
     RESERVATION
+}
+
+"""
+The declaration options the player can make on their hands.
+This enum is used for the communication into the system. It prevents the usage of NOTHING and offers the SILENT_MARRIAGE
+option that is hidden to the outside in DeclarationPublic.
+"""
+enum DeclarationOption {
+    HEALTHY
+    SILENT_MARRIAGE
+    RESERVATION
+
 }
 
 """
@@ -457,7 +508,7 @@ Only possible if the specified hand belongs to the user.
 """
 input DeclareInput {
     handId: ID!
-    declaration: Declaration!
+    declaration: DeclarationOption!
 }
 
 """
@@ -466,7 +517,7 @@ Only possible if the specified hand belongs to the user.
 """
 input BidInput {
     handId: ID!
-    bid: Bidding!
+    bid: BiddingOption!
 }
 
 """
@@ -481,8 +532,9 @@ enum RoundState {
 
 """
 Indicates the specific variant of the round that is played based on the game rules.
+This enum hides the SILENT_MARRIAGE option from the public.
 """
-enum RoundContract {
+enum RoundContractPublic {
     UNDECIDED
     NORMAL
     MARRIAGE
@@ -507,8 +559,19 @@ type TeamedResult {
 
 """
 The Doppelkopf game has two teams playing against each other, RE and KO.
+This enum allows for the NA option if the team is not yet known.
 """
 enum Team {
+    NA
+    RE
+    KO
+}
+
+"""
+The Doppelkopf game has two teams playing against each other, RE and KO.
+This enum only allows these two options to reflect objects that can only have a definite Team assigned.
+"""
+enum DefiniteTeam {
     RE
     KO
 }
@@ -535,7 +598,7 @@ type RoundResult implements HasCreatedUpdated {
     """
     The team this result is for.
     """
-    team: Team!
+    team: DefiniteTeam!
 
     """
     The number of tricks this team obtained.

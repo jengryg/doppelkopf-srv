@@ -1,5 +1,5 @@
 query getTurn($id: ID!) {
-    trick(id: $id) {
-        ...trickProperties
+    turn(id: $id) {
+        ...turnProperties
     }
 }

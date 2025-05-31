@@ -1,4 +1,4 @@
-mutation bidHand($handId: ID!, $bidding: Bidding!) {
+mutation bidHand($handId: ID!, $bidding: BiddingOption!) {
     bid(bidInput: {handId: $handId, bid: $bidding}) {
         ...privateHandProperties
     }

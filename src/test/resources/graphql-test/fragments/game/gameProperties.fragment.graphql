@@ -1,6 +1,7 @@
 fragment gameProperties on Game {
     id
     playerLimit
+    state
     ...cu
     ...se
 }
