@@ -20,7 +20,7 @@ data class RoundResult(
     val round: Round by _round
     val points: PointsResult by _points
 
-    constructor(entity: ResultEntity, currentUser: UserEntity?) : this(
+    constructor(entity: ResultEntity, currentUser: UserEntity) : this(
         id = entity.id,
         team = entity.team,
         trickCount = entity.trickCount,

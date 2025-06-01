@@ -14,7 +14,7 @@ data class PrivateHand(
 ) {
     val public: PublicHand by _public
 
-    constructor(entity: HandEntity, currentUser: UserEntity?) : this(
+    constructor(entity: HandEntity, currentUser: UserEntity) : this(
         id = entity.id,
         _public = lazy { PublicHand(entity, currentUser) },
         team = entity.playerTeam,

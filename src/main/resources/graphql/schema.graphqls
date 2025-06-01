@@ -364,6 +364,11 @@ type Round implements HasCreatedUpdated & HasStartedEnded {
     The calls made in this round.
     """
     calls: [Call!]!
+
+    """
+    The turns made in this round.
+    """
+    turns: [Turn!]!
 }
 
 """
@@ -537,7 +542,8 @@ This enum hides the SILENT_MARRIAGE option from the public.
 enum RoundContractPublic {
     UNDECIDED
     NORMAL
-    MARRIAGE
+    MARRIAGE_UNRESOLVED
+    MARRIAGE_RESOLVED
     MARRIAGE_SOLO
     SOLO
 }

@@ -102,6 +102,10 @@ abstract class BaseGraphQLTest : BaseSpringBootTest(), Logging {
      */
     fun initializeWebTestClient(): WebTestClient.Builder {
         return WebTestClient.bindToServer().baseUrl(gqlUrl)
+            .codecs {
+                it.defaultCodecs()
+                    .maxInMemorySize(16_777_216) // 16 * 1024 * 1024 bytes
+            }
     }
 
     /**
@@ -112,6 +116,10 @@ abstract class BaseGraphQLTest : BaseSpringBootTest(), Logging {
     fun initializeWebTestClient(username: String, password: String): WebTestClient.Builder {
         return WebTestClient.bindToServer().baseUrl(gqlUrl)
             .defaultCookie("JSESSIONID", loginAndExtractSessionId(username, password))
+            .codecs {
+                it.defaultCodecs()
+                    .maxInMemorySize(16_777_216) // 16 * 1024 * 1024 bytes
+            }
     }
 
     private fun loginAndExtractSessionId(username: String, password: String): String {

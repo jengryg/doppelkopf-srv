@@ -25,7 +25,7 @@ data class Game(
     val rounds: List<Round> by _rounds
     val currentRound: Round? by _currentRound
 
-    constructor(entity: GameEntity, currentUser: UserEntity?) : this(
+    constructor(entity: GameEntity, currentUser: UserEntity) : this(
         id = entity.id,
         playerLimit = entity.maxNumberOfPlayers,
         state = entity.state,

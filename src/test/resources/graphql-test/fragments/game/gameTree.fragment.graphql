@@ -1,0 +1,12 @@
+fragment gameTree on Game {
+    ...gameProperties
+    players {
+        ...playerTree
+    }
+    player {
+        ...playerTree
+    }
+    rounds {
+        ...roundTree
+    }
+}

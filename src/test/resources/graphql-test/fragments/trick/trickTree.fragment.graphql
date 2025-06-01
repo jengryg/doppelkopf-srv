@@ -1,0 +1,6 @@
+fragment trickTree on Trick {
+    ...trickProperties
+    winner {
+        ...publicHandTree
+    }
+}

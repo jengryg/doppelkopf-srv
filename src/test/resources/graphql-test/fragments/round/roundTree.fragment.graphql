@@ -1,0 +1,27 @@
+fragment roundTree on Round {
+    ...roundProperties
+    game {
+        id
+    }
+    dealer {
+        ...playerTree
+    }
+    hand {
+        ...privateHandTree
+    }
+    hands {
+        ...publicHandTree
+    }
+    calls {
+        ...callTree
+    }
+    tricks {
+        ...trickTree
+    }
+    currentTrick {
+        ...trickTree
+    }
+    turns {
+        ...turnTree
+    }
+}

@@ -1,0 +1,10 @@
+fragment playerTree on Player {
+    ...playerProperties
+    game {
+        id
+    }
+    user {
+        id
+        name
+    }
+}

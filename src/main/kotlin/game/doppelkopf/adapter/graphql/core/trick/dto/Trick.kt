@@ -26,7 +26,7 @@ data class Trick(
     val round: Round by _round
     val winner: PublicHand? by _winner
 
-    constructor(entity: TrickEntity, currentUser: UserEntity?) : this(
+    constructor(entity: TrickEntity, currentUser: UserEntity) : this(
         id = entity.id,
         cards = entity.cards,
         number = entity.number,

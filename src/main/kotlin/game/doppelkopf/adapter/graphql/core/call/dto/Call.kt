@@ -18,7 +18,7 @@ data class Call(
     val cu: CreatedUpdated by _cu
     val hand: PublicHand by _hand
 
-    constructor(entity: CallEntity, currentUser: UserEntity?) : this(
+    constructor(entity: CallEntity, currentUser: UserEntity) : this(
         id = entity.id,
         _cu = lazy { CreatedUpdated(entity) },
         _hand = lazy { PublicHand(entity.hand, currentUser) },

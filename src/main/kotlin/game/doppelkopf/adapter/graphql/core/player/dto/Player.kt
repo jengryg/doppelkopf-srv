@@ -19,7 +19,7 @@ data class Player(
     val game: Game by _game
     val user: PublicUser by _user
 
-    constructor(entity: PlayerEntity, currentUser: UserEntity?) : this(
+    constructor(entity: PlayerEntity, currentUser: UserEntity) : this(
         id = entity.id,
         seat = entity.seat,
         dealer = entity.dealer,

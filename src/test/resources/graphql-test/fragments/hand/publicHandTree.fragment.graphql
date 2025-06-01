@@ -1,0 +1,9 @@
+fragment publicHandTree on PublicHand {
+    ...publicHandProperties
+    round {
+        id
+    }
+    player {
+        ...playerTree
+    }
+}

@@ -1,0 +1,12 @@
+fragment turnTree on Turn {
+    ...turnProperties
+    round {
+        id
+    }
+    hand {
+        id
+    }
+    trick {
+        id
+    }
+}

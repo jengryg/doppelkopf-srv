@@ -1,0 +1,9 @@
+fragment privateHandTree on PrivateHand {
+    id
+    team
+    cardsPlayed
+    cardsRemaining
+    public {
+        ...publicHandTree
+    }
+}

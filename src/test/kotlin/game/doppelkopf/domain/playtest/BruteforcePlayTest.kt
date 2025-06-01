@@ -84,7 +84,7 @@ class BruteforcePlayTest : BaseSpringBootTest(), Logging {
             }
 
             log.atInfo()
-                .setMessage { "Finished round in bruteforce strategy." }
+                .setMessage { "Finished round in BruteForce strategy." }
                 .addKeyValue("game", game)
                 .addKeyValue("round", round)
                 .addKeyValue("number", it)
@@ -169,7 +169,7 @@ class BruteforcePlayTest : BaseSpringBootTest(), Logging {
             )
         }.onFailure {
             log.atDebug()
-                .setMessage { "Could not make bid." }
+                .setMessage { "Could not make declaration." }
                 .addKeyValue("user", user)
                 .addKeyValue("round", round)
                 .addKeyValue("declaration", declarationOption)
@@ -221,7 +221,6 @@ class BruteforcePlayTest : BaseSpringBootTest(), Logging {
         repeat(3) {
             // The next 3 players are playing in their seating order behind the one that started.
             val played = `bruteforce the next card to play`(round, testPlayers[(playerIndex + it + 1) % 4])
-            println("Card ${it + 1} in trick $expectedTrickNumber was played: $played")
             assertThat(played).isTrue
         }
 
@@ -248,7 +247,6 @@ class BruteforcePlayTest : BaseSpringBootTest(), Logging {
             }
 
             if (result.isSuccess) {
-                println("Card played by ${user.username}: $card remaining cards in hand: ${round.hands.single { it.player.user.id == user.id }.cardsRemaining}")
                 return true
             }
         }

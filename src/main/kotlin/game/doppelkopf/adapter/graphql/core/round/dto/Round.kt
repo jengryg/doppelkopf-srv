@@ -8,9 +8,10 @@ import game.doppelkopf.adapter.graphql.core.hand.dto.PrivateHand
 import game.doppelkopf.adapter.graphql.core.hand.dto.PublicHand
 import game.doppelkopf.adapter.graphql.core.player.dto.Player
 import game.doppelkopf.adapter.graphql.core.trick.dto.Trick
+import game.doppelkopf.adapter.graphql.core.turn.dto.Turn
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
-import game.doppelkopf.domain.round.enums.RoundContract
+import game.doppelkopf.domain.round.enums.RoundContractPublic
 import game.doppelkopf.domain.round.enums.RoundState
 import game.doppelkopf.utils.Teamed
 import java.util.*
@@ -19,7 +20,7 @@ data class Round(
     val id: UUID,
     val number: Int,
     val state: RoundState,
-    val contract: RoundContract,
+    val contract: RoundContractPublic,
     private val _cu: Lazy<CreatedUpdated>,
     private val _se: Lazy<StartedEnded>,
     private val _game: Lazy<Game>,
@@ -30,6 +31,7 @@ data class Round(
     private val _currentTrick: Lazy<Trick?>,
     private val _calls: Lazy<List<Call>>,
     private val _teamedResult: Lazy<TeamedResult?>,
+    private val _turns: Lazy<List<Turn>>,
 ) {
     val cu: CreatedUpdated by _cu
     val se: StartedEnded by _se
@@ -41,19 +43,20 @@ data class Round(
     val currentTrick: Trick? by _currentTrick
     val calls: List<Call> by _calls
     val result: TeamedResult? by _teamedResult
+    val turns: List<Turn> by _turns
 
-    constructor(entity: RoundEntity, currentUser: UserEntity?) : this(
+    constructor(entity: RoundEntity, currentUser: UserEntity) : this(
         id = entity.id,
         number = entity.number,
         state = entity.state,
-        contract = entity.contract,
+        contract = entity.contract.roundContractPublic,
         _cu = lazy { CreatedUpdated(entity) },
         _se = lazy { StartedEnded(entity) },
         _game = lazy { Game(entity.game, currentUser) },
         _dealer = lazy { Player(entity.dealer, currentUser) },
         _hands = lazy { entity.hands.map { PublicHand(it, currentUser) } },
         _hand = lazy {
-            currentUser?.let {
+            currentUser.let {
                 entity.hands.singleOrNull { h -> h.player.user.id == it.id }
             }?.let { PrivateHand(it, currentUser) }
         },
@@ -67,6 +70,7 @@ data class Round(
                     ko = RoundResult(ko, currentUser)
                 )
             }
-        }
+        },
+        _turns = lazy { entity.turns.map { Turn(it, currentUser) } }
     )
 }

@@ -26,7 +26,7 @@ data class PublicHand(
     val round: Round by _round
     val calls: List<Call> by _calls
 
-    constructor(entity: HandEntity, currentUser: UserEntity?) : this(
+    constructor(entity: HandEntity, currentUser: UserEntity) : this(
         id = entity.id,
         declared = entity.declared.declarationPublic,
         bid = entity.bidding.biddingPublic,

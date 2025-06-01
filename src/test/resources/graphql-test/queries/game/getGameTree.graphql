@@ -1,0 +1,5 @@
+query getGameTree($id: ID!) {
+    game(id: $id) {
+        ...gameTree
+    }
+}

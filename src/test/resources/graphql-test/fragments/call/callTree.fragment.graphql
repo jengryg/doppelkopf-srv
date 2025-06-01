@@ -1,0 +1,9 @@
+fragment callTree on Call {
+    ...callProperties
+    hand {
+        id
+    }
+    round {
+        id
+    }
+}

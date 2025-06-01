@@ -14,8 +14,8 @@ enum class RoundContract(
     SILENT_MARRIAGE(RoundContractPublic.NORMAL),
 
     // MARRIAGE starts in unresolved state and turns to resolved or SOLO during the round.
-    MARRIAGE_UNRESOLVED(RoundContractPublic.MARRIAGE),
-    MARRIAGE_RESOLVED(RoundContractPublic.MARRIAGE),
+    MARRIAGE_UNRESOLVED(RoundContractPublic.MARRIAGE_UNRESOLVED),
+    MARRIAGE_RESOLVED(RoundContractPublic.MARRIAGE_RESOLVED),
     MARRIAGE_SOLO(RoundContractPublic.MARRIAGE_SOLO),
 
     SOLO(RoundContractPublic.SOLO),
@@ -28,7 +28,8 @@ enum class RoundContract(
 enum class RoundContractPublic {
     UNDECIDED,
     NORMAL,
-    MARRIAGE,
+    MARRIAGE_UNRESOLVED,
+    MARRIAGE_RESOLVED,
     MARRIAGE_SOLO,
     SOLO
 }

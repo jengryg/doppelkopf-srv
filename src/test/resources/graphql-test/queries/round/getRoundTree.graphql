@@ -1,0 +1,5 @@
+query getRoundTree($id: ID!) {
+    round(id: $id) {
+        ...roundTree
+    }
+}
