@@ -80,7 +80,7 @@ class HandControllerTest : BaseRestAssuredTest() {
             response.forEach {
                 assertThat(it.roundId).isEqualTo(round.id)
                 assertThat(it.publicTeam).isEqualTo(Team.NA)
-                assertThat(it.bid).isEqualTo(Bidding.NOTHING)
+                assertThat(it.bid).isEqualTo(BiddingPublic.NOTHING)
                 assertThat(it.declared).isEqualTo(DeclarationPublic.NOTHING)
             }
         }

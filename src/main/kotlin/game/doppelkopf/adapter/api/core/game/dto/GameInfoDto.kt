@@ -3,6 +3,7 @@ package game.doppelkopf.adapter.api.core.game.dto
 import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoDto
 import game.doppelkopf.adapter.api.user.dto.PublicUserInfoDto
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
+import game.doppelkopf.domain.game.enums.GameState
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.Instant
 import java.util.*
@@ -44,7 +45,12 @@ class GameInfoDto(
     @Schema(
         description = "The users that have already joined this game."
     )
-    val players: List<PlayerInfoDto>
+    val players: List<PlayerInfoDto>,
+
+    @Schema(
+        description = "The current state of this game."
+    )
+    val state: GameState,
 ) {
     constructor(entity: GameEntity) : this(
         id = entity.id,
@@ -53,6 +59,7 @@ class GameInfoDto(
         started = entity.started,
         ended = entity.ended,
         creator = PublicUserInfoDto(entity.creator),
-        players = entity.players.map { PlayerInfoDto(it) }
+        players = entity.players.map { PlayerInfoDto(it) },
+        state = entity.state,
     )
 }

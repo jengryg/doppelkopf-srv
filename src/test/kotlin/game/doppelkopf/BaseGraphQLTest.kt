@@ -1,5 +1,7 @@
 package game.doppelkopf
 
+import game.doppelkopf.adapter.graphql.core.game.dto.GameTreeResponse
+import game.doppelkopf.adapter.graphql.core.round.dto.RoundTreeResponse
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
 import org.junit.jupiter.api.BeforeAll
@@ -11,6 +13,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
+import java.util.UUID
 
 /**
  * Set up the SpringBoot Integration testing for GraphQL based API testing against the Spring Web Environment.
@@ -135,7 +138,56 @@ abstract class BaseGraphQLTest : BaseSpringBootTest(), Logging {
                     Mono.error(IllegalStateException("Login failed: ${response.statusCode()}"))
                 }
             }.block() ?: throw IllegalStateException("Could not obtain JSESSIONID for $username.")
+    }
 
+    protected fun getGameTree(gameId: UUID): GameTreeResponse {
+        return gqlUserTester.documentName("getGameTree")
+            .fragName("gameTree")
+            .fragName("playerTree")
+            .fragName("roundTree")
+            .fragName("privateHandTree")
+            .fragName("publicHandTree")
+            .fragName("callTree")
+            .fragName("trickTree")
+            .fragName("turnTree")
+            .fragName("gameProperties")
+            .fragName("playerProperties")
+            .fragName("roundProperties")
+            .fragName("publicHandProperties")
+            .fragName("trickProperties")
+            .fragName("turnProperties")
+            .fragName("callProperties")
+            .fragName("resultProperties")
+            .fragName("cu")
+            .fragName("se")
+            .fragName("sq")
+            .variable("id", gameId)
+            .execute()
+            .toSingleEntity<GameTreeResponse>()
+    }
+
+    protected fun getRoundTree(roundId: UUID): RoundTreeResponse {
+        return gqlUserTester.documentName("getRoundTree")
+            .fragName("playerTree")
+            .fragName("roundTree")
+            .fragName("privateHandTree")
+            .fragName("publicHandTree")
+            .fragName("callTree")
+            .fragName("trickTree")
+            .fragName("turnTree")
+            .fragName("playerProperties")
+            .fragName("roundProperties")
+            .fragName("publicHandProperties")
+            .fragName("trickProperties")
+            .fragName("turnProperties")
+            .fragName("callProperties")
+            .fragName("resultProperties")
+            .fragName("cu")
+            .fragName("se")
+            .fragName("sq")
+            .variable("id", roundId)
+            .execute()
+            .toSingleEntity<RoundTreeResponse>()
     }
 }
 

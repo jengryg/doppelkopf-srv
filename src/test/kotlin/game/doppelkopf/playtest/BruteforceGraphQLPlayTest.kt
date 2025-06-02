@@ -3,9 +3,7 @@ package game.doppelkopf.playtest
 import com.fasterxml.jackson.databind.ObjectMapper
 import game.doppelkopf.BaseGraphQLTest
 import game.doppelkopf.adapter.graphql.core.game.dto.GameResponse
-import game.doppelkopf.adapter.graphql.core.game.dto.GameTreeResponse
 import game.doppelkopf.adapter.graphql.core.round.dto.RoundResponse
-import game.doppelkopf.adapter.graphql.core.round.dto.RoundTreeResponse
 import game.doppelkopf.domain.deck.enums.DeckMode
 import game.doppelkopf.domain.deck.model.Deck
 import game.doppelkopf.domain.game.enums.GameState
@@ -42,7 +40,7 @@ class BruteforceGraphQLPlayTest : BaseGraphQLTest(), Logging {
 
     private lateinit var gqlTesters: List<HttpGraphQlTester>
 
-    val cards = Deck.create(DeckMode.DIAMONDS).cards.values.map { it.encoded }
+    private val cards = Deck.create(DeckMode.DIAMONDS).cards.values.map { it.encoded }
 
     @OptIn(ExperimentalEncodingApi::class)
     @Test
@@ -307,55 +305,5 @@ class BruteforceGraphQLPlayTest : BaseGraphQLTest(), Logging {
         }
 
         return false
-    }
-
-    private fun getGameTree(gameId: UUID): GameTreeResponse {
-        return gqlUserTester.documentName("getGameTree")
-            .fragName("gameTree")
-            .fragName("playerTree")
-            .fragName("roundTree")
-            .fragName("privateHandTree")
-            .fragName("publicHandTree")
-            .fragName("callTree")
-            .fragName("trickTree")
-            .fragName("turnTree")
-            .fragName("gameProperties")
-            .fragName("playerProperties")
-            .fragName("roundProperties")
-            .fragName("publicHandProperties")
-            .fragName("trickProperties")
-            .fragName("turnProperties")
-            .fragName("callProperties")
-            .fragName("resultProperties")
-            .fragName("cu")
-            .fragName("se")
-            .fragName("sq")
-            .variable("id", gameId)
-            .execute()
-            .toSingleEntity<GameTreeResponse>()
-    }
-
-    private fun getRoundTree(roundId: UUID): RoundTreeResponse {
-        return gqlUserTester.documentName("getRoundTree")
-            .fragName("playerTree")
-            .fragName("roundTree")
-            .fragName("privateHandTree")
-            .fragName("publicHandTree")
-            .fragName("callTree")
-            .fragName("trickTree")
-            .fragName("turnTree")
-            .fragName("playerProperties")
-            .fragName("roundProperties")
-            .fragName("publicHandProperties")
-            .fragName("trickProperties")
-            .fragName("turnProperties")
-            .fragName("callProperties")
-            .fragName("resultProperties")
-            .fragName("cu")
-            .fragName("se")
-            .fragName("sq")
-            .variable("id", roundId)
-            .execute()
-            .toSingleEntity<RoundTreeResponse>()
     }
 }

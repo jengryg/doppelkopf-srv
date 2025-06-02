@@ -137,12 +137,12 @@ Object metadata that tracks when an object was started and ended.
 """
 type StartedEnded {
     """
-    The game was started at this moment. If this is null, the game was not started yet.
+    The parent object was started at this moment. If this is null, the parent object was not started yet.
     """
     started: Instant
 
     """
-    The game was ended at this moment. If this is null, the game was not ended yet.
+    The parent object was ended at this moment. If this is null, the parent object was not ended yet.
     """
     ended: Instant
 }

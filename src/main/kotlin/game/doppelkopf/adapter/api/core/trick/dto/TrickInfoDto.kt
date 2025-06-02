@@ -45,7 +45,7 @@ class TrickInfoDto(
     @Schema(
         description = "The winner of this trick if known, otherwise null."
     )
-    val winner: HandPublicInfoDto?
+    val winner: HandPublicInfoDto?,
 ) {
     constructor(
         trickEntity: TrickEntity

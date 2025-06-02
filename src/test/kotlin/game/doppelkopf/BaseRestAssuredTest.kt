@@ -13,7 +13,6 @@ import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import org.junit.jupiter.api.BeforeAll
 import org.springframework.http.HttpHeaders
-import java.util.*
 
 /**
  * Set up the SpringBoot Integration testing for RestAssured based API testing against the Spring Web Environment.
@@ -67,16 +66,21 @@ abstract class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
      *
      * @param path for HTTP POST
      * @param expectedStatus the HTTP Status Code of the response we expect
+     * @param login credentials to use for the login, uses [testUser] when null given
      *
      * @return the Pair containing the response cast to [T] and the location reference for the resource as [String] if
      * the location header was present in the response
      */
     protected final inline fun <reified T> createResource(
         path: String,
-        expectedStatus: Int
+        expectedStatus: Int,
+        login: Login? = null,
     ): Pair<T, String?> {
         return Given {
             contentType(ContentType.JSON)
+            login?.let {
+                auth().form(login.username, login.password, formAuthConfig)
+            } ?: this
         } When {
             post(path)
         } Then {
@@ -103,6 +107,7 @@ abstract class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
      *
      * @param path for HTTP POST
      * @param expectedStatus the HTTP Status Code of the response we expect
+     * @param login credentials to use for the login, uses [testUser] when null given
      *
      * @return the Pair containing the response cast to [T] and the location reference for the resource as [String] if
      * the location header was present in the response
@@ -111,15 +116,20 @@ abstract class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
         path: String,
         body: S,
         expectedStatus: Int,
+        login: Login? = null,
     ): Pair<T, String?> {
         return Given {
             contentType(ContentType.JSON)
             body(body)
+            login?.let {
+                auth().form(login.username, login.password, formAuthConfig)
+            } ?: this
         } When {
             post(path)
         } Then {
             statusCode(expectedStatus)
         } Extract {
+            print(String(response().asByteArray()))
             Pair(
                 first = response().`as`(T::class.java),
                 second = response().headers.let {
@@ -140,6 +150,7 @@ abstract class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
      *
      * @param path for HTTP PATCH
      * @param expectedStatus the HTTP Status Code of the response we expect
+     * @param login credentials to use for the login, uses [testUser] when null given
      *
      * @return the response body cast to [T]
      */
@@ -147,10 +158,14 @@ abstract class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
         path: String,
         body: S,
         expectedStatus: Int,
+        login: Login? = null,
     ): T {
         return Given {
             contentType(ContentType.JSON)
             body(body)
+            login?.let {
+                auth().form(login.username, login.password, formAuthConfig)
+            } ?: this
         } When {
             patch(path)
         } Then {
@@ -169,15 +184,19 @@ abstract class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
      *
      * @param path for HTTP GET
      * @param expectedStatus the HTTP Status Code of the response we expect
+     * @param login credentials to use for the login, uses [testUser] when null given
      *
      * @return the response body cast to [T]
      */
     protected final inline fun <reified T> getResource(
         path: String,
-        expectedStatus: Int
+        expectedStatus: Int,
+        login: Login? = null,
     ): T {
         return Given {
-            this
+            login?.let {
+                auth().form(login.username, login.password, formAuthConfig)
+            } ?: this
         } When {
             get(path)
         } Then {
@@ -197,6 +216,7 @@ abstract class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
      *
      * @param path for HTTP GET
      * @param expectedStatus the HTTP Status Code of the response we expect
+     * @param login credentials to use for the login, uses [testUser] when null given
      *
      * @return the response body cast to a [List] of [T]
      *
@@ -204,10 +224,13 @@ abstract class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
      */
     protected final inline fun <reified T> getResourceList(
         path: String,
-        expectedStatus: Int
+        expectedStatus: Int,
+        login: Login? = null,
     ): List<T> {
         return Given {
-            this
+            login?.let {
+                auth().form(login.username, login.password, formAuthConfig)
+            } ?: this
         } When {
             get(path)
         } Then {
@@ -216,4 +239,6 @@ abstract class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
             response().jsonPath().getList("$", T::class.java)
         }
     }
+
+    inner class Login(val username: String, val password: String)
 }

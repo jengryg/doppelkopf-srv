@@ -1,7 +1,7 @@
 package game.doppelkopf.adapter.api.core.hand.dto
 
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
-import game.doppelkopf.domain.hand.enums.Bidding
+import game.doppelkopf.domain.hand.enums.BiddingPublic
 import game.doppelkopf.domain.hand.enums.DeclarationPublic
 import game.doppelkopf.domain.hand.enums.Team
 import io.swagger.v3.oas.annotations.media.Schema
@@ -34,7 +34,7 @@ class HandPublicInfoDto(
     @Schema(
         description = "The bid of this hand."
     )
-    val bid: Bidding,
+    val bid: BiddingPublic,
 
     @Schema(
         description = "The team this hands plays on, from the viewpoint of other players in the game.",
@@ -46,7 +46,7 @@ class HandPublicInfoDto(
         roundId = handEntity.round.id,
         playerId = handEntity.player.id,
         declared = handEntity.declared.declarationPublic,
-        bid = handEntity.bidding,
+        bid = handEntity.bidding.biddingPublic,
         publicTeam = handEntity.publicTeam,
     )
 }

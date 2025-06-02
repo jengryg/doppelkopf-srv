@@ -7,6 +7,7 @@ import game.doppelkopf.domain.round.enums.RoundContractPublic
 import game.doppelkopf.domain.round.enums.RoundState
 import game.doppelkopf.utils.Teamed
 import io.swagger.v3.oas.annotations.media.Schema
+import java.time.Instant
 import java.util.*
 
 @Schema(
@@ -46,7 +47,17 @@ class RoundInfoDto(
     @Schema(
         description = "The result of this round if available, otherwise null."
     )
-    val result: Teamed<ResultInfoDto>?
+    val result: Teamed<ResultInfoDto>?,
+
+    @Schema(
+        description = "The round was started at this moment. If this is null, the round was not started yet."
+    )
+    val started: Instant?,
+
+    @Schema(
+        description = "The round was ended at this moment. If this is null, the round was not ended yet."
+    )
+    val ended: Instant?,
 ) {
     constructor(roundEntity: RoundEntity) : this(
         id = roundEntity.id,
@@ -56,5 +67,7 @@ class RoundInfoDto(
         state = roundEntity.state,
         contract = roundEntity.contract.roundContractPublic,
         result = Teamed.from(roundEntity.results) { it.team.internal }?.map { ResultInfoDto(it) },
+        started = roundEntity.started,
+        ended = roundEntity.ended,
     )
 }
