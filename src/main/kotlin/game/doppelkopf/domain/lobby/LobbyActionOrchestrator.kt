@@ -14,7 +14,8 @@ class LobbyActionOrchestrator(
     fun execute(action: LobbyActionCreateNewGame): GameEntity {
         val command = LobbyCommandCreateNewGame(
             user = action.user.entity,
-            playerLimit = action.playerLimit
+            playerLimit = action.playerLimit,
+            seed = action.seed,
         )
 
         return lobbyEngine.execute(command)

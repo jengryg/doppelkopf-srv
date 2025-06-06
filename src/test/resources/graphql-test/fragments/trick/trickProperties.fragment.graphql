@@ -1,10 +1,12 @@
 fragment trickProperties on Trick {
     id
     number
+    state
     demand
     openIndex
     leadingCardIndex
     cards
+    score
     ...cu
     ...se
 }

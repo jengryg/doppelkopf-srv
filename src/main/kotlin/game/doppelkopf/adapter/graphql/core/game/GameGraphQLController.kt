@@ -48,7 +48,8 @@ class GameGraphQLController(
         return lobbyActionOrchestrator.execute(
             action = LobbyActionCreateNewGame(
                 user = userDetails,
-                playerLimit = createGameInput.playerLimit
+                playerLimit = createGameInput.playerLimit,
+                seed = createGameInput.seed,
             )
         ).let {
             Game(it, userDetails.entity)

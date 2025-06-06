@@ -7,5 +7,6 @@ import game.doppelkopf.security.UserDetails
  */
 class LobbyActionCreateNewGame(
     override val user: UserDetails,
-    val playerLimit: Int
+    val playerLimit: Int,
+    val seed: ByteArray?,
 ) : ILobbyAction

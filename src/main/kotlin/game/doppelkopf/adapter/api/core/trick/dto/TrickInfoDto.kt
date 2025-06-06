@@ -3,7 +3,9 @@ package game.doppelkopf.adapter.api.core.trick.dto
 import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoDto
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.domain.deck.enums.CardDemand
+import game.doppelkopf.domain.trick.enums.TrickState
 import io.swagger.v3.oas.annotations.media.Schema
+import java.time.Instant
 import java.util.*
 
 class TrickInfoDto(
@@ -28,6 +30,21 @@ class TrickInfoDto(
     val number: Int,
 
     @Schema(
+        description = "The current state of this trick."
+    )
+    val state: TrickState,
+
+    @Schema(
+        description = "The trick was started at this moment. If this is null, the trick was not started yet."
+    )
+    val started: Instant?,
+
+    @Schema(
+        description = "The trick was ended at this moment. If this is null, the trick was not ended yet."
+    )
+    val ended: Instant?,
+
+    @Schema(
         description = "The demand of this trick."
     )
     val demand: CardDemand,
@@ -46,6 +63,11 @@ class TrickInfoDto(
         description = "The winner of this trick if known, otherwise null."
     )
     val winner: HandPublicInfoDto?,
+
+    @Schema(
+        description = "The current score of this trick."
+    )
+    val score: Int,
 ) {
     constructor(
         trickEntity: TrickEntity
@@ -54,9 +76,13 @@ class TrickInfoDto(
         roundId = trickEntity.round.id,
         cards = trickEntity.cards.toList(),
         number = trickEntity.number,
+        state = trickEntity.state,
+        started = trickEntity.started,
+        ended = trickEntity.ended,
         demand = trickEntity.demand,
         openIndex = trickEntity.openIndex,
         leadingCardIndex = trickEntity.leadingCardIndex,
-        winner = trickEntity.winner?.let { HandPublicInfoDto(it) }
+        winner = trickEntity.winner?.let { HandPublicInfoDto(it) },
+        score = trickEntity.score,
     )
 }

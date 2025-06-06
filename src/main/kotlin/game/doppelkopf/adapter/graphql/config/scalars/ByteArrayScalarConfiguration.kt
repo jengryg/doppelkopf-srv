@@ -9,41 +9,38 @@ import graphql.schema.idl.RuntimeWiring
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.graphql.execution.RuntimeWiringConfigurer
-import java.time.Instant
 import java.util.*
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
-
-/**
- * Custom graphql type `Instant` for [Instant].
- */
 @Configuration
-class InstantScalarConfiguration {
+class ByteArrayScalarConfiguration {
     @Bean
-    fun instantScalar(): GraphQLScalarType {
+    fun byteArrayScalar(): GraphQLScalarType {
         return GraphQLScalarType.newScalar()
-            .name("Instant")
-            .description("Instant in time.")
-            .coercing(InstantCoercing())
+            .name("ByteArray")
+            .description("Array of bytes.")
+            .coercing(ByteArrayCoercing())
             .build()
     }
 
     @Bean
-    fun runtimeWiringConfigurerForInstanceScalar(): RuntimeWiringConfigurer {
-        return RuntimeWiringConfigurer { builder: RuntimeWiring.Builder? -> builder!!.scalar(instantScalar()) }
+    fun runtimeWiringConfigurerForByteArrayScalar(): RuntimeWiringConfigurer {
+        return RuntimeWiringConfigurer { builder: RuntimeWiring.Builder? -> builder!!.scalar(byteArrayScalar()) }
     }
 
-    inner class InstantCoercing : Coercing<Instant, String> {
+    inner class ByteArrayCoercing : Coercing<ByteArray, String> {
         override fun serialize(
             dataFetcherResult: Any,
             graphQLContext: GraphQLContext,
             locale: Locale
         ): String {
             when (dataFetcherResult) {
-                is Instant -> return runCatching { serializer(dataFetcherResult) }.getOrElse {
-                    throw CoercingSerializeException("Could not serialize Instant.", it)
+                is ByteArray -> return runCatching { serializer(dataFetcherResult) }.getOrElse {
+                    throw CoercingSerializeException("Could not serialize ByteArray.", it)
                 }
 
-                else -> throw CoercingSerializeException("Given dataFetcherResult is not an Instant type.")
+                else -> throw CoercingSerializeException("Given dataFetcherResult is not an ByteArray type.")
             }
         }
 
@@ -51,13 +48,13 @@ class InstantScalarConfiguration {
             input: Any,
             graphQLContext: GraphQLContext,
             locale: Locale
-        ): Instant {
+        ): ByteArray {
             when (input) {
                 is String -> return runCatching { parser(input) }.getOrElse {
-                    throw CoercingParseValueException("Could not parse input $input to Instant.", it)
+                    throw CoercingParseValueException("Could not parse input $input to ByteArray.", it)
                 }
 
-                else -> throw CoercingParseValueException("Given input is not a String type.")
+                else -> throw CoercingParseValueException("Given input is not an String type.")
             }
         }
 
@@ -66,10 +63,10 @@ class InstantScalarConfiguration {
             variables: CoercedVariables,
             graphQLContext: GraphQLContext,
             locale: Locale
-        ): Instant {
+        ): ByteArray? {
             when (input) {
                 is StringValue -> return runCatching { parser(input.value) }.getOrElse {
-                    throw CoercingParseLiteralException("Could not parse input ${input.value} to Instant.", it)
+                    throw CoercingParseLiteralException("Could not parse input ${input.value} to ByteArray.", it)
                 }
 
                 else -> throw CoercingParseLiteralException("Given input is not a StringValue type.")
@@ -84,12 +81,14 @@ class InstantScalarConfiguration {
             return StringValue(input.toString())
         }
 
-        private fun serializer(instant: Instant): String {
-            return instant.toString()
+        @OptIn(ExperimentalEncodingApi::class)
+        private fun serializer(bytes: ByteArray): String {
+            return Base64.UrlSafe.withPadding(Base64.PaddingOption.PRESENT).encode(bytes)
         }
 
-        private fun parser(input: String): Instant {
-            return Instant.parse(input)
+        @OptIn(ExperimentalEncodingApi::class)
+        private fun parser(input: String): ByteArray {
+            return Base64.UrlSafe.withPadding(Base64.PaddingOption.PRESENT).decode(input)
         }
     }
 }

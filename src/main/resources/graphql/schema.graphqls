@@ -5,6 +5,11 @@ Example: 2011-12-03T10:15:30Z
 scalar Instant
 
 """
+An array of bytes, encoded as url-safe Base64 with mandatory padding.
+"""
+scalar ByteArray
+
+"""
 All queries this graphQL API supports.
 """
 type Query {
@@ -238,6 +243,11 @@ input CreateGameInput {
     How many players are at most allowed to join the game.
     """
     playerLimit: Int!
+
+    """
+    The seed to use for the game encoded as Base64. If null, a random seed is generated
+    """
+    seed: ByteArray
 }
 
 """
@@ -735,6 +745,11 @@ type Trick implements HasCreatedUpdated & HasStartedEnded {
     number: Int!
 
     """
+    The current state of this trick.
+    """
+    state: TrickState!
+
+    """
     The demand of this trick.
     """
     demand: CardDemand!
@@ -753,6 +768,21 @@ type Trick implements HasCreatedUpdated & HasStartedEnded {
     The winner of this trick if known, otherwise null.
     """
     winner: PublicHand
+
+    """
+    The current score of this trick.
+    """
+    score: Int!
+}
+
+"""
+Indicates the current phase the trick is in.
+"""
+enum TrickState {
+    FIRST_CARD_PLAYED
+    SECOND_CARD_PLAYED
+    THIRD_CARD_PLAYED
+    FOURTH_CARD_PLAYED
 }
 
 """

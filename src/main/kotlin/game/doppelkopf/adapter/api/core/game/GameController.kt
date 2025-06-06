@@ -51,7 +51,8 @@ class GameController(
         val game = lobbyActionOrchestrator.execute(
             action = LobbyActionCreateNewGame(
                 user = userDetails,
-                playerLimit = gameCreateDto.playerLimit
+                playerLimit = gameCreateDto.playerLimit,
+                seed = gameCreateDto.seed,
             ),
         )
 

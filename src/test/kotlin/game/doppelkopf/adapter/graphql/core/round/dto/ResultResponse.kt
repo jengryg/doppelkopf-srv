@@ -1,12 +1,12 @@
 package game.doppelkopf.adapter.graphql.core.round.dto
 
 import game.doppelkopf.adapter.graphql.common.CreatedUpdated
-import game.doppelkopf.domain.hand.enums.Team
+import game.doppelkopf.domain.hand.enums.DefiniteTeam
 import java.util.*
 
 data class ResultResponse(
     val id: UUID,
-    val team: Team,
+    val team: DefiniteTeam,
     val trickCount: Int,
     val scoreObtained: Int,
     val scoreTarget: Int,
