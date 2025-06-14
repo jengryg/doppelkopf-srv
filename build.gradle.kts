@@ -156,6 +156,9 @@ jib {
     to {
         image = "${imageRegistry}${imageRepository}/${project.name}"
         tags = imageTags.toSet()
+        // we currently allow insecure target registries, this should be changed in the future, when the local setup
+        // also provides https registry
+        setAllowInsecureRegistries(true)
     }
 }
 
