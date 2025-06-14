@@ -54,6 +54,10 @@ class SecurityConfiguration(
             configureSpringDocOpenApi(auth)
             // configure springdoc openapi pages
 
+            auth.requestMatchers("/actuator/health").permitAll()
+            // configure spring actuator health to be available
+            // we use this endpoint in the probes for kubernetes pod monitoring
+
             auth.anyRequest().authenticated()
             // require login for all other urls/methods
         }
