@@ -21,17 +21,19 @@ import org.springframework.http.HttpHeaders
  *
  * Provides [RestAssured] with basic auth config using the [testUser] by default.
  */
-abstract class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
+abstract class BaseRestAssuredTest(
+    val disableExtendedLogging: Boolean = false,
+) : BaseSpringBootTest(), Logging {
     private val log = logger()
 
     /**
      * The [FormAuthConfig] for the login api at `/v1/auth/login`.
      */
-    protected val formAuthConfig = FormAuthConfig(
+    protected val formAuthConfig: FormAuthConfig = FormAuthConfig(
         "/v1/auth/login",
         "username",
         "password"
-    ).withLoggingEnabled()!!
+    ).let { if (!disableExtendedLogging) it.withLoggingEnabled() else it }
 
     @BeforeAll
     fun `setup containerized rest assured test`() {
@@ -43,7 +45,7 @@ abstract class BaseRestAssuredTest : BaseSpringBootTest(), Logging {
         RestAssured.authentication =
             RestAssured.form(testUserName, testUserPassword, formAuthConfig)
 
-        if (log.isDebugEnabled) {
+        if (log.isDebugEnabled && !disableExtendedLogging) {
             // print request and responses contents to console when debug log level is enabled
             RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
         }

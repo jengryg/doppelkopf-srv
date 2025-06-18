@@ -15,6 +15,7 @@ import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
 import game.doppelkopf.toSingleEntity
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,11 +28,12 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 @TestPropertySource(
     properties = [
         // Due to the bruteforce nature of this test, it writes a lot of logging when debug mode is active.
-        // To prevent this from overwhelming the log receiving side, we run this test explicitly with INFO level.
-        "logging.level.game.doppelkopf=INFO",
-        "logging.level.root=INFO"
+        // To prevent this from overwhelming the log receiving side, we run this test explicitly with ERROR level.
+        "logging.level.game.doppelkopf=ERROR",
+        "logging.level.root=ERROR"
     ]
 )
+@Disabled("This test is sometimes really slow due to the vast amount of requests it must make.")
 class BruteforceGraphQLPlayTest : BaseGraphQLTest(), Logging {
     private val log = logger()
 

@@ -24,6 +24,7 @@ import game.doppelkopf.domain.round.enums.RoundState
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.test.context.TestPropertySource
 import java.util.*
@@ -32,12 +33,13 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 @TestPropertySource(
     properties = [
         // Due to the bruteforce nature of this test, it writes a lot of logging when debug mode is active.
-        // To prevent this from overwhelming the log receiving side, we run this test explicitly with INFO level.
+        // To prevent this from overwhelming the log receiving side, we run this test explicitly with ERROR level.
         "logging.level.game.doppelkopf=ERROR",
         "logging.level.root=ERROR"
     ]
 )
-class BruteforceApiPlayTest : BaseRestAssuredTest(), Logging {
+@Disabled("This test is sometimes really slow due to the vast amount of requests it must make.")
+class BruteforceApiPlayTest : BaseRestAssuredTest(disableExtendedLogging = true), Logging {
     private val log = logger()
 
     private val cards = Deck.create(DeckMode.DIAMONDS).cards.values.map { it.encoded }
