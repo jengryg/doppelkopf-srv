@@ -5,9 +5,9 @@ import jakarta.persistence.Column
 import jakarta.persistence.Id
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.Version
-import org.hibernate.Hibernate
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
+import org.hibernate.proxy.HibernateProxy
 import java.time.Instant
 import java.util.*
 
@@ -38,10 +38,20 @@ abstract class BaseEntity : IBaseEntity {
     }
 
     override fun equals(other: Any?): Boolean {
+        /**
+         * Get the [Class] of the given [obj] respecting the [HibernateProxy] without causing proxy initialization as
+         * side effect.
+         */
+        fun clazzOf(obj: Any): Class<out Any>? = if (obj is HibernateProxy) {
+            obj.hibernateLazyInitializer.persistentClass
+        } else {
+            obj.javaClass
+        }
+
         return when {
             this === other -> true
             other == null -> false
-            Hibernate.getClass(this) != Hibernate.getClass(other) -> false
+            clazzOf(this) != clazzOf(other) -> false
             else -> (other as BaseEntity).id == id
         }
     }
