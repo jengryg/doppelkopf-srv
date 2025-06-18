@@ -1,6 +1,14 @@
 @file:Suppress("UnstableApiUsage")
 
 
+buildscript {
+    dependencies {
+        // liquibase gradle plugin expects its corresponding core
+        // see https://github.com/liquibase/liquibase-gradle-plugin/blob/Release_3.0.1/doc/usage.md#usage
+        classpath(libs.liquibase.core)
+    }
+}
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.spring)
@@ -8,6 +16,7 @@ plugins {
     alias(libs.plugins.spring.dependency)
     alias(libs.plugins.kotlin.jpa)
     alias(libs.plugins.jib)
+    alias(libs.plugins.liquibase.gradle)
 
     distribution
     jacoco
@@ -89,6 +98,11 @@ dependencies {
 
     // define the otel agent as dependency for the otel agent distribution
     openTelemetryAgent(libs.otel.java.agent)
+
+    // liquibase gradle plugin dependencies
+    liquibaseRuntime(libs.liquibase.core)
+    liquibaseRuntime(libs.picocli)
+    liquibaseRuntime(libs.jaxb)
 }
 
 kotlin {
