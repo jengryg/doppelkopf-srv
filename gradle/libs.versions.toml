@@ -57,7 +57,9 @@ otel-java-agent = { module = "io.opentelemetry.javaagent:opentelemetry-javaagent
 
 # liquibase gradle plugin dependencies
 liquibase-core = { module = "org.liquibase:liquibase-core", version = "4.32.0" }
+
 picocli = { module = "info.picocli:picocli", version = "4.7.7" }
+
 jaxb = { module = "javax.xml.bind:jaxb-api", version = "2.3.1" }
 
 [bundles]
