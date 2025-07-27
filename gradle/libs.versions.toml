@@ -5,7 +5,7 @@
 # Centrally define versions here to reuse as variables in the following blocks.
 # This allows to sync versions for dependencies in this definition file.
 
-kotlin = "2.1.20"
+kotlin = "2.2.0"
 
 restassured = "5.5.1"
 
