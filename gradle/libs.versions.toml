@@ -42,7 +42,7 @@ asserj = { module = "org.assertj:assertj-core", version = "3.27.3" }
 mockk = { module = "io.mockk:mockk", version = "1.13.17" }
 
 # cryptography and de-/en-coding with bouncycastle
-bouncycastle = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.80" }
+bouncycastle = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.81" }
 
 # RestAsured
 restassured-core = { module = "io.rest-assured:rest-assured-all", version.ref = "restassured" }
