@@ -7,7 +7,7 @@
 
 kotlin = "2.1.20"
 
-restassured = "5.5.1"
+restassured = "5.5.5"
 
 [plugins]
 
