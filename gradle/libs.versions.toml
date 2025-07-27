@@ -56,7 +56,7 @@ openapi-webmvc = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui",
 otel-java-agent = { module = "io.opentelemetry.javaagent:opentelemetry-javaagent", version = "2.15.0" }
 
 # liquibase gradle plugin dependencies
-liquibase-core = { module = "org.liquibase:liquibase-core", version = "4.32.0" }
+liquibase-core = { module = "org.liquibase:liquibase-core", version = "4.33.0" }
 
 picocli = { module = "info.picocli:picocli", version = "4.7.7" }
 
