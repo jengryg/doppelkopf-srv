@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer
@@ -14,6 +15,9 @@ import org.springframework.security.config.annotation.web.configurers.FormLoginC
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
@@ -38,7 +42,35 @@ class SecurityConfiguration(
     }
 
     @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val corsConfig = CorsConfiguration().apply {
+            allowCredentials = true
+
+            // allow credentials is true, thus we need to specify these values explicitly
+            allowedOrigins = listOf("http://localhost:4200")
+            // TODO: only allow specific methods
+            allowedMethods = HttpMethod.values().map { it.name() }.also {
+                log.atInfo()
+                    .setMessage { "Allowed CORS methods." }
+                    .addKeyValue("methods") { it.joinToString(",") }
+                    .log()
+            }
+
+            allowedHeaders = listOf("*")
+        }
+
+        return UrlBasedCorsConfigurationSource().apply {
+            registerCorsConfiguration("/**", corsConfig)
+        }.also {
+            log.atInfo()
+                .setMessage { "Created cors configuration source." }
+                .log()
+        }
+    }
+
+    @Bean
     fun filterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
+        httpSecurity.cors(Customizer.withDefaults())
         httpSecurity.csrf { csrf ->
             //csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             csrf.disable()
@@ -49,6 +81,7 @@ class SecurityConfiguration(
         httpSecurity.authorizeHttpRequests { auth ->
             auth.requestMatchers(HttpMethod.GET, "/v1/auth/login").permitAll()
             auth.requestMatchers(HttpMethod.POST, "/v1/auth/login").permitAll()
+            auth.requestMatchers(HttpMethod.POST, "/v1/auth/register").permitAll()
             // login matchers to allow POST to the login endpoint
 
             configureSpringDocOpenApi(auth)
@@ -75,6 +108,8 @@ class SecurityConfiguration(
         }
 
         httpSecurity.logout { logout ->
+            logout.logoutUrl("/v1/auth/logout")
+
             logout.logoutSuccessHandler { request, response, authentication ->
                 // 204 no content when logout worked
                 response.status = HttpStatus.NO_CONTENT.value()
