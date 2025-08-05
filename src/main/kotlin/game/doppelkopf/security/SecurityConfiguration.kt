@@ -79,10 +79,12 @@ class SecurityConfiguration(
         }
 
         httpSecurity.authorizeHttpRequests { auth ->
+            // allow the login status endpoint
             auth.requestMatchers(HttpMethod.GET, "/v1/auth/login").permitAll()
+            // allow the login endpoint
             auth.requestMatchers(HttpMethod.POST, "/v1/auth/login").permitAll()
-            auth.requestMatchers(HttpMethod.POST, "/v1/auth/register").permitAll()
-            // login matchers to allow POST to the login endpoint
+            // allow the registration endpoint
+            auth.requestMatchers(HttpMethod.POST, "/v1/users").permitAll()
 
             configureSpringDocOpenApi(auth)
             // configure springdoc openapi pages
