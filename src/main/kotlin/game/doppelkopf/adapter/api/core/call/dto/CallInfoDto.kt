@@ -9,27 +9,27 @@ import java.util.*
     description = "Information about a call of a hand in a round of Doppelkopf."
 )
 class CallInfoDto(
-    @Schema(
+    @field:Schema(
         description = "The UUID of this call."
     )
     val id: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The UUID of the hand this call was made by."
     )
     val handId: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The UUID of the round this call was made in."
     )
     val roundId: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The type of this call."
     )
     val callType: CallType,
 
-    @Schema(
+    @field:Schema(
         description = "The number of cards the hand had already played when this call was made."
     )
     val cardsPlayedBefore: Int

@@ -53,7 +53,7 @@ class RoundBidsEvaluationModel(
         return Result.success(votes)
     }
 
-    inner class BidResult(
+    class BidResult(
         val nothing: List<IHandModel>,
         val marriage: List<IHandModel>,
         val solo: List<IHandModel>,

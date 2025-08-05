@@ -28,7 +28,7 @@ class RoundEvaluationModel(
     fun evaluateRound(): Teamed<IResultModel> {
         canEvaluateRound().getOrThrow()
 
-        getTricksWonByHand().forEach { hand, tricks ->
+        getTricksWonByHand().forEach { (hand, tricks) ->
             hand.score = tricks.sumOf { it.score }
             hand.tricks = tricks.count()
         }

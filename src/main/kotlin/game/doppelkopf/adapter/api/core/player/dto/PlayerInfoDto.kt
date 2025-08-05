@@ -9,27 +9,27 @@ import java.util.*
     description = "A user playing in a game as player.",
 )
 class PlayerInfoDto(
-    @Schema(
+    @field:Schema(
         description = "The UUID of this player."
     )
     val id: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The number of the seat this player is sitting on in the game.",
     )
     val seat: Int,
 
-    @Schema(
+    @field:Schema(
         description = "The UUID of the game this player is playing in.",
     )
     val gameId: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The user that is playing in the game as this player.",
     )
     val user: PublicUserInfoDto,
 
-    @Schema(
+    @field:Schema(
         description = "Is this player is the current dealer in the game."
     )
     val dealer: Boolean

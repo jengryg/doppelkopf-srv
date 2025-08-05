@@ -4,33 +4,33 @@ import game.doppelkopf.adapter.persistence.model.result.ResultEntity
 import io.swagger.v3.oas.annotations.media.Schema
 
 class UnderCallsDto(
-    @Schema(
+    @field:Schema(
         description = "1 point for the winner for each level call made by RE team."
     )
     val re: UnderCallsTeamDto,
 
-    @Schema(
+    @field:Schema(
         description = "1 point for the winner for each level call made by KO team."
     )
     val ko: UnderCallsTeamDto,
 ) {
     class UnderCallsTeamDto(
-        @Schema(
+        @field:Schema(
             description = "under 90 call"
         )
         val p90: Int,
 
-        @Schema(
+        @field:Schema(
             description = "under 60 call"
         )
         val p60: Int,
 
-        @Schema(
+        @field:Schema(
             description = "under 30 call"
         )
         val p30: Int,
 
-        @Schema(
+        @field:Schema(
             description = "no tricks at all call"
         )
         val p00: Int,

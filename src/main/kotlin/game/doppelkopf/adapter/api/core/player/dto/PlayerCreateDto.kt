@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Range
     description = "Join a game at the specified seat as player."
 )
 class PlayerCreateDto(
-    @Schema(
+    @field:Schema(
         description = "The seat position to take."
     )
     @field:Range(min = 1, max = 7)

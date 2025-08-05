@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema
     description = "Make a declaration for the hand.",
 )
 class DeclarationCreateDto(
-    @Schema(
+    @field:Schema(
         description = "The declaration to make."
     )
     val declaration: DeclarationOption

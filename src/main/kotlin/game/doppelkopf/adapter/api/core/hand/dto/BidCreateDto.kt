@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema
     description = "Make a bid for the hand."
 )
 class BidCreateDto(
-    @Schema(
+    @field:Schema(
         description = "The bid to make."
     )
     val bid: BiddingOption

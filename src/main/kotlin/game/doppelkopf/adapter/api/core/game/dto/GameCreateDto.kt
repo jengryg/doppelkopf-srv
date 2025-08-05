@@ -8,13 +8,13 @@ import org.hibernate.validator.constraints.Range
     description = "Send this to create a new game."
 )
 class GameCreateDto(
-    @Schema(
+    @field:Schema(
         description = "How many players are at most allowed to join the game."
     )
     @field:Range(min = 4, max = 8)
     val playerLimit: Int,
 
-    @Schema(
+    @field:Schema(
         description = "The seed to use for the game encoded as Base64. If null, a random seed is generated."
     )
     @field:Size(max = 256)

@@ -14,47 +14,47 @@ import java.util.*
     description = "Information about a round in a game of Doppelkopf.",
 )
 class RoundInfoDto(
-    @Schema(
+    @field:Schema(
         description = "The UUID of this round."
     )
     val id: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The UUID of the game this round is played in.",
     )
     val gameId: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The player that dealt this round."
     )
     val dealer: PlayerInfoDto,
 
-    @Schema(
+    @field:Schema(
         description = "The number of this round, incrementally starting at 1."
     )
     val number: Int,
 
-    @Schema(
+    @field:Schema(
         description = "The current state of the round."
     )
     val state: RoundState,
 
-    @Schema(
+    @field:Schema(
         description = "The public contract information of the round."
     )
     val contract: RoundContractPublic,
 
-    @Schema(
+    @field:Schema(
         description = "The result of this round if available, otherwise null."
     )
     val result: Teamed<ResultInfoDto>?,
 
-    @Schema(
+    @field:Schema(
         description = "The round was started at this moment. If this is null, the round was not started yet."
     )
     val started: Instant?,
 
-    @Schema(
+    @field:Schema(
         description = "The round was ended at this moment. If this is null, the round was not ended yet."
     )
     val ended: Instant?,

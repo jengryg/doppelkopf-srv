@@ -12,42 +12,42 @@ import java.util.*
     description = "Information about a game of Doppelkopf.",
 )
 class GameInfoDto(
-    @Schema(
+    @field:Schema(
         description = "The UUID of this game."
     )
     val id: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "How many players are at most allowed to join this game."
     )
     val playerLimit: Int,
 
-    @Schema(
+    @field:Schema(
         description = "The game was created at this moment."
     )
     val created: Instant,
 
-    @Schema(
+    @field:Schema(
         description = "The game was started at this moment. If this is null, the game was not started yet."
     )
     val started: Instant?,
 
-    @Schema(
+    @field:Schema(
         description = "The game was ended at this moment. If this is null, the game was not ended yet."
     )
     val ended: Instant?,
 
-    @Schema(
+    @field:Schema(
         description = "The user that created this game."
     )
     val creator: PublicUserInfoDto,
 
-    @Schema(
+    @field:Schema(
         description = "The users that have already joined this game."
     )
     val players: List<PlayerInfoDto>,
 
-    @Schema(
+    @field:Schema(
         description = "The current state of this game."
     )
     val state: GameState,

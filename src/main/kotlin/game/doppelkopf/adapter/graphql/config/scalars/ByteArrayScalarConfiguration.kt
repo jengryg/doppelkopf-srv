@@ -29,7 +29,7 @@ class ByteArrayScalarConfiguration {
         return RuntimeWiringConfigurer { builder: RuntimeWiring.Builder? -> builder!!.scalar(byteArrayScalar()) }
     }
 
-    inner class ByteArrayCoercing : Coercing<ByteArray, String> {
+    class ByteArrayCoercing : Coercing<ByteArray, String> {
         override fun serialize(
             dataFetcherResult: Any,
             graphQLContext: GraphQLContext,
@@ -63,7 +63,7 @@ class ByteArrayScalarConfiguration {
             variables: CoercedVariables,
             graphQLContext: GraphQLContext,
             locale: Locale
-        ): ByteArray? {
+        ): ByteArray {
             when (input) {
                 is StringValue -> return runCatching { parser(input.value) }.getOrElse {
                     throw CoercingParseLiteralException("Could not parse input ${input.value} to ByteArray.", it)

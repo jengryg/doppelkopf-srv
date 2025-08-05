@@ -68,7 +68,7 @@ class GraphQLFallbackExceptionResolver : DataFetcherExceptionResolverAdapter(), 
     private fun handleConstraintValidationException(
         ex: ConstraintViolationException,
         env: DataFetchingEnvironment
-    ): List<GraphQLError>? {
+    ): List<GraphQLError> {
         return ex.constraintViolations.map { violation ->
             resolveViolation(violation, env)
         }

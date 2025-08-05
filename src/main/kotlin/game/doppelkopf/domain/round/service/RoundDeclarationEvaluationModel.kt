@@ -62,7 +62,7 @@ class RoundDeclarationEvaluationModel(
         return Result.success(votes)
     }
 
-    inner class DeclarationResult(
+    class DeclarationResult(
         val nothing: Int,
         val reservation: Int,
         val healthy: Int,

@@ -12,12 +12,12 @@ import io.swagger.v3.oas.annotations.media.Schema
     description = "Information about the team results of a round in a game of Doppelkopf.",
 )
 class TeamedResultInfoDto(
-    @Schema(
+    @field:Schema(
         description = "The result information for the RE team."
     )
     val re: ResultInfoDto?,
 
-    @Schema(
+    @field:Schema(
         description = "The result information for the KO team."
     )
     val ko: ResultInfoDto?

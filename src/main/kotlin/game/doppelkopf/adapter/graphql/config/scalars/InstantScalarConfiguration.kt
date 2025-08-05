@@ -32,7 +32,7 @@ class InstantScalarConfiguration {
         return RuntimeWiringConfigurer { builder: RuntimeWiring.Builder? -> builder!!.scalar(instantScalar()) }
     }
 
-    inner class InstantCoercing : Coercing<Instant, String> {
+    class InstantCoercing : Coercing<Instant, String> {
         override fun serialize(
             dataFetcherResult: Any,
             graphQLContext: GraphQLContext,

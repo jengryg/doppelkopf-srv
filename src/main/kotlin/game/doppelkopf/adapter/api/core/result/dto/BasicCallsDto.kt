@@ -4,12 +4,12 @@ import game.doppelkopf.adapter.persistence.model.result.ResultEntity
 import io.swagger.v3.oas.annotations.media.Schema
 
 class BasicCallsDto(
-    @Schema(
+    @field:Schema(
         description = "2 points for the winner if RE was called."
     )
     val re: Int,
 
-    @Schema(
+    @field:Schema(
         description = "2 points for the winner if KO was called."
     )
     val ko: Int

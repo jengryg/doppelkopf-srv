@@ -25,6 +25,6 @@ class UserGraphQLController(
     fun publicUser(
         @Argument id: UUID
     ): PublicUser {
-        return userPersistence.load(id).let { PublicUser(it) }
+        return PublicUser(userPersistence.load(id))
     }
 }

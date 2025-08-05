@@ -8,32 +8,32 @@ import java.util.*
     description = "Information about a turn in a round of Doppelkopf."
 )
 class TurnInfoDto(
-    @Schema(
+    @field:Schema(
         description = "The UUID of this turn."
     )
     val id: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The UUID of the round this turn is made in."
     )
     val roundId: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The UUID of the hand this turn is made by."
     )
     val handId: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The UUID of the trick this turn is made in."
     )
     val trickId: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The number of this turn, incrementally starting at 1."
     )
     val number: Int,
 
-    @Schema(
+    @field:Schema(
         description = "The card played in this turn."
     )
     val card: String

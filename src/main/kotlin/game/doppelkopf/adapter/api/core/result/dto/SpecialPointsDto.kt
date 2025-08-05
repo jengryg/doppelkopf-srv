@@ -4,17 +4,17 @@ import game.doppelkopf.adapter.persistence.model.result.ResultEntity
 import io.swagger.v3.oas.annotations.media.Schema
 
 class SpecialPointsDto(
-    @Schema(
+    @field:Schema(
         description = "1 point if KO wins against RE."
     )
     val opposition: Int,
 
-    @Schema(
+    @field:Schema(
         description = "1 point for each trick with a score of 40 or more."
     )
     val doppelkopf: Int,
 
-    @Schema(
+    @field:Schema(
         description = "1 point for winning the last trick with Jack of Clubs."
     )
     val charly: Int,

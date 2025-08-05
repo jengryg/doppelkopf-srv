@@ -4,19 +4,19 @@ import game.doppelkopf.adapter.persistence.model.result.ResultEntity
 import io.swagger.v3.oas.annotations.media.Schema
 
 class LostScoreDto(
-    @Schema(
+    @field:Schema(
         description = "1 point when the loosing team scores below 90."
     )
     val p90: Int,
-    @Schema(
+    @field:Schema(
         description = "1 point when the loosing team scores below 60."
     )
     val p60: Int,
-    @Schema(
+    @field:Schema(
         description = "1 point when the loosing team scores below 30."
     )
     val p30: Int,
-    @Schema(
+    @field:Schema(
         description = "1 point when the loosing team scores no trick at all."
     )
     val p00: Int

@@ -8,12 +8,12 @@ import java.util.*
     description = "Representation of a user to be exposed to other users."
 )
 class PublicUserInfoDto(
-    @Schema(
+    @field:Schema(
         description = "The UUID of the user."
     )
     val id: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The name of the user."
     )
     val name: String,

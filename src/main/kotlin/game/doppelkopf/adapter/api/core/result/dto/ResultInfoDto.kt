@@ -9,57 +9,57 @@ import java.util.*
     description = "Information about a result of a round in a game of Doppelkopf."
 )
 class ResultInfoDto(
-    @Schema(
+    @field:Schema(
         description = "The UUID of this result."
     )
     val id: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The UUID of the round this result is from."
     )
     val roundId: UUID,
 
-    @Schema(
+    @field:Schema(
         description = "The team this result is for."
     )
     val team: DefiniteTeam,
 
-    @Schema(
+    @field:Schema(
         description = "The number of tricks this team obtained."
     )
     val tricksCount: Int,
 
-    @Schema(
+    @field:Schema(
         description = "The total score this team obtained."
     )
     val score: Int,
 
-    @Schema(
+    @field:Schema(
         description = "The target score this team must obtain."
     )
     val targetScore: Int,
 
-    @Schema(
+    @field:Schema(
         description = "The basic points for this team."
     )
     val pointsBasic: BasicPointsDto,
 
-    @Schema(
+    @field:Schema(
         description = "The points for the basic calls."
     )
     val pointsBasicCalls: BasicCallsDto,
 
-    @Schema(
+    @field:Schema(
         description = "The points for the under calls."
     )
     val pointsUnderCalls: UnderCallsDto,
 
-    @Schema(
+    @field:Schema(
         description = "The points based on the levels the score of the looser is below."
     )
     val pointsLostScore: LostScoreDto,
 
-    @Schema(
+    @field:Schema(
         description = "The points based on special rules."
     )
     val pointsForSpecial: SpecialPointsDto,
