@@ -1,10 +1,10 @@
 package game.doppelkopf.adapter.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.adapter.api.core.hand.dto.BidCreateDto
-import game.doppelkopf.adapter.api.core.hand.dto.DeclarationCreateDto
-import game.doppelkopf.adapter.api.core.hand.dto.HandForPlayerDto
-import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoDto
+import game.doppelkopf.adapter.api.core.hand.dto.BidCreateRequest
+import game.doppelkopf.adapter.api.core.hand.dto.DeclarationCreateRequest
+import game.doppelkopf.adapter.api.core.hand.dto.HandForPlayerResponse
+import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoResponse
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.game.GameRepository
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
@@ -68,7 +68,7 @@ class HandControllerTest : BaseRestAssuredTest() {
         fun `get hands of round that has hands returns 200 and list of dto`() {
             val round = createPersistedRoundEntity()
 
-            val response = getResourceList<HandPublicInfoDto>(
+            val response = getResourceList<HandPublicInfoResponse>(
                 path = "/v1/rounds/${round.id}/hands",
                 expectedStatus = 200
             )
@@ -121,7 +121,7 @@ class HandControllerTest : BaseRestAssuredTest() {
             val player = round.game.players.single { it.user == testUser }
             val hand = round.hands.single { it.player.user == testUser }
 
-            val response = getResource<HandForPlayerDto>(
+            val response = getResource<HandForPlayerResponse>(
                 path = "/v1/hands/${hand.id}",
                 expectedStatus = 200
             )
@@ -226,7 +226,7 @@ class HandControllerTest : BaseRestAssuredTest() {
                 anyConstructed<RoundDeclarationEvaluationModel>().canEvaluateDeclarations()
             } returns Result.failure(mockk())
 
-            val (response, location) = execDeclaration<HandForPlayerDto>(
+            val (response, location) = execDeclaration<HandForPlayerResponse>(
                 handId = hand.id,
                 declarationOption = DeclarationOption.HEALTHY,
                 expectedStatus = 201
@@ -334,7 +334,7 @@ class HandControllerTest : BaseRestAssuredTest() {
                 anyConstructed<RoundBidsEvaluationModel>().canEvaluateBids()
             } returns Result.failure(mockk())
 
-            val (response, location) = execBid<HandForPlayerDto>(
+            val (response, location) = execBid<HandForPlayerResponse>(
                 handId = hand.id,
                 bidOption = BiddingOption.MARRIAGE,
                 expectedStatus = 201
@@ -390,9 +390,9 @@ class HandControllerTest : BaseRestAssuredTest() {
         declarationOption: DeclarationOption,
         expectedStatus: Int,
     ): Pair<T, String?> {
-        return createResource<DeclarationCreateDto, T>(
+        return createResource<DeclarationCreateRequest, T>(
             path = "/v1/hands/$handId/declarations",
-            body = DeclarationCreateDto(
+            body = DeclarationCreateRequest(
                 declaration = declarationOption
             ),
             expectedStatus = expectedStatus
@@ -404,9 +404,9 @@ class HandControllerTest : BaseRestAssuredTest() {
         bidOption: BiddingOption,
         expectedStatus: Int
     ): Pair<T, String?> {
-        return createResource<BidCreateDto, T>(
+        return createResource<BidCreateRequest, T>(
             path = "/v1/hands/$handId/bids",
-            body = BidCreateDto(
+            body = BidCreateRequest(
                 bid = bidOption
             ),
             expectedStatus = expectedStatus

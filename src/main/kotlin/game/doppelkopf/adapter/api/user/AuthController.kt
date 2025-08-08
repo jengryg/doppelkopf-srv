@@ -1,6 +1,6 @@
 package game.doppelkopf.adapter.api.user
 
-import game.doppelkopf.adapter.api.user.dto.PublicUserInfoDto
+import game.doppelkopf.adapter.api.user.dto.PublicUserInfoResponse
 import game.doppelkopf.instrumentation.logging.Logging
 import game.doppelkopf.instrumentation.logging.logger
 import game.doppelkopf.security.UserDetails
@@ -23,7 +23,7 @@ class AuthController : Logging {
     @GetMapping("/status")
     fun status(
         @AuthenticationPrincipal userDetails: UserDetails?
-    ): ResponseEntity<PublicUserInfoDto> {
+    ): ResponseEntity<PublicUserInfoResponse> {
         log.atDebug()
             .setMessage("Current user login status obtained.")
             .addKeyValue("userDetails") { userDetails?.entity }
@@ -31,7 +31,7 @@ class AuthController : Logging {
 
         return if (userDetails != null) {
             ResponseEntity.ok(
-                PublicUserInfoDto(
+                PublicUserInfoResponse(
                     id = userDetails.entity.id,
                     name = userDetails.entity.username
                 )

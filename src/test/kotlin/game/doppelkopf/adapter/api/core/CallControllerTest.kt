@@ -1,8 +1,8 @@
 package game.doppelkopf.adapter.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.adapter.api.core.call.dto.CallCreateDto
-import game.doppelkopf.adapter.api.core.call.dto.CallInfoDto
+import game.doppelkopf.adapter.api.core.call.dto.CallCreateRequest
+import game.doppelkopf.adapter.api.core.call.dto.CallInfoResponse
 import game.doppelkopf.adapter.persistence.model.call.CallEntity
 import game.doppelkopf.adapter.persistence.model.call.CallRepository
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
@@ -59,7 +59,7 @@ class CallControllerTest : BaseRestAssuredTest() {
         fun `get calls of hand that has no calls returns empty list`() {
             val hand = createPersistedHandEntity()
 
-            val response = getResourceList<CallInfoDto>(
+            val response = getResourceList<CallInfoResponse>(
                 path = "/v1/hands/${hand.id}/calls",
                 expectedStatus = 200
             )
@@ -100,7 +100,7 @@ class CallControllerTest : BaseRestAssuredTest() {
 
             callRepository.saveAll(hand.calls)
 
-            val response = getResourceList<CallInfoDto>(
+            val response = getResourceList<CallInfoResponse>(
                 path = "/v1/hands/${hand.id}/calls",
                 expectedStatus = 200
             )
@@ -138,7 +138,7 @@ class CallControllerTest : BaseRestAssuredTest() {
             }.let { callRepository.save(it) }
 
 
-            val response = getResource<CallInfoDto>(
+            val response = getResource<CallInfoResponse>(
                 path = "/v1/calls/${call.id}",
                 expectedStatus = 200
             )
@@ -260,9 +260,9 @@ class CallControllerTest : BaseRestAssuredTest() {
         callType: CallType,
         expectedStatus: Int
     ): Pair<T, String?> {
-        return createResource<CallCreateDto, T>(
+        return createResource<CallCreateRequest, T>(
             path = "/v1/hands/$handId/calls",
-            body = CallCreateDto(
+            body = CallCreateRequest(
                 callType = callType
             ),
             expectedStatus = expectedStatus

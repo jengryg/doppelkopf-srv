@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size
 @Schema(
     description = "User data required to register."
 )
-class UserRegisterDto(
+class UserRegisterRequest(
     @field:Schema(
         description = "The name of the user to create."
     )

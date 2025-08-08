@@ -1,7 +1,7 @@
 package game.doppelkopf.adapter.api.user
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.adapter.api.user.dto.PublicUserInfoDto
+import game.doppelkopf.adapter.api.user.dto.PublicUserInfoResponse
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
@@ -33,7 +33,7 @@ class AuthControllerTest : BaseRestAssuredTest() {
             } Then {
                 statusCode(200)
             } Extract {
-                response().`as`(PublicUserInfoDto::class.java)
+                response().`as`(PublicUserInfoResponse::class.java)
             }
 
             assertEquals(testUser.id, response.id)
@@ -49,7 +49,7 @@ class AuthControllerTest : BaseRestAssuredTest() {
             } Then {
                 statusCode(200)
             } Extract {
-                response().`as`(PublicUserInfoDto::class.java)
+                response().`as`(PublicUserInfoResponse::class.java)
             }
 
             assertEquals(testAdmin.id, response.id)

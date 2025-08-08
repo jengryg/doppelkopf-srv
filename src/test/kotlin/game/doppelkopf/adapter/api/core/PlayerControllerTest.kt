@@ -1,8 +1,8 @@
 package game.doppelkopf.adapter.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.adapter.api.core.player.dto.PlayerCreateDto
-import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoDto
+import game.doppelkopf.adapter.api.core.player.dto.PlayerCreateRequest
+import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoResponse
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.game.GameRepository
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
@@ -47,7 +47,7 @@ class PlayerControllerTest : BaseRestAssuredTest() {
                 gameRepository.save(it)
             }
 
-            val response = getResourceList<PlayerInfoDto>("/v1/games/${game.id}/players", 200)
+            val response = getResourceList<PlayerInfoResponse>("/v1/games/${game.id}/players", 200)
 
             assertThat(response).hasSize(8)
 
@@ -71,7 +71,7 @@ class PlayerControllerTest : BaseRestAssuredTest() {
 
             val player = entity.players.first()
 
-            val response = getResource<PlayerInfoDto>("/v1/players/${player.id}", 200)
+            val response = getResource<PlayerInfoResponse>("/v1/players/${player.id}", 200)
 
             response.also {
                 assertThat(it.id).isEqualTo(player.id)
@@ -136,7 +136,7 @@ class PlayerControllerTest : BaseRestAssuredTest() {
                 every { entity } returns player
             }
 
-            val (response, location) = execJoinGame<PlayerInfoDto>(game.id, seat, 201)
+            val (response, location) = execJoinGame<PlayerInfoResponse>(game.id, seat, 201)
 
             response.also {
                 assertThat(it.id).isEqualTo(player.id)
@@ -180,8 +180,8 @@ class PlayerControllerTest : BaseRestAssuredTest() {
         seat: Int,
         expectedStatus: Int,
     ): Pair<T, String?> {
-        return createResource<PlayerCreateDto, T>(
-            path = "/v1/games/$gameId/players", body = PlayerCreateDto(
+        return createResource<PlayerCreateRequest, T>(
+            path = "/v1/games/$gameId/players", body = PlayerCreateRequest(
                 seat = seat
             ), expectedStatus = expectedStatus
         )

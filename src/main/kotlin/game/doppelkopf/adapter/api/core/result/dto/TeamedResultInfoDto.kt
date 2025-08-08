@@ -15,15 +15,15 @@ class TeamedResultInfoDto(
     @field:Schema(
         description = "The result information for the RE team."
     )
-    val re: ResultInfoDto?,
+    val re: ResultInfoResponse?,
 
     @field:Schema(
         description = "The result information for the KO team."
     )
-    val ko: ResultInfoDto?
+    val ko: ResultInfoResponse?
 ) {
     constructor(teamedEntities: Teamed<ResultEntity?>) : this(
-        re = teamedEntities.re?.let { ResultInfoDto(teamedEntities.re) },
-        ko = teamedEntities.ko?.let { ResultInfoDto(teamedEntities.ko) },
+        re = teamedEntities.re?.let { ResultInfoResponse(teamedEntities.re) },
+        ko = teamedEntities.ko?.let { ResultInfoResponse(teamedEntities.ko) },
     )
 }

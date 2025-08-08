@@ -1,7 +1,7 @@
 package game.doppelkopf.adapter.api.core.player
 
-import game.doppelkopf.adapter.api.core.player.dto.PlayerCreateDto
-import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoDto
+import game.doppelkopf.adapter.api.core.player.dto.PlayerCreateRequest
+import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoResponse
 import game.doppelkopf.adapter.persistence.model.player.PlayerPersistence
 import game.doppelkopf.domain.game.GameActionOrchestrator
 import game.doppelkopf.domain.game.ports.actions.GameActionJoinAsPlayer
@@ -30,9 +30,9 @@ class PlayerController(
     @GetMapping("/games/{gameId}/players")
     fun list(
         @PathVariable gameId: UUID,
-    ): ResponseEntity<List<PlayerInfoDto>> {
+    ): ResponseEntity<List<PlayerInfoResponse>> {
         return ResponseEntity.ok(
-            playerPersistence.listForGame(gameId).map { PlayerInfoDto(it) }
+            playerPersistence.listForGame(gameId).map { PlayerInfoResponse(it) }
         )
     }
 
@@ -43,19 +43,19 @@ class PlayerController(
     @PostMapping("/games/{gameId}/players")
     fun create(
         @PathVariable gameId: UUID,
-        @RequestBody @Valid playerCreateDto: PlayerCreateDto,
+        @RequestBody @Valid playerCreateRequest: PlayerCreateRequest,
         @AuthenticationPrincipal userDetails: UserDetails
-    ): ResponseEntity<PlayerInfoDto> {
+    ): ResponseEntity<PlayerInfoResponse> {
         return gameActionOrchestrator.execute(
             action = GameActionJoinAsPlayer(
                 userDetails,
                 gameId = gameId,
-                seat = playerCreateDto.seat
+                seat = playerCreateRequest.seat
             )
         ).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/players/{id}").build(it.id)
-            ).body(PlayerInfoDto(it))
+            ).body(PlayerInfoResponse(it))
         }
     }
 
@@ -66,9 +66,9 @@ class PlayerController(
     @GetMapping("/players/{id}")
     fun show(
         @PathVariable id: UUID
-    ): ResponseEntity<PlayerInfoDto> {
+    ): ResponseEntity<PlayerInfoResponse> {
         return ResponseEntity.ok(
-            PlayerInfoDto(playerPersistence.load(id))
+            PlayerInfoResponse(playerPersistence.load(id))
         )
     }
 }

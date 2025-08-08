@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Range
 @Schema(
     description = "Send this to create a new game."
 )
-class GameCreateDto(
+class GameCreateRequest(
     @field:Schema(
         description = "How many players are at most allowed to join the game."
     )

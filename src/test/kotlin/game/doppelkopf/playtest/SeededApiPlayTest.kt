@@ -1,18 +1,18 @@
 package game.doppelkopf.playtest
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.adapter.api.core.game.dto.GameCreateDto
-import game.doppelkopf.adapter.api.core.game.dto.GameInfoDto
-import game.doppelkopf.adapter.api.core.game.dto.GameOperationDto
-import game.doppelkopf.adapter.api.core.hand.dto.DeclarationCreateDto
-import game.doppelkopf.adapter.api.core.hand.dto.HandForPlayerDto
-import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoDto
-import game.doppelkopf.adapter.api.core.player.dto.PlayerCreateDto
-import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoDto
-import game.doppelkopf.adapter.api.core.round.dto.RoundInfoDto
-import game.doppelkopf.adapter.api.core.trick.dto.TrickInfoDto
-import game.doppelkopf.adapter.api.core.turn.dto.CreateTurnDto
-import game.doppelkopf.adapter.api.core.turn.dto.TurnInfoDto
+import game.doppelkopf.adapter.api.core.game.dto.GameCreateRequest
+import game.doppelkopf.adapter.api.core.game.dto.GameInfoResponse
+import game.doppelkopf.adapter.api.core.game.dto.GameOperationRequest
+import game.doppelkopf.adapter.api.core.hand.dto.DeclarationCreateRequest
+import game.doppelkopf.adapter.api.core.hand.dto.HandForPlayerResponse
+import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoResponse
+import game.doppelkopf.adapter.api.core.player.dto.PlayerCreateRequest
+import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoResponse
+import game.doppelkopf.adapter.api.core.round.dto.RoundInfoResponse
+import game.doppelkopf.adapter.api.core.trick.dto.TrickInfoResponse
+import game.doppelkopf.adapter.api.core.turn.dto.CreateTurnRequest
+import game.doppelkopf.adapter.api.core.turn.dto.TurnInfoResponse
 import game.doppelkopf.domain.game.enums.GameOperation
 import game.doppelkopf.domain.game.enums.GameState
 import game.doppelkopf.domain.hand.enums.DeclarationOption
@@ -34,7 +34,7 @@ class SeededApiPlayTest : BaseRestAssuredTest(), Logging {
     fun `playtest a game over api with seed and implemented strategy`() {
         val gameId = `create a new game using a seed, join the players and start it`()
 
-        val players = getResourceList<PlayerInfoDto>(
+        val players = getResourceList<PlayerInfoResponse>(
             path = "/v1/games/$gameId/players",
             expectedStatus = 200
         )
@@ -49,7 +49,7 @@ class SeededApiPlayTest : BaseRestAssuredTest(), Logging {
 
         val roundId = `deal a new round`(gameId, dealerIndex)
 
-        getResource<RoundInfoDto>(
+        getResource<RoundInfoResponse>(
             path = "/v1/rounds/$roundId",
             expectedStatus = 200
         ).also { round ->
@@ -59,14 +59,14 @@ class SeededApiPlayTest : BaseRestAssuredTest(), Logging {
 
         `declare and auction the hands`(roundId)
 
-        getResource<GameInfoDto>(
+        getResource<GameInfoResponse>(
             path = "/v1/games/$gameId",
             expectedStatus = 200
         ).also { game ->
             assertThat(game.state).isEqualTo(GameState.PLAYING_ROUND)
         }
 
-        getResource<RoundInfoDto>(
+        getResource<RoundInfoResponse>(
             path = "/v1/rounds/$roundId",
             expectedStatus = 200
         ).also { round ->
@@ -78,7 +78,7 @@ class SeededApiPlayTest : BaseRestAssuredTest(), Logging {
 
         `play the game according to a pre-determined way`(roundId, userIdToPlayerId)
 
-        val round = getResource<RoundInfoDto>(
+        val round = getResource<RoundInfoResponse>(
             path = "/v1/rounds/$roundId",
             expectedStatus = 200
         )
@@ -124,9 +124,9 @@ class SeededApiPlayTest : BaseRestAssuredTest(), Logging {
     }
 
     private fun `create a new game using a seed, join the players and start it`(): UUID {
-        val (response, _) = createResource<GameCreateDto, GameInfoDto>(
+        val (response, _) = createResource<GameCreateRequest, GameInfoResponse>(
             path = "/v1/games",
-            body = GameCreateDto(
+            body = GameCreateRequest(
                 playerLimit = 4,
                 seed = ByteArray(256) { 0x42 }
             ),
@@ -135,17 +135,17 @@ class SeededApiPlayTest : BaseRestAssuredTest(), Logging {
         )
 
         repeat(3) {
-            createResource<PlayerCreateDto, PlayerInfoDto>(
+            createResource<PlayerCreateRequest, PlayerInfoResponse>(
                 path = "/v1/games/${response.id}/players",
-                body = PlayerCreateDto(seat = it + 1),
+                body = PlayerCreateRequest(seat = it + 1),
                 expectedStatus = 201,
                 login = Login(username = testPlayerNames[it + 1], testPlayerPasswords[it + 1])
             )
         }
 
-        patchResource<GameOperationDto, GameInfoDto>(
+        patchResource<GameOperationRequest, GameInfoResponse>(
             path = "/v1/games/${response.id}",
-            body = GameOperationDto(
+            body = GameOperationRequest(
                 op = GameOperation.START
             ),
             expectedStatus = 200,
@@ -156,7 +156,7 @@ class SeededApiPlayTest : BaseRestAssuredTest(), Logging {
     }
 
     private fun `deal a new round`(gameId: UUID, dealerIndex: Int): UUID {
-        val (response, _) = createResource<RoundInfoDto>(
+        val (response, _) = createResource<RoundInfoResponse>(
             path = "/v1/games/$gameId/rounds",
             expectedStatus = 201,
             login = Login(username = testPlayerNames[dealerIndex], testPlayerPasswords[dealerIndex])
@@ -166,17 +166,17 @@ class SeededApiPlayTest : BaseRestAssuredTest(), Logging {
     }
 
     private fun `declare and auction the hands`(roundId: UUID) {
-        val round = getResource<RoundInfoDto>(
+        val round = getResource<RoundInfoResponse>(
             path = "/v1/rounds/$roundId",
             expectedStatus = 200
         )
 
-        val players = getResourceList<PlayerInfoDto>(
+        val players = getResourceList<PlayerInfoResponse>(
             path = "/v1/games/${round.gameId}/players",
             expectedStatus = 200
         )
 
-        val hands = getResourceList<HandPublicInfoDto>(
+        val hands = getResourceList<HandPublicInfoResponse>(
             path = "/v1/rounds/$roundId/hands",
             expectedStatus = 200,
         )
@@ -187,9 +187,9 @@ class SeededApiPlayTest : BaseRestAssuredTest(), Logging {
         repeat(4) { index ->
             val playerIdToFind = players.single { p -> p.user.id == testPlayers[index].id }.id
 
-            createResource<DeclarationCreateDto, HandForPlayerDto>(
+            createResource<DeclarationCreateRequest, HandForPlayerResponse>(
                 path = "/v1/hands/${hands.single { it.playerId == playerIdToFind }.id}/declarations",
-                body = DeclarationCreateDto(
+                body = DeclarationCreateRequest(
                     declaration = DeclarationOption.HEALTHY
                 ),
                 expectedStatus = 201,
@@ -359,16 +359,16 @@ class SeededApiPlayTest : BaseRestAssuredTest(), Logging {
     }
 
     fun play(roundId: UUID, playingIndex: Int, card: String) {
-        createResource<CreateTurnDto, TurnInfoDto>(
+        createResource<CreateTurnRequest, TurnInfoResponse>(
             path = "/v1/rounds/$roundId/turns",
-            body = CreateTurnDto(card = card),
+            body = CreateTurnRequest(card = card),
             expectedStatus = 201,
             login = Login(username = testPlayerNames[playingIndex], testPlayerPasswords[playingIndex])
         )
     }
 
-    fun getTricks(roundId: UUID): List<TrickInfoDto> {
-        return getResourceList<TrickInfoDto>(
+    fun getTricks(roundId: UUID): List<TrickInfoResponse> {
+        return getResourceList<TrickInfoResponse>(
             "/v1/rounds/$roundId/tricks",
             expectedStatus = 200
         )

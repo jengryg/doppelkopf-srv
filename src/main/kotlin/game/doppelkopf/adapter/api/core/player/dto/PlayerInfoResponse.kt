@@ -1,6 +1,6 @@
 package game.doppelkopf.adapter.api.core.player.dto
 
-import game.doppelkopf.adapter.api.user.dto.PublicUserInfoDto
+import game.doppelkopf.adapter.api.user.dto.PublicUserInfoResponse
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
@@ -8,7 +8,7 @@ import java.util.*
 @Schema(
     description = "A user playing in a game as player.",
 )
-class PlayerInfoDto(
+class PlayerInfoResponse(
     @field:Schema(
         description = "The UUID of this player."
     )
@@ -27,7 +27,7 @@ class PlayerInfoDto(
     @field:Schema(
         description = "The user that is playing in the game as this player.",
     )
-    val user: PublicUserInfoDto,
+    val user: PublicUserInfoResponse,
 
     @field:Schema(
         description = "Is this player is the current dealer in the game."
@@ -38,7 +38,7 @@ class PlayerInfoDto(
         id = entity.id,
         seat = entity.seat,
         gameId = entity.game.id,
-        user = PublicUserInfoDto(entity.user),
+        user = PublicUserInfoResponse(entity.user),
         dealer = entity.dealer
     )
 }

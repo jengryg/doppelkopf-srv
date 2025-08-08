@@ -1,7 +1,7 @@
 package game.doppelkopf.adapter.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.adapter.api.core.result.dto.ResultInfoDto
+import game.doppelkopf.adapter.api.core.result.dto.ResultInfoResponse
 import game.doppelkopf.adapter.api.core.result.dto.TeamedResultInfoDto
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.game.GameRepository
@@ -50,7 +50,7 @@ class ResultControllerTest : BaseRestAssuredTest() {
             val round = createPersistedRoundEntity()
 
             val response =
-                getResource<Teamed<ResultInfoDto?>>(path = "/v1/rounds/${round.id}/results", expectedStatus = 200)
+                getResource<Teamed<ResultInfoResponse?>>(path = "/v1/rounds/${round.id}/results", expectedStatus = 200)
 
             assertThat(response.re).isNull()
             assertThat(response.ko).isNull()
@@ -122,7 +122,7 @@ class ResultControllerTest : BaseRestAssuredTest() {
                 number = 47
             ).let { resultRepository.save(it) }
 
-            val response = getResource<ResultInfoDto>(
+            val response = getResource<ResultInfoResponse>(
                 path = "/v1/results/${result.id}",
                 expectedStatus = 200
             )

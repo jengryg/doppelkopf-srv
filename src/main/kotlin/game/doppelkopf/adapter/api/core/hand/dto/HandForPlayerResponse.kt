@@ -8,7 +8,7 @@ import java.util.*
 @Schema(
     description = "Information about a hand in a game of Doppelkopf that should only be available to the player of the hand."
 )
-class HandForPlayerDto(
+class HandForPlayerResponse(
     @field:Schema(
         description = "The UUID of this hand."
     )

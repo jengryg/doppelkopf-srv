@@ -7,7 +7,7 @@ import java.util.*
 @Schema(
     description = "Representation of a user to be exposed to other users."
 )
-class PublicUserInfoDto(
+class PublicUserInfoResponse(
     @field:Schema(
         description = "The UUID of the user."
     )

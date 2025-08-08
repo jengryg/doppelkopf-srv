@@ -1,7 +1,7 @@
 package game.doppelkopf.adapter.api.core.round.dto
 
-import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoDto
-import game.doppelkopf.adapter.api.core.result.dto.ResultInfoDto
+import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoResponse
+import game.doppelkopf.adapter.api.core.result.dto.ResultInfoResponse
 import game.doppelkopf.adapter.persistence.model.round.RoundEntity
 import game.doppelkopf.domain.round.enums.RoundContractPublic
 import game.doppelkopf.domain.round.enums.RoundState
@@ -13,7 +13,7 @@ import java.util.*
 @Schema(
     description = "Information about a round in a game of Doppelkopf.",
 )
-class RoundInfoDto(
+class RoundInfoResponse(
     @field:Schema(
         description = "The UUID of this round."
     )
@@ -27,7 +27,7 @@ class RoundInfoDto(
     @field:Schema(
         description = "The player that dealt this round."
     )
-    val dealer: PlayerInfoDto,
+    val dealer: PlayerInfoResponse,
 
     @field:Schema(
         description = "The number of this round, incrementally starting at 1."
@@ -47,7 +47,7 @@ class RoundInfoDto(
     @field:Schema(
         description = "The result of this round if available, otherwise null."
     )
-    val result: Teamed<ResultInfoDto>?,
+    val result: Teamed<ResultInfoResponse>?,
 
     @field:Schema(
         description = "The round was started at this moment. If this is null, the round was not started yet."
@@ -62,11 +62,11 @@ class RoundInfoDto(
     constructor(roundEntity: RoundEntity) : this(
         id = roundEntity.id,
         gameId = roundEntity.game.id,
-        dealer = PlayerInfoDto(roundEntity.dealer),
+        dealer = PlayerInfoResponse(roundEntity.dealer),
         number = roundEntity.number,
         state = roundEntity.state,
         contract = roundEntity.contract.roundContractPublic,
-        result = Teamed.from(roundEntity.results) { it.team.internal }?.map { ResultInfoDto(it) },
+        result = Teamed.from(roundEntity.results) { it.team.internal }?.map { ResultInfoResponse(it) },
         started = roundEntity.started,
         ended = roundEntity.ended,
     )

@@ -1,9 +1,9 @@
 package game.doppelkopf.adapter.api.core.hand
 
-import game.doppelkopf.adapter.api.core.hand.dto.BidCreateDto
-import game.doppelkopf.adapter.api.core.hand.dto.DeclarationCreateDto
-import game.doppelkopf.adapter.api.core.hand.dto.HandForPlayerDto
-import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoDto
+import game.doppelkopf.adapter.api.core.hand.dto.BidCreateRequest
+import game.doppelkopf.adapter.api.core.hand.dto.DeclarationCreateRequest
+import game.doppelkopf.adapter.api.core.hand.dto.HandForPlayerResponse
+import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoResponse
 import game.doppelkopf.adapter.persistence.model.hand.HandPersistence
 import game.doppelkopf.domain.hand.HandActionOrchestrator
 import game.doppelkopf.domain.hand.ports.actions.HandActionBid
@@ -29,9 +29,9 @@ class HandController(
     @GetMapping("/rounds/{roundId}/hands")
     fun list(
         @PathVariable roundId: UUID
-    ): ResponseEntity<List<HandPublicInfoDto>> {
+    ): ResponseEntity<List<HandPublicInfoResponse>> {
         return ResponseEntity.ok(
-            handPersistence.listForRound(roundId).map { HandPublicInfoDto(it) }
+            handPersistence.listForRound(roundId).map { HandPublicInfoResponse(it) }
         )
     }
 
@@ -43,9 +43,9 @@ class HandController(
     fun show(
         @PathVariable handId: UUID,
         @AuthenticationPrincipal userDetails: UserDetails,
-    ): ResponseEntity<HandForPlayerDto> {
+    ): ResponseEntity<HandForPlayerResponse> {
         return ResponseEntity.ok(
-            HandForPlayerDto(handPersistence.loadForUser(handId, userDetails.entity))
+            HandForPlayerResponse(handPersistence.loadForUser(handId, userDetails.entity))
         )
     }
 
@@ -56,19 +56,19 @@ class HandController(
     @PostMapping("/hands/{handId}/declarations")
     fun declare(
         @PathVariable handId: UUID,
-        @RequestBody declarationCreateDto: DeclarationCreateDto,
+        @RequestBody declarationCreateRequest: DeclarationCreateRequest,
         @AuthenticationPrincipal userDetails: UserDetails
-    ): ResponseEntity<HandForPlayerDto> {
+    ): ResponseEntity<HandForPlayerResponse> {
         return handActionOrchestrator.execute(
             action = HandActionDeclare(
                 user = userDetails,
                 handId = handId,
-                declaration = declarationCreateDto.declaration
+                declaration = declarationCreateRequest.declaration
             )
         ).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/hands/{id}").build(it.id)
-            ).body(HandForPlayerDto(it))
+            ).body(HandForPlayerResponse(it))
         }
     }
 
@@ -79,19 +79,19 @@ class HandController(
     @PostMapping("/hands/{handId}/bids")
     fun bid(
         @PathVariable handId: UUID,
-        @RequestBody bidCreateDto: BidCreateDto,
+        @RequestBody bidCreateRequest: BidCreateRequest,
         @AuthenticationPrincipal userDetails: UserDetails
-    ): ResponseEntity<HandForPlayerDto> {
+    ): ResponseEntity<HandForPlayerResponse> {
         return handActionOrchestrator.execute(
             action = HandActionBid(
                 user = userDetails,
                 handId = handId,
-                bid = bidCreateDto.bid
+                bid = bidCreateRequest.bid
             )
         ).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/hands/{id}").build(it.id)
-            ).body(HandForPlayerDto(it))
+            ).body(HandForPlayerResponse(it))
         }
     }
 }

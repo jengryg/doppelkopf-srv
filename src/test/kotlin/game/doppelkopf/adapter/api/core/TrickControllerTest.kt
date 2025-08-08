@@ -1,8 +1,8 @@
 package game.doppelkopf.adapter.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.adapter.api.core.trick.dto.TrickInfoDto
-import game.doppelkopf.adapter.api.core.trick.dto.TrickOperationDto
+import game.doppelkopf.adapter.api.core.trick.dto.TrickInfoResponse
+import game.doppelkopf.adapter.api.core.trick.dto.TrickOperationRequest
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.game.GameRepository
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
@@ -56,7 +56,7 @@ class TrickControllerTest : BaseRestAssuredTest() {
         fun `get tricks of round that has no tricks returns empty list`() {
             val round = createPersistedRoundEntity()
 
-            val response = getResourceList<TrickInfoDto>(
+            val response = getResourceList<TrickInfoResponse>(
                 path = "/v1/rounds/${round.id}/tricks",
                 expectedStatus = 200
             )
@@ -105,7 +105,7 @@ class TrickControllerTest : BaseRestAssuredTest() {
 
             trickRepository.saveAll(round.tricks)
 
-            val response = getResourceList<TrickInfoDto>(
+            val response = getResourceList<TrickInfoResponse>(
                 path = "/v1/rounds/${round.id}/tricks",
                 expectedStatus = 200
             )
@@ -149,7 +149,7 @@ class TrickControllerTest : BaseRestAssuredTest() {
 
             val trick = trickRepository.save(round.tricks.first())
 
-            val response = getResource<TrickInfoDto>(
+            val response = getResource<TrickInfoResponse>(
                 path = "/v1/tricks/${trick.id}",
                 expectedStatus = 200
             )
@@ -183,7 +183,7 @@ class TrickControllerTest : BaseRestAssuredTest() {
             mockkConstructor(TrickEvaluationModel::class)
             every { anyConstructed<TrickEvaluationModel>().evaluateTrick() } just Runs
 
-            val response = execPatchTrick<TrickInfoDto>(trick.id, TrickOperation.TRICK_EVALUATION, 200)
+            val response = execPatchTrick<TrickInfoResponse>(trick.id, TrickOperation.TRICK_EVALUATION, 200)
 
             assertThat(response.id).isEqualTo(trick.id)
         }
@@ -256,9 +256,9 @@ class TrickControllerTest : BaseRestAssuredTest() {
         operation: TrickOperation,
         expectedStatus: Int
     ): T {
-        return patchResource<TrickOperationDto, T>(
+        return patchResource<TrickOperationRequest, T>(
             path = "/v1/tricks/$trickId",
-            body = TrickOperationDto(
+            body = TrickOperationRequest(
                 op = operation,
             ),
             expectedStatus = expectedStatus

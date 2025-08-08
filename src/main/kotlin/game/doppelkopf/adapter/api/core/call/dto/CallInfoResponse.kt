@@ -8,7 +8,7 @@ import java.util.*
 @Schema(
     description = "Information about a call of a hand in a round of Doppelkopf."
 )
-class CallInfoDto(
+class CallInfoResponse(
     @field:Schema(
         description = "The UUID of this call."
     )

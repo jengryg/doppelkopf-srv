@@ -1,7 +1,7 @@
 package game.doppelkopf.adapter.api.core.turn
 
-import game.doppelkopf.adapter.api.core.turn.dto.CreateTurnDto
-import game.doppelkopf.adapter.api.core.turn.dto.TurnInfoDto
+import game.doppelkopf.adapter.api.core.turn.dto.CreateTurnRequest
+import game.doppelkopf.adapter.api.core.turn.dto.TurnInfoResponse
 import game.doppelkopf.adapter.persistence.model.turn.TurnPersistence
 import game.doppelkopf.domain.round.RoundActionOrchestrator
 import game.doppelkopf.domain.round.ports.actions.RoundActionPlayCard
@@ -26,9 +26,9 @@ class TurnController(
     @GetMapping("/rounds/{roundId}/turns")
     fun list(
         @PathVariable roundId: UUID
-    ): ResponseEntity<List<TurnInfoDto>> {
+    ): ResponseEntity<List<TurnInfoResponse>> {
         return ResponseEntity.ok(
-            turnPersistence.listForRound(roundId).map { TurnInfoDto(it) }
+            turnPersistence.listForRound(roundId).map { TurnInfoResponse(it) }
         )
     }
 
@@ -39,19 +39,19 @@ class TurnController(
     @PostMapping("/rounds/{roundId}/turns")
     fun playCard(
         @PathVariable roundId: UUID,
-        @RequestBody createTurnDto: CreateTurnDto,
+        @RequestBody createTurnRequest: CreateTurnRequest,
         @AuthenticationPrincipal userDetails: UserDetails
-    ): ResponseEntity<TurnInfoDto> {
+    ): ResponseEntity<TurnInfoResponse> {
         return roundActionOrchestrator.execute(
             action = RoundActionPlayCard(
                 user = userDetails,
                 roundId = roundId,
-                encodedCard = createTurnDto.card
+                encodedCard = createTurnRequest.card
             )
         ).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/turns/{id}").build(it.id)
-            ).body(TurnInfoDto(it))
+            ).body(TurnInfoResponse(it))
         }
     }
 
@@ -62,9 +62,9 @@ class TurnController(
     @GetMapping("/turns/{turnId}")
     fun show(
         @PathVariable turnId: UUID,
-    ): ResponseEntity<TurnInfoDto> {
+    ): ResponseEntity<TurnInfoResponse> {
         return ResponseEntity.ok(
-            TurnInfoDto(turnPersistence.load(turnId))
+            TurnInfoResponse(turnPersistence.load(turnId))
         )
     }
 }

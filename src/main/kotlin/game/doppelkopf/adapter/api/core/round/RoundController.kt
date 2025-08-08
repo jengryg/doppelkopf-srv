@@ -1,7 +1,7 @@
 package game.doppelkopf.adapter.api.core.round
 
-import game.doppelkopf.adapter.api.core.round.dto.RoundInfoDto
-import game.doppelkopf.adapter.api.core.round.dto.RoundOperationDto
+import game.doppelkopf.adapter.api.core.round.dto.RoundInfoResponse
+import game.doppelkopf.adapter.api.core.round.dto.RoundOperationRequest
 import game.doppelkopf.adapter.persistence.model.round.RoundPersistence
 import game.doppelkopf.domain.game.GameActionOrchestrator
 import game.doppelkopf.domain.game.ports.actions.GameActionDealNewRound
@@ -35,9 +35,9 @@ class RoundController(
         description = "Gets a list containing information about all rounds of the specified game."
     )
     @GetMapping("/games/{gameId}/rounds")
-    fun list(@PathVariable gameId: UUID): ResponseEntity<List<RoundInfoDto>> {
+    fun list(@PathVariable gameId: UUID): ResponseEntity<List<RoundInfoResponse>> {
         return ResponseEntity.ok(
-            roundPersistence.listForGame(gameId).map { RoundInfoDto(it) }
+            roundPersistence.listForGame(gameId).map { RoundInfoResponse(it) }
         )
     }
 
@@ -49,7 +49,7 @@ class RoundController(
     fun deal(
         @PathVariable gameId: UUID,
         @AuthenticationPrincipal userDetails: UserDetails,
-    ): ResponseEntity<RoundInfoDto> {
+    ): ResponseEntity<RoundInfoResponse> {
         return gameActionOrchestrator.execute(
             action = GameActionDealNewRound(
                 user = userDetails,
@@ -58,7 +58,7 @@ class RoundController(
         ).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/rounds/{id}").build(it.id)
-            ).body(RoundInfoDto(it))
+            ).body(RoundInfoResponse(it))
         }
     }
 
@@ -69,9 +69,9 @@ class RoundController(
     @GetMapping("/rounds/{id}")
     fun show(
         @PathVariable id: UUID
-    ): ResponseEntity<RoundInfoDto> {
+    ): ResponseEntity<RoundInfoResponse> {
         return ResponseEntity.ok(
-            RoundInfoDto(roundPersistence.load(id))
+            RoundInfoResponse(roundPersistence.load(id))
         )
     }
 
@@ -82,9 +82,9 @@ class RoundController(
     @PatchMapping("/rounds/{id}")
     fun patch(
         @PathVariable id: UUID,
-        @RequestBody @Valid operation: RoundOperationDto,
+        @RequestBody @Valid operation: RoundOperationRequest,
         @AuthenticationPrincipal userDetails: UserDetails
-    ): ResponseEntity<RoundInfoDto> {
+    ): ResponseEntity<RoundInfoResponse> {
         return when (operation.op) {
             RoundOperation.DECLARE_EVALUATION -> roundActionOrchestrator.execute(
                 action = RoundActionEvaluateDeclarations(
@@ -114,7 +114,7 @@ class RoundController(
                 )
             )
         }.let {
-            ResponseEntity.ok(RoundInfoDto(it))
+            ResponseEntity.ok(RoundInfoResponse(it))
         }
     }
 }

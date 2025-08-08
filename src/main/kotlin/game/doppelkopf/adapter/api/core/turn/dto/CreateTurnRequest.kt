@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern
 @Schema(
     description = "Send this to play a card."
 )
-class CreateTurnDto(
+class CreateTurnRequest(
     @field:Schema(
         description = "The card you want to play. Must be one of the cards on your hand. Encoded as {kind symbol}{suit symbol}{0 or 1}."
     )

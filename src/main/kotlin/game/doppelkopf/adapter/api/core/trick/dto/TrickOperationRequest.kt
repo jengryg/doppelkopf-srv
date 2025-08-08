@@ -6,6 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 @Schema(
     description = "Operation to execute on a trick."
 )
-class TrickOperationDto(
+class TrickOperationRequest(
     val op: TrickOperation
 )

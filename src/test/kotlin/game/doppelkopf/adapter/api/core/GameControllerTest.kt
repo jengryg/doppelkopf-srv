@@ -1,9 +1,9 @@
 package game.doppelkopf.adapter.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.adapter.api.core.game.dto.GameCreateDto
-import game.doppelkopf.adapter.api.core.game.dto.GameInfoDto
-import game.doppelkopf.adapter.api.core.game.dto.GameOperationDto
+import game.doppelkopf.adapter.api.core.game.dto.GameCreateRequest
+import game.doppelkopf.adapter.api.core.game.dto.GameInfoResponse
+import game.doppelkopf.adapter.api.core.game.dto.GameOperationRequest
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.game.GameRepository
 import game.doppelkopf.adapter.persistence.model.player.PlayerEntity
@@ -41,7 +41,7 @@ class GameControllerTest : BaseRestAssuredTest() {
         fun `get list with no games in database returns 200 empty list`() {
             gameRepository.deleteAll()
 
-            val response = getResourceList<GameInfoDto>("/v1/games", 200)
+            val response = getResourceList<GameInfoResponse>("/v1/games", 200)
 
             assertThat(response).isEmpty()
         }
@@ -58,7 +58,7 @@ class GameControllerTest : BaseRestAssuredTest() {
                 gameRepository.save(it)
             }
 
-            val response = getResourceList<GameInfoDto>("/v1/games", 200)
+            val response = getResourceList<GameInfoResponse>("/v1/games", 200)
             assertThat(response).hasSize(4)
 
             assertThat(response.map { it.id }).containsExactlyInAnyOrderElementsOf(entities.map { it.id })
@@ -86,7 +86,7 @@ class GameControllerTest : BaseRestAssuredTest() {
                 gameRepository.save(it)
             }
 
-            val response = getResource<GameInfoDto>(
+            val response = getResource<GameInfoResponse>(
                 path = "/v1/games/${entity.id}",
                 expectedStatus = 200
             )
@@ -106,7 +106,7 @@ class GameControllerTest : BaseRestAssuredTest() {
         @ParameterizedTest
         @ValueSource(ints = [4, 5, 6, 7, 8])
         fun `create with valid player limit returns 201 and dto`(playerLimit: Int) {
-            val (response, location) = execCreateGame<GameInfoDto>(playerLimit, 201)
+            val (response, location) = execCreateGame<GameInfoResponse>(playerLimit, 201)
 
             response.also {
                 assertThat(it.creator.id).isEqualTo(testUser.id)
@@ -121,7 +121,7 @@ class GameControllerTest : BaseRestAssuredTest() {
 
             assertThat(location).isNotNull()
 
-            getResource<GameInfoDto>(location!!, 200).also {
+            getResource<GameInfoResponse>(location!!, 200).also {
                 assertThat(it.creator.id).isEqualTo(testUser.id)
                 assertThat(it.playerLimit).isEqualTo(playerLimit)
 
@@ -157,7 +157,7 @@ class GameControllerTest : BaseRestAssuredTest() {
             mockkConstructor(GameStartModel::class)
             every { anyConstructed<GameStartModel>().start(any()) } just Runs
 
-            val response = execPatchGame<GameInfoDto>(game.id, GameOperation.START, 200)
+            val response = execPatchGame<GameInfoResponse>(game.id, GameOperation.START, 200)
 
             assertThat(response.id).isEqualTo(game.id)
             assertThat(response.creator.id).isEqualTo(game.creator.id)
@@ -224,9 +224,9 @@ class GameControllerTest : BaseRestAssuredTest() {
         playerLimit: Int,
         expectedStatus: Int,
     ): Pair<T, String?> {
-        return createResource<GameCreateDto, T>(
+        return createResource<GameCreateRequest, T>(
             path = "/v1/games",
-            body = GameCreateDto(
+            body = GameCreateRequest(
                 playerLimit = playerLimit,
             ),
             expectedStatus = expectedStatus,
@@ -238,9 +238,9 @@ class GameControllerTest : BaseRestAssuredTest() {
         operation: GameOperation,
         expectedStatus: Int,
     ): T {
-        return patchResource<GameOperationDto, T>(
+        return patchResource<GameOperationRequest, T>(
             path = "/v1/games/$gameId",
-            body = GameOperationDto(
+            body = GameOperationRequest(
                 op = operation
             ),
             expectedStatus = expectedStatus,

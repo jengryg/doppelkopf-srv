@@ -1,6 +1,6 @@
 package game.doppelkopf.adapter.api.core.trick.dto
 
-import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoDto
+import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoResponse
 import game.doppelkopf.adapter.persistence.model.trick.TrickEntity
 import game.doppelkopf.domain.deck.enums.CardDemand
 import game.doppelkopf.domain.trick.enums.TrickState
@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import java.time.Instant
 import java.util.*
 
-class TrickInfoDto(
+class TrickInfoResponse(
     @field:Schema(
         description = "The UUID of this trick."
     )
@@ -62,7 +62,7 @@ class TrickInfoDto(
     @field:Schema(
         description = "The winner of this trick if known, otherwise null."
     )
-    val winner: HandPublicInfoDto?,
+    val winner: HandPublicInfoResponse?,
 
     @field:Schema(
         description = "The current score of this trick."
@@ -82,7 +82,7 @@ class TrickInfoDto(
         demand = trickEntity.demand,
         openIndex = trickEntity.openIndex,
         leadingCardIndex = trickEntity.leadingCardIndex,
-        winner = trickEntity.winner?.let { HandPublicInfoDto(it) },
+        winner = trickEntity.winner?.let { HandPublicInfoResponse(it) },
         score = trickEntity.score,
     )
 }

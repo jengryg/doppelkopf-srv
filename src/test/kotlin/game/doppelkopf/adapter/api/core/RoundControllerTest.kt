@@ -1,8 +1,8 @@
 package game.doppelkopf.adapter.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.adapter.api.core.round.dto.RoundInfoDto
-import game.doppelkopf.adapter.api.core.round.dto.RoundOperationDto
+import game.doppelkopf.adapter.api.core.round.dto.RoundInfoResponse
+import game.doppelkopf.adapter.api.core.round.dto.RoundOperationRequest
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.game.GameRepository
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
@@ -56,7 +56,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
             }
             playerRepository.saveAll(game.players)
 
-            val response = getResourceList<RoundInfoDto>("/v1/games/${game.id}/rounds", 200)
+            val response = getResourceList<RoundInfoResponse>("/v1/games/${game.id}/rounds", 200)
 
             assertThat(response).isEmpty()
         }
@@ -82,7 +82,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
             }
             playerRepository.saveAll(game.players)
 
-            val response = getResourceList<RoundInfoDto>("/v1/games/${game.id}/rounds", 200)
+            val response = getResourceList<RoundInfoResponse>("/v1/games/${game.id}/rounds", 200)
 
             assertThat(response).hasSize(4)
             assertThat(response.map { it.number }).containsExactlyInAnyOrder(1, 2, 3, 4)
@@ -116,7 +116,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
             playerRepository.saveAll(game.players)
             val round = game.rounds.first()
 
-            val response = getResource<RoundInfoDto>(
+            val response = getResource<RoundInfoResponse>(
                 path = "/v1/rounds/${round.id}",
                 expectedStatus = 200
             )
@@ -159,7 +159,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
                 second = hands.map { mockk { every { entity } returns it } }
             )
 
-            val (response, location) = execDealCards<RoundInfoDto>(game.id, 201)
+            val (response, location) = execDealCards<RoundInfoResponse>(game.id, 201)
 
             response.also {
                 assertThat(it.gameId).isEqualTo(game.id)
@@ -223,7 +223,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
             mockkConstructor(RoundDeclarationEvaluationModel::class)
             every { anyConstructed<RoundDeclarationEvaluationModel>().evaluateDeclarations() } just Runs
 
-            val response = execPatchRound<RoundInfoDto>(round.id, RoundOperation.DECLARE_EVALUATION, 200)
+            val response = execPatchRound<RoundInfoResponse>(round.id, RoundOperation.DECLARE_EVALUATION, 200)
 
             assertThat(response.id).isEqualTo(round.id)
         }
@@ -258,7 +258,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
             mockkConstructor(RoundBidsEvaluationModel::class)
             every { anyConstructed<RoundBidsEvaluationModel>().evaluateBids() } just Runs
 
-            val response = execPatchRound<RoundInfoDto>(round.id, RoundOperation.BID_EVALUATION, 200)
+            val response = execPatchRound<RoundInfoResponse>(round.id, RoundOperation.BID_EVALUATION, 200)
 
             assertThat(response.id).isEqualTo(round.id)
         }
@@ -293,7 +293,7 @@ class RoundControllerTest : BaseRestAssuredTest() {
             mockkConstructor(RoundMarriageResolverModel::class)
             every { anyConstructed<RoundMarriageResolverModel>().resolveMarriage() } just Runs
 
-            val response = execPatchRound<RoundInfoDto>(round.id, RoundOperation.MARRIAGE_RESOLVER, 200)
+            val response = execPatchRound<RoundInfoResponse>(round.id, RoundOperation.MARRIAGE_RESOLVER, 200)
 
             assertThat(response.id).isEqualTo(round.id)
         }
@@ -356,9 +356,9 @@ class RoundControllerTest : BaseRestAssuredTest() {
         operation: RoundOperation,
         expectedStatus: Int
     ): T {
-        return patchResource<RoundOperationDto, T>(
+        return patchResource<RoundOperationRequest, T>(
             path = "/v1/rounds/$roundId",
-            body = RoundOperationDto(
+            body = RoundOperationRequest(
                 op = operation
             ),
             expectedStatus = expectedStatus

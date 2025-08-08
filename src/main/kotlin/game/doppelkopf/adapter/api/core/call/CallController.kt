@@ -1,7 +1,7 @@
 package game.doppelkopf.adapter.api.core.call
 
-import game.doppelkopf.adapter.api.core.call.dto.CallCreateDto
-import game.doppelkopf.adapter.api.core.call.dto.CallInfoDto
+import game.doppelkopf.adapter.api.core.call.dto.CallCreateRequest
+import game.doppelkopf.adapter.api.core.call.dto.CallInfoResponse
 import game.doppelkopf.adapter.persistence.model.call.CallPersistence
 import game.doppelkopf.domain.hand.HandActionOrchestrator
 import game.doppelkopf.domain.hand.ports.actions.HandActionCall
@@ -26,9 +26,9 @@ class CallController(
     @GetMapping("/hands/{handId}/calls")
     fun list(
         @PathVariable handId: UUID
-    ): ResponseEntity<List<CallInfoDto>> {
+    ): ResponseEntity<List<CallInfoResponse>> {
         return ResponseEntity.ok(
-            callPersistence.listForHand(handId).map { CallInfoDto(it) }
+            callPersistence.listForHand(handId).map { CallInfoResponse(it) }
         )
     }
 
@@ -39,9 +39,9 @@ class CallController(
     @GetMapping("/calls/{callId}")
     fun show(
         @PathVariable callId: UUID
-    ): ResponseEntity<CallInfoDto> {
+    ): ResponseEntity<CallInfoResponse> {
         return ResponseEntity.ok(
-            CallInfoDto(callPersistence.load(callId))
+            CallInfoResponse(callPersistence.load(callId))
         )
     }
 
@@ -52,19 +52,19 @@ class CallController(
     @PostMapping("/hands/{handId}/calls")
     fun call(
         @PathVariable handId: UUID,
-        @RequestBody callCreateDto: CallCreateDto,
+        @RequestBody callCreateRequest: CallCreateRequest,
         @AuthenticationPrincipal userDetails: UserDetails
-    ): ResponseEntity<CallInfoDto> {
+    ): ResponseEntity<CallInfoResponse> {
         return handActionOrchestrator.execute(
             action = HandActionCall(
                 user = userDetails,
                 handId = handId,
-                callType = callCreateDto.callType
+                callType = callCreateRequest.callType
             )
         ).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/calls/{id}").build(it.id)
-            ).body(CallInfoDto(it))
+            ).body(CallInfoResponse(it))
         }
     }
 }

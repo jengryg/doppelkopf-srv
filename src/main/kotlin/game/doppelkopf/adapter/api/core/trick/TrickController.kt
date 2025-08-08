@@ -1,7 +1,7 @@
 package game.doppelkopf.adapter.api.core.trick
 
-import game.doppelkopf.adapter.api.core.trick.dto.TrickInfoDto
-import game.doppelkopf.adapter.api.core.trick.dto.TrickOperationDto
+import game.doppelkopf.adapter.api.core.trick.dto.TrickInfoResponse
+import game.doppelkopf.adapter.api.core.trick.dto.TrickOperationRequest
 import game.doppelkopf.adapter.persistence.model.trick.TrickPersistence
 import game.doppelkopf.domain.trick.TrickActionOrchestrator
 import game.doppelkopf.domain.trick.enums.TrickOperation
@@ -25,9 +25,9 @@ class TrickController(
         description = "Gets a list containing information about all tricks of the specified game."
     )
     @GetMapping("/rounds/{roundId}/tricks")
-    fun list(@PathVariable roundId: UUID): ResponseEntity<List<TrickInfoDto>> {
+    fun list(@PathVariable roundId: UUID): ResponseEntity<List<TrickInfoResponse>> {
         return ResponseEntity.ok(
-            trickPersistence.listForRound(roundId).map { TrickInfoDto(it) }
+            trickPersistence.listForRound(roundId).map { TrickInfoResponse(it) }
         )
     }
 
@@ -38,9 +38,9 @@ class TrickController(
     @GetMapping("/tricks/{trickId}")
     fun show(
         @PathVariable trickId: UUID
-    ): ResponseEntity<TrickInfoDto> {
+    ): ResponseEntity<TrickInfoResponse> {
         return ResponseEntity.ok(
-            TrickInfoDto(trickPersistence.load(trickId))
+            TrickInfoResponse(trickPersistence.load(trickId))
         )
     }
 
@@ -51,9 +51,9 @@ class TrickController(
     @PatchMapping("/tricks/{id}")
     fun patch(
         @PathVariable id: UUID,
-        @RequestBody @Valid operation: TrickOperationDto,
+        @RequestBody @Valid operation: TrickOperationRequest,
         @AuthenticationPrincipal userDetails: UserDetails
-    ): ResponseEntity<TrickInfoDto> {
+    ): ResponseEntity<TrickInfoResponse> {
         return when (operation.op) {
             TrickOperation.TRICK_EVALUATION -> trickActionOrchestrator.execute(
                 action = TrickActionEvaluate(
@@ -62,7 +62,7 @@ class TrickController(
                 )
             )
         }.let {
-            ResponseEntity.ok(TrickInfoDto(it))
+            ResponseEntity.ok(TrickInfoResponse(it))
         }
     }
 }

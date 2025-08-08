@@ -1,8 +1,8 @@
 package game.doppelkopf.adapter.api.core.game
 
-import game.doppelkopf.adapter.api.core.game.dto.GameCreateDto
-import game.doppelkopf.adapter.api.core.game.dto.GameInfoDto
-import game.doppelkopf.adapter.api.core.game.dto.GameOperationDto
+import game.doppelkopf.adapter.api.core.game.dto.GameCreateRequest
+import game.doppelkopf.adapter.api.core.game.dto.GameInfoResponse
+import game.doppelkopf.adapter.api.core.game.dto.GameOperationRequest
 import game.doppelkopf.adapter.persistence.model.game.GamePersistence
 import game.doppelkopf.domain.game.GameActionOrchestrator
 import game.doppelkopf.domain.game.enums.GameOperation
@@ -33,9 +33,9 @@ class GameController(
         description = "Gets a list containing information about all games.",
     )
     @GetMapping("/games")
-    fun list(): ResponseEntity<List<GameInfoDto>> {
+    fun list(): ResponseEntity<List<GameInfoResponse>> {
         return ResponseEntity.ok(
-            gamePersistence.list().map { GameInfoDto(it) }
+            gamePersistence.list().map { GameInfoResponse(it) }
         )
     }
 
@@ -45,18 +45,18 @@ class GameController(
     )
     @PostMapping("/games")
     fun create(
-        @RequestBody @Valid gameCreateDto: GameCreateDto,
+        @RequestBody @Valid gameCreateRequest: GameCreateRequest,
         @AuthenticationPrincipal userDetails: UserDetails
-    ): ResponseEntity<GameInfoDto> {
+    ): ResponseEntity<GameInfoResponse> {
         val game = lobbyActionOrchestrator.execute(
             action = LobbyActionCreateNewGame(
                 user = userDetails,
-                playerLimit = gameCreateDto.playerLimit,
-                seed = gameCreateDto.seed,
+                playerLimit = gameCreateRequest.playerLimit,
+                seed = gameCreateRequest.seed,
             ),
         )
 
-        return GameInfoDto(game).let {
+        return GameInfoResponse(game).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/games/{id}").build(it.id)
             ).body(it)
@@ -68,9 +68,9 @@ class GameController(
         description = "Gets the information about the game with the specified id.",
     )
     @GetMapping("/games/{id}")
-    fun show(@PathVariable id: UUID): ResponseEntity<GameInfoDto> {
+    fun show(@PathVariable id: UUID): ResponseEntity<GameInfoResponse> {
         return ResponseEntity.ok(
-            GameInfoDto(gamePersistence.load(id))
+            GameInfoResponse(gamePersistence.load(id))
         )
     }
 
@@ -81,9 +81,9 @@ class GameController(
     @PatchMapping("/games/{id}")
     fun patch(
         @PathVariable id: UUID,
-        @RequestBody @Valid operation: GameOperationDto,
+        @RequestBody @Valid operation: GameOperationRequest,
         @AuthenticationPrincipal userDetails: UserDetails
-    ): ResponseEntity<GameInfoDto> {
+    ): ResponseEntity<GameInfoResponse> {
         return when (operation.op) {
             GameOperation.START -> gameActionOrchestrator.execute(
                 action = GameActionStartPlaying(
@@ -91,6 +91,6 @@ class GameController(
                     gameId = id
                 )
             )
-        }.let { ResponseEntity.ok(GameInfoDto(it)) }
+        }.let { ResponseEntity.ok(GameInfoResponse(it)) }
     }
 }

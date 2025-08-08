@@ -10,7 +10,7 @@ import java.util.*
 @Schema(
     description = "Information about a hand in a game of Doppelkopf that is ok for all users to see at any time."
 )
-class HandPublicInfoDto(
+class HandPublicInfoResponse(
     @field:Schema(
         description = "The UUID of this hand."
     )

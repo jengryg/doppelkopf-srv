@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 @Schema(
     description = "Make a declaration for the hand.",
 )
-class DeclarationCreateDto(
+class DeclarationCreateRequest(
     @field:Schema(
         description = "The declaration to make."
     )

@@ -1,7 +1,7 @@
 package game.doppelkopf.adapter.api.user
 
-import game.doppelkopf.adapter.api.user.dto.PublicUserInfoDto
-import game.doppelkopf.adapter.api.user.dto.UserRegisterDto
+import game.doppelkopf.adapter.api.user.dto.PublicUserInfoResponse
+import game.doppelkopf.adapter.api.user.dto.UserRegisterRequest
 import game.doppelkopf.adapter.persistence.model.user.UserEntity
 import game.doppelkopf.adapter.persistence.model.user.UserPersistence
 import game.doppelkopf.adapter.persistence.model.user.UserRepository
@@ -30,8 +30,8 @@ class UserController(
     )
     @PostMapping("")
     fun register(
-        @RequestBody @Valid registerDto: UserRegisterDto
-    ): ResponseEntity<PublicUserInfoDto> {
+        @RequestBody @Valid registerDto: UserRegisterRequest
+    ): ResponseEntity<PublicUserInfoResponse> {
         if (registerDto.password != registerDto.passwordConfirm) {
             throw InvalidActionException("Passwords do not match.")
         }
@@ -53,7 +53,7 @@ class UserController(
             userRepository.save(it)
         }
 
-        return PublicUserInfoDto(user).let {
+        return PublicUserInfoResponse(user).let {
             ResponseEntity.created(
                 UriComponentsBuilder.newInstance().path("/v1/users/{id}").build(it.id)
             ).body(it)
@@ -67,9 +67,9 @@ class UserController(
     @GetMapping("/{id}")
     fun show(
         @PathVariable id: UUID
-    ): ResponseEntity<PublicUserInfoDto> {
+    ): ResponseEntity<PublicUserInfoResponse> {
         return ResponseEntity.ok(
-            PublicUserInfoDto(userPersistence.load(id))
+            PublicUserInfoResponse(userPersistence.load(id))
         )
     }
 }

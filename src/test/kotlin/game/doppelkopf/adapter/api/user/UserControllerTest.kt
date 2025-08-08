@@ -1,8 +1,8 @@
 package game.doppelkopf.adapter.api.user
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.adapter.api.user.dto.PublicUserInfoDto
-import game.doppelkopf.adapter.api.user.dto.UserRegisterDto
+import game.doppelkopf.adapter.api.user.dto.PublicUserInfoResponse
+import game.doppelkopf.adapter.api.user.dto.UserRegisterRequest
 import game.doppelkopf.errors.ProblemDetailResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -25,7 +25,7 @@ class UserControllerTest : BaseRestAssuredTest() {
 
         @Test
         fun `get specific by its id returns 200 and dto`() {
-            val response = getResource<PublicUserInfoDto>(
+            val response = getResource<PublicUserInfoResponse>(
                 path = "/v1/users/${testAdmin.id}",
                 expectedStatus = 200
             )
@@ -103,7 +103,7 @@ class UserControllerTest : BaseRestAssuredTest() {
 
         @Test
         fun `register with valid data creates account`() {
-            val (response, location) = execRegisterUser<PublicUserInfoDto>(
+            val (response, location) = execRegisterUser<PublicUserInfoResponse>(
                 username = "UserSuccess",
                 password = "Password42",
                 passwordConfirm = "Password42",
@@ -116,7 +116,7 @@ class UserControllerTest : BaseRestAssuredTest() {
 
             assertThat(location).isNotNull()
 
-            getResource<PublicUserInfoDto>(location!!, 200).also {
+            getResource<PublicUserInfoResponse>(location!!, 200).also {
                 assertThat(it.id).isEqualTo(response.id)
                 assertThat(it.name).isEqualTo("UserSuccess")
             }
@@ -129,9 +129,9 @@ class UserControllerTest : BaseRestAssuredTest() {
         passwordConfirm: String,
         expectedStatus: Int
     ): Pair<T, String?> {
-        return createResource<UserRegisterDto, T>(
+        return createResource<UserRegisterRequest, T>(
             path = "/v1/users",
-            body = UserRegisterDto(
+            body = UserRegisterRequest(
                 username = username,
                 password = password,
                 passwordConfirm = passwordConfirm

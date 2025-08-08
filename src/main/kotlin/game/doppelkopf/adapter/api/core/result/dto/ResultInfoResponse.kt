@@ -8,7 +8,7 @@ import java.util.*
 @Schema(
     description = "Information about a result of a round in a game of Doppelkopf."
 )
-class ResultInfoDto(
+class ResultInfoResponse(
     @field:Schema(
         description = "The UUID of this result."
     )
@@ -42,12 +42,12 @@ class ResultInfoDto(
     @field:Schema(
         description = "The basic points for this team."
     )
-    val pointsBasic: BasicPointsDto,
+    val pointsBasic: BasicPointsResponse,
 
     @field:Schema(
         description = "The points for the basic calls."
     )
-    val pointsBasicCalls: BasicCallsDto,
+    val pointsBasicCalls: BasicCallsResponse,
 
     @field:Schema(
         description = "The points for the under calls."
@@ -57,12 +57,12 @@ class ResultInfoDto(
     @field:Schema(
         description = "The points based on the levels the score of the looser is below."
     )
-    val pointsLostScore: LostScoreDto,
+    val pointsLostScore: LostScoreResponse,
 
     @field:Schema(
         description = "The points based on special rules."
     )
-    val pointsForSpecial: SpecialPointsDto,
+    val pointsForSpecial: SpecialPointsResponse,
 ) {
     constructor(entity: ResultEntity) : this(
         id = entity.id,
@@ -71,10 +71,10 @@ class ResultInfoDto(
         tricksCount = entity.trickCount,
         score = entity.score,
         targetScore = entity.target,
-        pointsBasic = BasicPointsDto(entity),
-        pointsBasicCalls = BasicCallsDto(entity),
+        pointsBasic = BasicPointsResponse(entity),
+        pointsBasicCalls = BasicCallsResponse(entity),
         pointsUnderCalls = UnderCallsDto(entity),
-        pointsLostScore = LostScoreDto(entity),
-        pointsForSpecial = SpecialPointsDto(entity)
+        pointsLostScore = LostScoreResponse(entity),
+        pointsForSpecial = SpecialPointsResponse(entity)
     )
 }

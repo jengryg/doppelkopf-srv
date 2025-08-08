@@ -3,7 +3,7 @@ package game.doppelkopf.adapter.api.core.result.dto
 import game.doppelkopf.adapter.persistence.model.result.ResultEntity
 import io.swagger.v3.oas.annotations.media.Schema
 
-class SpecialPointsDto(
+class SpecialPointsResponse(
     @field:Schema(
         description = "1 point if KO wins against RE."
     )

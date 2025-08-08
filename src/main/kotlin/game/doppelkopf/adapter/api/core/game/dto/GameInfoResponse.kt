@@ -1,7 +1,7 @@
 package game.doppelkopf.adapter.api.core.game.dto
 
-import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoDto
-import game.doppelkopf.adapter.api.user.dto.PublicUserInfoDto
+import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoResponse
+import game.doppelkopf.adapter.api.user.dto.PublicUserInfoResponse
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.domain.game.enums.GameState
 import io.swagger.v3.oas.annotations.media.Schema
@@ -11,7 +11,7 @@ import java.util.*
 @Schema(
     description = "Information about a game of Doppelkopf.",
 )
-class GameInfoDto(
+class GameInfoResponse(
     @field:Schema(
         description = "The UUID of this game."
     )
@@ -40,12 +40,12 @@ class GameInfoDto(
     @field:Schema(
         description = "The user that created this game."
     )
-    val creator: PublicUserInfoDto,
+    val creator: PublicUserInfoResponse,
 
     @field:Schema(
         description = "The users that have already joined this game."
     )
-    val players: List<PlayerInfoDto>,
+    val players: List<PlayerInfoResponse>,
 
     @field:Schema(
         description = "The current state of this game."
@@ -58,8 +58,8 @@ class GameInfoDto(
         created = entity.created,
         started = entity.started,
         ended = entity.ended,
-        creator = PublicUserInfoDto(entity.creator),
-        players = entity.players.map { PlayerInfoDto(it) },
+        creator = PublicUserInfoResponse(entity.creator),
+        players = entity.players.map { PlayerInfoResponse(it) },
         state = entity.state,
     )
 }

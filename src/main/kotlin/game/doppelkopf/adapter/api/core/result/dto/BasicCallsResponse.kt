@@ -3,7 +3,7 @@ package game.doppelkopf.adapter.api.core.result.dto
 import game.doppelkopf.adapter.persistence.model.result.ResultEntity
 import io.swagger.v3.oas.annotations.media.Schema
 
-class BasicCallsDto(
+class BasicCallsResponse(
     @field:Schema(
         description = "2 points for the winner if RE was called."
     )

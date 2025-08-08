@@ -1,19 +1,19 @@
 package game.doppelkopf.playtest
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.adapter.api.core.game.dto.GameCreateDto
-import game.doppelkopf.adapter.api.core.game.dto.GameInfoDto
-import game.doppelkopf.adapter.api.core.game.dto.GameOperationDto
-import game.doppelkopf.adapter.api.core.hand.dto.BidCreateDto
-import game.doppelkopf.adapter.api.core.hand.dto.DeclarationCreateDto
-import game.doppelkopf.adapter.api.core.hand.dto.HandForPlayerDto
-import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoDto
-import game.doppelkopf.adapter.api.core.player.dto.PlayerCreateDto
-import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoDto
-import game.doppelkopf.adapter.api.core.round.dto.RoundInfoDto
-import game.doppelkopf.adapter.api.core.trick.dto.TrickInfoDto
-import game.doppelkopf.adapter.api.core.turn.dto.CreateTurnDto
-import game.doppelkopf.adapter.api.core.turn.dto.TurnInfoDto
+import game.doppelkopf.adapter.api.core.game.dto.GameCreateRequest
+import game.doppelkopf.adapter.api.core.game.dto.GameInfoResponse
+import game.doppelkopf.adapter.api.core.game.dto.GameOperationRequest
+import game.doppelkopf.adapter.api.core.hand.dto.BidCreateRequest
+import game.doppelkopf.adapter.api.core.hand.dto.DeclarationCreateRequest
+import game.doppelkopf.adapter.api.core.hand.dto.HandForPlayerResponse
+import game.doppelkopf.adapter.api.core.hand.dto.HandPublicInfoResponse
+import game.doppelkopf.adapter.api.core.player.dto.PlayerCreateRequest
+import game.doppelkopf.adapter.api.core.player.dto.PlayerInfoResponse
+import game.doppelkopf.adapter.api.core.round.dto.RoundInfoResponse
+import game.doppelkopf.adapter.api.core.trick.dto.TrickInfoResponse
+import game.doppelkopf.adapter.api.core.turn.dto.CreateTurnRequest
+import game.doppelkopf.adapter.api.core.turn.dto.TurnInfoResponse
 import game.doppelkopf.domain.deck.enums.DeckMode
 import game.doppelkopf.domain.deck.model.Deck
 import game.doppelkopf.domain.game.enums.GameOperation
@@ -49,7 +49,7 @@ class BruteforceApiPlayTest : BaseRestAssuredTest(disableExtendedLogging = true)
     fun `playtest a game over api with brute force strategy`() {
         val gameId = `create a new game, join the players and start it`()
 
-        val dealerId = getResourceList<PlayerInfoDto>(
+        val dealerId = getResourceList<PlayerInfoResponse>(
             path = "/v1/games/$gameId/players",
             expectedStatus = 200
         ).also { players ->
@@ -64,7 +64,7 @@ class BruteforceApiPlayTest : BaseRestAssuredTest(disableExtendedLogging = true)
 
             val roundId = `deal a new round`(gameId, dealerIndex)
 
-            getResource<RoundInfoDto>(
+            getResource<RoundInfoResponse>(
                 path = "/v1/rounds/$roundId",
                 expectedStatus = 200
             ).also { round ->
@@ -74,14 +74,14 @@ class BruteforceApiPlayTest : BaseRestAssuredTest(disableExtendedLogging = true)
 
             `declare and auction the hands`(roundId)
 
-            getResource<GameInfoDto>(
+            getResource<GameInfoResponse>(
                 path = "/v1/games/$gameId",
                 expectedStatus = 200
             ).also { game ->
                 assertThat(game.state).isEqualTo(GameState.PLAYING_ROUND)
             }
 
-            getResource<RoundInfoDto>(
+            getResource<RoundInfoResponse>(
                 path = "/v1/rounds/$roundId",
                 expectedStatus = 200
             ).also { round ->
@@ -92,7 +92,7 @@ class BruteforceApiPlayTest : BaseRestAssuredTest(disableExtendedLogging = true)
                 `play cards for the trick`(roundId, tI + 1)
             }
 
-            getResource<RoundInfoDto>(
+            getResource<RoundInfoResponse>(
                 path = "/v1/rounds/$roundId",
                 expectedStatus = 200
             ).also { round ->
@@ -103,7 +103,7 @@ class BruteforceApiPlayTest : BaseRestAssuredTest(disableExtendedLogging = true)
                 }
             }
 
-            getResourceList<TrickInfoDto>(
+            getResourceList<TrickInfoResponse>(
                 path = "/v1/rounds/$roundId/tricks",
                 expectedStatus = 200
             ).also { tricks ->
@@ -120,25 +120,25 @@ class BruteforceApiPlayTest : BaseRestAssuredTest(disableExtendedLogging = true)
     }
 
     private fun `create a new game, join the players and start it`(): UUID {
-        val (response, _) = createResource<GameCreateDto, GameInfoDto>(
+        val (response, _) = createResource<GameCreateRequest, GameInfoResponse>(
             path = "/v1/games",
-            body = GameCreateDto(playerLimit = 4),
+            body = GameCreateRequest(playerLimit = 4),
             expectedStatus = 201,
             login = Login(username = testPlayerNames[0], testPlayerPasswords[0])
         )
 
         repeat(3) {
-            createResource<PlayerCreateDto, PlayerInfoDto>(
+            createResource<PlayerCreateRequest, PlayerInfoResponse>(
                 path = "/v1/games/${response.id}/players",
-                body = PlayerCreateDto(seat = it + 1),
+                body = PlayerCreateRequest(seat = it + 1),
                 expectedStatus = 201,
                 login = Login(username = testPlayerNames[it + 1], testPlayerPasswords[it + 1])
             )
         }
 
-        patchResource<GameOperationDto, GameInfoDto>(
+        patchResource<GameOperationRequest, GameInfoResponse>(
             path = "/v1/games/${response.id}",
-            body = GameOperationDto(
+            body = GameOperationRequest(
                 op = GameOperation.START
             ),
             expectedStatus = 200,
@@ -149,17 +149,17 @@ class BruteforceApiPlayTest : BaseRestAssuredTest(disableExtendedLogging = true)
     }
 
     private fun `declare and auction the hands`(roundId: UUID) {
-        val round = getResource<RoundInfoDto>(
+        val round = getResource<RoundInfoResponse>(
             path = "/v1/rounds/$roundId",
             expectedStatus = 200
         )
 
-        val players = getResourceList<PlayerInfoDto>(
+        val players = getResourceList<PlayerInfoResponse>(
             path = "/v1/games/${round.gameId}/players",
             expectedStatus = 200
         )
 
-        val hands = getResourceList<HandPublicInfoDto>(
+        val hands = getResourceList<HandPublicInfoResponse>(
             path = "/v1/rounds/$roundId/hands",
             expectedStatus = 200,
         )
@@ -210,7 +210,7 @@ class BruteforceApiPlayTest : BaseRestAssuredTest(disableExtendedLogging = true)
     }
 
     private fun `deal a new round`(gameId: UUID, dealerIndex: Int): UUID {
-        val (response, _) = createResource<RoundInfoDto>(
+        val (response, _) = createResource<RoundInfoResponse>(
             path = "/v1/games/$gameId/rounds",
             expectedStatus = 201,
             login = Login(username = testPlayerNames[dealerIndex], testPlayerPasswords[dealerIndex])
@@ -226,9 +226,9 @@ class BruteforceApiPlayTest : BaseRestAssuredTest(disableExtendedLogging = true)
         declarationOption: DeclarationOption,
     ): Boolean {
         return runCatching {
-            createResource<DeclarationCreateDto, HandForPlayerDto>(
+            createResource<DeclarationCreateRequest, HandForPlayerResponse>(
                 path = "/v1/hands/$handId/declarations",
-                body = DeclarationCreateDto(
+                body = DeclarationCreateRequest(
                     declaration = declarationOption
                 ),
                 expectedStatus = 201,
@@ -253,9 +253,9 @@ class BruteforceApiPlayTest : BaseRestAssuredTest(disableExtendedLogging = true)
         biddingOption: BiddingOption
     ): Boolean {
         return runCatching {
-            createResource<BidCreateDto, HandForPlayerDto>(
+            createResource<BidCreateRequest, HandForPlayerResponse>(
                 path = "/v1/hands/$handId/bids",
-                body = BidCreateDto(
+                body = BidCreateRequest(
                     bid = biddingOption
                 ),
                 expectedStatus = 201,
@@ -294,12 +294,12 @@ class BruteforceApiPlayTest : BaseRestAssuredTest(disableExtendedLogging = true)
 
         // 4 cards played, the trick is complete
 
-        getResource<RoundInfoDto>(
+        getResource<RoundInfoResponse>(
             path = "/v1/rounds/$roundId",
             expectedStatus = 200
         )
 
-        getResourceList<TrickInfoDto>(
+        getResourceList<TrickInfoResponse>(
             path = "/v1/rounds/$roundId/tricks",
             expectedStatus = 200
         ).also { tricks ->
@@ -314,9 +314,9 @@ class BruteforceApiPlayTest : BaseRestAssuredTest(disableExtendedLogging = true)
     private fun `bruteforce the next card to play`(roundId: UUID, playingIndex: Int): Boolean {
         cards.forEach { card ->
             runCatching {
-                createResource<CreateTurnDto, TurnInfoDto>(
+                createResource<CreateTurnRequest, TurnInfoResponse>(
                     path = "/v1/rounds/$roundId/turns",
-                    body = CreateTurnDto(card = card),
+                    body = CreateTurnRequest(card = card),
                     expectedStatus = 201,
                     login = Login(username = testPlayerNames[playingIndex], testPlayerPasswords[playingIndex])
                 )

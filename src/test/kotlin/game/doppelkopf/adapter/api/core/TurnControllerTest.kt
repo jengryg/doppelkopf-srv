@@ -1,8 +1,8 @@
 package game.doppelkopf.adapter.api.core
 
 import game.doppelkopf.BaseRestAssuredTest
-import game.doppelkopf.adapter.api.core.turn.dto.CreateTurnDto
-import game.doppelkopf.adapter.api.core.turn.dto.TurnInfoDto
+import game.doppelkopf.adapter.api.core.turn.dto.CreateTurnRequest
+import game.doppelkopf.adapter.api.core.turn.dto.TurnInfoResponse
 import game.doppelkopf.adapter.persistence.model.game.GameEntity
 import game.doppelkopf.adapter.persistence.model.game.GameRepository
 import game.doppelkopf.adapter.persistence.model.hand.HandEntity
@@ -69,7 +69,7 @@ class TurnControllerTest : BaseRestAssuredTest() {
         fun `get turns of round that has no turns returns empty list`() {
             val round = createPersistedRoundEntity()
 
-            val response = getResourceList<TurnInfoDto>(
+            val response = getResourceList<TurnInfoResponse>(
                 path = "/v1/rounds/${round.id}/turns",
                 expectedStatus = 200
             )
@@ -109,7 +109,7 @@ class TurnControllerTest : BaseRestAssuredTest() {
 
             turnRepository.saveAll(round.turns)
 
-            val response = getResourceList<TurnInfoDto>(
+            val response = getResourceList<TurnInfoResponse>(
                 path = "/v1/rounds/${round.id}/turns",
                 expectedStatus = 200
             )
@@ -147,7 +147,7 @@ class TurnControllerTest : BaseRestAssuredTest() {
                 round.turns.add(it)
             }.let { turnRepository.save(it) }
 
-            val response = getResource<TurnInfoDto>(
+            val response = getResource<TurnInfoResponse>(
                 path = "/v1/turns/${turn.id}",
                 expectedStatus = 200
             )
@@ -183,7 +183,7 @@ class TurnControllerTest : BaseRestAssuredTest() {
                 second = TurnModel(turn, ModelFactoryProvider())
             )
 
-            val (response, location) = execPlayCard<TurnInfoDto>(round.id, 201)
+            val (response, location) = execPlayCard<TurnInfoResponse>(round.id, 201)
 
             response.also {
                 assertThat(it.roundId).isEqualTo(round.id)
@@ -301,9 +301,9 @@ class TurnControllerTest : BaseRestAssuredTest() {
         roundId: UUID,
         expectedStatus: Int
     ): Pair<T, String?> {
-        return createResource<CreateTurnDto, T>(
+        return createResource<CreateTurnRequest, T>(
             path = "/v1/rounds/$roundId/turns",
-            body = CreateTurnDto(card = "TH0"),
+            body = CreateTurnRequest(card = "TH0"),
             expectedStatus = expectedStatus
         )
     }

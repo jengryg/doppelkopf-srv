@@ -1,6 +1,6 @@
 package game.doppelkopf.adapter.api.core.result
 
-import game.doppelkopf.adapter.api.core.result.dto.ResultInfoDto
+import game.doppelkopf.adapter.api.core.result.dto.ResultInfoResponse
 import game.doppelkopf.adapter.api.core.result.dto.TeamedResultInfoDto
 import game.doppelkopf.adapter.persistence.model.result.ResultPersistence
 import io.swagger.v3.oas.annotations.Operation
@@ -37,9 +37,9 @@ class ResultController(
     @GetMapping("/results/{resultId}")
     fun show(
         @PathVariable resultId: UUID,
-    ): ResponseEntity<ResultInfoDto> {
+    ): ResponseEntity<ResultInfoResponse> {
         return ResponseEntity.ok(
-            ResultInfoDto(resultPersistence.load(resultId))
+            ResultInfoResponse(resultPersistence.load(resultId))
         )
     }
 }

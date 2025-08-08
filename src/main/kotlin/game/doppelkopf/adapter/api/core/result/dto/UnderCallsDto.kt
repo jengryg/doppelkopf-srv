@@ -7,14 +7,14 @@ class UnderCallsDto(
     @field:Schema(
         description = "1 point for the winner for each level call made by RE team."
     )
-    val re: UnderCallsTeamDto,
+    val re: UnderCallsTeamResponse,
 
     @field:Schema(
         description = "1 point for the winner for each level call made by KO team."
     )
-    val ko: UnderCallsTeamDto,
+    val ko: UnderCallsTeamResponse,
 ) {
-    class UnderCallsTeamDto(
+    class UnderCallsTeamResponse(
         @field:Schema(
             description = "under 90 call"
         )
@@ -37,13 +37,13 @@ class UnderCallsDto(
     )
 
     constructor(entity: ResultEntity) : this(
-        re = UnderCallsTeamDto(
+        re = UnderCallsTeamResponse(
             p90 = entity.pointsUnderCallsRe90,
             p60 = entity.pointsUnderCallsRe60,
             p30 = entity.pointsUnderCallsRe30,
             p00 = entity.pointsUnderCallsRe00,
         ),
-        ko = UnderCallsTeamDto(
+        ko = UnderCallsTeamResponse(
             p90 = entity.pointsUnderCallsKo90,
             p60 = entity.pointsUnderCallsKo60,
             p30 = entity.pointsUnderCallsKo30,

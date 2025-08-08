@@ -7,7 +7,7 @@ import java.util.*
 @Schema(
     description = "Information about a turn in a round of Doppelkopf."
 )
-class TurnInfoDto(
+class TurnInfoResponse(
     @field:Schema(
         description = "The UUID of this turn."
     )
